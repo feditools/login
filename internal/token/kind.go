@@ -8,6 +8,8 @@ const (
 	KindFediInstance Kind = 1 + iota
 	// KindFediAccount is a token that represents a federated social account
 	KindFediAccount
+	// KindOauthClient is a token that represents an oauth client
+	KindOauthClient
 )
 
 func (k Kind) String() string {

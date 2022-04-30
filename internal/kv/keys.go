@@ -6,6 +6,9 @@ const (
 	keyFedi         = keyBase + "fedi:"
 	keyFediNodeInfo = keyFedi + "ni:"
 
+	keyOauth      = keyBase + "oauth:"
+	keyOauthToken = keyOauth + "token:"
+
 	keySession = keyBase + "session:"
 )
 
@@ -14,3 +17,6 @@ func KeyFediNodeInfo(d string) string { return keyFediNodeInfo + d }
 
 // KeySession returns the base kv key prefix
 func KeySession() string { return keySession }
+
+// KeyOauthToken returns the oauth token key prefix
+func KeyOauthToken() string { return keyOauthToken }

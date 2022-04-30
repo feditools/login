@@ -6,6 +6,8 @@ require (
 	github.com/BurntSushi/toml v1.1.0
 	github.com/cactus/go-statsd-client/v5 v5.0.0
 	github.com/go-http-utils/etag v0.0.0-20161124023236-513ea8f21eb1
+	github.com/go-oauth2/oauth2/v4 v4.4.3
+	github.com/go-oauth2/redis/v4 v4.1.1
 	github.com/go-playground/validator/v10 v10.10.1
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-redsync/redsync/v4 v4.5.0
@@ -46,6 +48,7 @@ require (
 	github.com/go-http-utils/headers v0.0.0-20181008091004-fed159eddc2a // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
+	github.com/golang-jwt/jwt v3.2.1+incompatible // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/gorilla/securecookie v1.1.1 // indirect

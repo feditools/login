@@ -25,6 +25,8 @@ func (m *Module) Route(s *http.Server) error {
 
 	webapp.HandleFunc(path.CallbackOauth, m.CallbackOauthGetHandler).Methods("GET")
 	webapp.HandleFunc(path.Login, m.LoginGetHandler).Methods("GET")
+	webapp.HandleFunc(path.OauthAuthorize, m.OauthAuthorizeHandler)
+	webapp.HandleFunc(path.OauthToken, m.OauthTokenHandler)
 
 	return nil
 }

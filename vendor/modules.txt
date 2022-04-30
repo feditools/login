@@ -39,6 +39,17 @@ github.com/go-http-utils/fresh
 # github.com/go-http-utils/headers v0.0.0-20181008091004-fed159eddc2a
 ## explicit
 github.com/go-http-utils/headers
+# github.com/go-oauth2/oauth2/v4 v4.4.3
+## explicit; go 1.13
+github.com/go-oauth2/oauth2/v4
+github.com/go-oauth2/oauth2/v4/errors
+github.com/go-oauth2/oauth2/v4/generates
+github.com/go-oauth2/oauth2/v4/manage
+github.com/go-oauth2/oauth2/v4/models
+github.com/go-oauth2/oauth2/v4/server
+# github.com/go-oauth2/redis/v4 v4.1.1
+## explicit; go 1.13
+github.com/go-oauth2/redis/v4
 # github.com/go-playground/locales v0.14.0
 ## explicit; go 1.13
 github.com/go-playground/locales
@@ -64,6 +75,9 @@ github.com/go-redis/redis/v8/internal/util
 github.com/go-redsync/redsync/v4
 github.com/go-redsync/redsync/v4/redis
 github.com/go-redsync/redsync/v4/redis/goredis/v8
+# github.com/golang-jwt/jwt v3.2.1+incompatible
+## explicit
+github.com/golang-jwt/jwt
 # github.com/golang/protobuf v1.5.2
 ## explicit; go 1.9
 github.com/golang/protobuf/proto

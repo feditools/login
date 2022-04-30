@@ -15,10 +15,14 @@ import (
 	"github.com/feditools/login/internal/path"
 	"github.com/feditools/login/internal/template"
 	"github.com/feditools/login/internal/token"
+	"github.com/go-oauth2/oauth2/v4/errors"
+	"github.com/go-oauth2/oauth2/v4/manage"
+	"github.com/go-oauth2/oauth2/v4/server"
+	oredis "github.com/go-oauth2/redis/v4"
 	"github.com/gorilla/sessions"
 	"github.com/rbcervilla/redisstore/v8"
 	"github.com/spf13/viper"
-	minify "github.com/tdewolff/minify/v2"
+	"github.com/tdewolff/minify/v2"
 	"github.com/tdewolff/minify/v2/html"
 	htmltemplate "html/template"
 	"sync"
@@ -28,6 +32,7 @@ import (
 type Module struct {
 	db        db.DB
 	fedi      *fedi.Fedi
+	oauth     *server.Server
 	store     sessions.Store
 	language  *language.Module
 	metrics   metrics.Collector
@@ -44,7 +49,7 @@ type Module struct {
 }
 
 // New returns a new webapp module
-func New(ctx context.Context, db db.DB, r *redis.Client, f *fedi.Fedi, lMod *language.Module, t *token.Tokenizer, mc metrics.Collector) (http.Module, error) {
+func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *language.Module, t *token.Tokenizer, mc metrics.Collector) (http.Module, error) {
 	l := logger.WithField("func", "New")
 
 	// Fetch new store.
@@ -71,6 +76,25 @@ func New(ctx context.Context, db db.DB, r *redis.Client, f *fedi.Fedi, lMod *lan
 		m = minify.New()
 		m.AddFunc("text/html", html.Minify)
 	}
+
+	// oauth
+	manager := manage.NewDefaultManager()
+	manager.MapTokenStorage(oredis.NewRedisStoreWithCli(
+		r.RedisClient(),
+		kv.KeyOauthToken(),
+	))
+	manager.MapClientStorage(NewAdapterClientStore(d, t))
+
+	oauthServer := server.NewDefaultServer(manager)
+	oauthServer.SetAllowGetAccessRequest(true)
+	oauthServer.SetClientInfoHandler(server.ClientFormHandler)
+	oauthServer.SetInternalErrorHandler(func(err error) *errors.Response {
+		l.Errorf("Internal Error: %s", err.Error())
+		return nil
+	})
+	oauthServer.SetResponseErrorHandler(func(re *errors.Response) {
+		l.Errorf("Response Error: %s", re.Error.Error())
+	})
 
 	// get templates
 	tmpl, err := template.New(t)
@@ -115,8 +139,9 @@ func New(ctx context.Context, db db.DB, r *redis.Client, f *fedi.Fedi, lMod *lan
 	}
 
 	return &Module{
-		db:        db,
+		db:        d,
 		fedi:      f,
+		oauth:     oauthServer,
 		store:     store,
 		language:  lMod,
 		metrics:   mc,

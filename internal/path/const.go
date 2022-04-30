@@ -12,6 +12,8 @@ const (
 
 	// parts
 
+	// PartAuthorize is used in a path for authorization
+	PartAuthorize = "authorize"
 	// PartCallback is used in a path for callback
 	PartCallback = "callback"
 	// PartLogin is used in a path for login
@@ -20,6 +22,8 @@ const (
 	PartOauth = "oauth"
 	// PartStatic is used in a path for static files
 	PartStatic = "static"
+	// PartToken is used in a path for static files
+	PartToken = "token"
 
 	// paths
 
@@ -27,6 +31,12 @@ const (
 	CallbackOauth = "/" + PartCallback + "/" + PartOauth + "/" + VarInstance
 	// Login is the path for the login page
 	Login = "/" + PartLogin
+	// Oauth is the path prefix for oauth
+	Oauth = "/" + PartOauth
+	// OauthAuthorize is the path prefix for the oauth authorization
+	OauthAuthorize = Oauth + "/" + PartAuthorize
+	// OauthToken is the path prefix for the oauth token
+	OauthToken = Oauth + "/" + PartToken
 	// Static is the path for static files
 	Static = "/" + PartStatic + "/"
 	// StaticCSS is the path
