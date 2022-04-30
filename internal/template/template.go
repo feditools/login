@@ -3,6 +3,7 @@ package template
 import (
 	"github.com/feditools/login"
 	"github.com/feditools/login/internal/language"
+	"github.com/feditools/login/internal/models"
 	"github.com/feditools/login/internal/token"
 	"html/template"
 	"io/ioutil"
@@ -15,10 +16,11 @@ const templateDir = "web/template"
 type InitTemplate interface {
 	AddHeadLink(l HeadLink)
 	AddFooterScript(s Script)
+	SetAccount(account *models.FediAccount)
 	SetLanguage(l string)
 	SetLocalizer(l *language.Localizer)
+	SetLogoSrc(dark, light string)
 	SetNavbar(nodes Navbar)
-	SetAccountID(accountID int64)
 }
 
 // New creates a new template

@@ -18,6 +18,8 @@ func (k Kind) String() string {
 		return "FediInstance"
 	case KindFediAccount:
 		return "FediAccount"
+	case KindOauthClient:
+		return "OauthClient"
 	default:
 		return "unknown"
 	}

@@ -26,5 +26,8 @@ func Server(cmd *cobra.Command, values config.Values) {
 	cmd.PersistentFlags().String(config.Keys.WebappBootstrapCSSIntegrity, values.WebappBootstrapCSSIntegrity, usage.WebappBootstrapCSSIntegrity)
 	cmd.PersistentFlags().String(config.Keys.WebappBootstrapJSURI, values.WebappBootstrapJSURI, usage.WebappBootstrapJSURI)
 	cmd.PersistentFlags().String(config.Keys.WebappBootstrapJSIntegrity, values.WebappBootstrapJSIntegrity, usage.WebappBootstrapJSIntegrity)
-	cmd.PersistentFlags().String(config.Keys.WebappLogoURI, values.WebappLogoURI, usage.WebappLogoURI)
+	cmd.PersistentFlags().String(config.Keys.WebappFontAwesomeCSSURI, values.WebappFontAwesomeCSSURI, usage.WebappFontAwesomeCSSURI)
+	cmd.PersistentFlags().String(config.Keys.WebappFontAwesomeCSSIntegrity, values.WebappFontAwesomeCSSIntegrity, usage.WebappFontAwesomeCSSIntegrity)
+	cmd.PersistentFlags().String(config.Keys.WebappLogoSrcDark, values.WebappLogoSrcDark, usage.WebappLogoSrcDark)
+	cmd.PersistentFlags().String(config.Keys.WebappLogoSrcLight, values.WebappLogoSrcLight, usage.WebappLogoSrcLight)
 }

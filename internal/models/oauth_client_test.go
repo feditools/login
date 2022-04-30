@@ -9,7 +9,7 @@ import (
 
 func TestOauthClient_BeforeAppendModel_Insert(t *testing.T) {
 	obj := &OauthClient{
-		Domain: "https://test.com",
+		RedirectURI: "https://test.com",
 	}
 
 	err := obj.BeforeAppendModel(context.Background(), &bun.InsertQuery{})
@@ -29,7 +29,7 @@ func TestOauthClient_BeforeAppendModel_Insert(t *testing.T) {
 
 func TestOauthClient_BeforeAppendModel_Update(t *testing.T) {
 	obj := &OauthClient{
-		Domain: "https://test.com",
+		RedirectURI: "https://test.com",
 	}
 
 	err := obj.BeforeAppendModel(context.Background(), &bun.UpdateQuery{})

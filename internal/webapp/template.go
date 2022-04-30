@@ -8,6 +8,7 @@ import (
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/language"
 	"github.com/feditools/login/internal/models"
+	"github.com/feditools/login/internal/path"
 	"github.com/feditools/login/internal/template"
 	"github.com/gorilla/sessions"
 	nethttp "net/http"
@@ -24,6 +25,9 @@ func (m *Module) initTemplate(w nethttp.ResponseWriter, r *nethttp.Request, tmpl
 	lang := r.Context().Value(http.ContextKeyLanguage).(string)
 	tmpl.SetLanguage(lang)
 
+	// set logo image src
+	tmpl.SetLogoSrc(m.logoSrcDark, m.logoSrcLight)
+
 	// add css
 	for _, link := range m.headLinks {
 		tmpl.AddHeadLink(link)
@@ -36,7 +40,7 @@ func (m *Module) initTemplate(w nethttp.ResponseWriter, r *nethttp.Request, tmpl
 
 	if r.Context().Value(http.ContextKeyAccount) != nil {
 		account := r.Context().Value(http.ContextKeyAccount).(*models.FediAccount)
-		tmpl.SetAccountID(account.ID)
+		tmpl.SetAccount(account)
 	}
 
 	// try to read session data
@@ -74,4 +78,20 @@ func (m *Module) executeTemplate(w nethttp.ResponseWriter, name string, tmplVars
 		return err
 	}
 	return m.minify.Minify("text/html", w, b)
+}
+
+func makeAdminNavbar(r *nethttp.Request, l *language.Localizer) template.Navbar {
+	// create navbar
+	newNavbar := template.Navbar{
+		{
+			Text:     l.TextHomeShort().String(),
+			MatchStr: path.ReAdmin,
+			FAIcon:   "home",
+			URL:      path.Admin,
+		},
+	}
+
+	newNavbar.ActivateFromPath(r.URL.Path)
+
+	return newNavbar
 }

@@ -43,7 +43,7 @@ func (m *Module) returnErrorPage(w http.ResponseWriter, r *http.Request, code in
 	})
 
 	// set image
-	tmplVars.Image = m.logoURI
+	tmplVars.Image = m.logoSrcDark
 
 	// set text
 	tmplVars.Header = fmt.Sprintf("%d", code)

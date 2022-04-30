@@ -24,26 +24,26 @@ func (m *Module) Middleware(next nethttp.Handler) nethttp.Handler {
 
 		// Retrieve our account and type-assert it
 		val := us.Values[SessionKeyAccountID]
-		if userID, ok := val.(int64); ok {
+		if accountID, ok := val.(int64); ok {
 			// read federated accounts
-			user, err := m.db.ReadFediAccount(ctx, userID)
+			account, err := m.db.ReadFediAccount(ctx, accountID)
 			if err != nil {
 				l.Errorf("db read: %s", err.Error())
 				m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
 				return
 			}
 
-			if user != nil {
+			if account != nil {
 				// read federated instance
-				instance, err := m.db.ReadFediInstance(ctx, user.InstanceID)
+				instance, err := m.db.ReadFediInstance(ctx, account.InstanceID)
 				if err != nil {
 					l.Errorf("db read: %s", err.Error())
 					m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
 					return
 				}
-				user.Instance = instance
+				account.Instance = instance
 
-				ctx = context.WithValue(ctx, http.ContextKeyAccount, user)
+				ctx = context.WithValue(ctx, http.ContextKeyAccount, account)
 			}
 		}
 

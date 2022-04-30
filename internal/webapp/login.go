@@ -69,15 +69,12 @@ func (m *Module) displayLoginPage(w nethttp.ResponseWriter, r *nethttp.Request, 
 
 	tmplVars.PageTitle = localizer.TextLogin().String()
 
-	// set bot image
-	tmplVars.Image = m.logoURI
-
 	// set form values
 	tmplVars.FormError = formError
 	tmplVars.FormAccount = account
 
-	err = m.executeTemplate(w, "login", tmplVars)
+	err = m.executeTemplate(w, template.LoginName, tmplVars)
 	if err != nil {
-		l.Errorf("could not render login template: %s", err.Error())
+		l.Errorf("could not render %s template: %s", template.LoginName, err.Error())
 	}
 }

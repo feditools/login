@@ -39,6 +39,8 @@ type DB interface {
 	ReadFediInstance(ctx context.Context, id int64) (instance *models.FediInstance, err Error)
 	// ReadFediInstanceByDomain returns one federated social instance
 	ReadFediInstanceByDomain(ctx context.Context, domain string) (instance *models.FediInstance, err Error)
+	// ReadFediInstancesPage returns a page of federated social instances
+	ReadFediInstancesPage(ctx context.Context, index, count int) ([]*models.FediInstance, Error)
 	// UpdateFediInstance updates the stored federated instance and caches it
 	UpdateFediInstance(ctx context.Context, instance *models.FediInstance) (err Error)
 

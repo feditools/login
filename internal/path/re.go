@@ -1,3 +1,18 @@
 package path
 
-const ()
+import (
+	"fmt"
+	"regexp"
+)
+
+const (
+	// reToken is regex to match a token
+	reToken = `[a-zA-Z0-9_]{16,}`
+)
+
+var (
+	// ReAdmin matches the admin page
+	ReAdmin = regexp.MustCompile(fmt.Sprintf(`^?/%s$`, PartAdmin))
+	// ReAdminOauthClientsPre matches the admin oauth clients page prefix
+	ReAdminOauthClientsPre = regexp.MustCompile(fmt.Sprintf(`^?/%s/%s`, PartAdmin, PartClients))
+)

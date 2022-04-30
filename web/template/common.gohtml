@@ -1,2 +1,120 @@
+{{ define "a_lang_plus" }}{{ if ne . "" }}+lang={{ . }}{{ end }}{{ end }}
+{{ define "a_lang_question" }}{{ if ne . "" }}?lang={{ . }}{{ end }}{{ end }}
+
 {{ define "head_link" }}<link href="{{ .HRef }}"{{if .Rel}} rel="{{ .Rel }}"{{end}}{{if .Integrity}} integrity="{{ .Integrity }}"{{end}}{{if .Sizes}} sizes="{{ .Sizes }}"{{end}}{{if .CrossOrigin}} crossorigin="{{ .CrossOrigin }}"{{end}}{{if .Type}} type="{{ .Type }}"{{end}}>{{ end }}
+
+{{ define "image" }}<img src="{{ .Src }}"{{ if .Alt }} alt="{{ .Alt }}"{{ end }}{{ if gt .Height 0 }} height="{{ .Height }}"{{ end }}{{ if gt .Width 0 }} width="{{ .Width }}"{{ end }}{{ if .Class }} class="{{ .Class }}"{{ end }}>{{ end }}
+
+{{ define "navbar" }}
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="{{.LogoSrcLight}}" alt="robot" height="25" class="d-inline-block align-top">
+        feditools
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            {{- range .NavBar -}}
+                {{- if .Children }}
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle{{if .Active}} active{{end}}{{if .Disabled}} disabled{{end}}" href="{{.URL}}" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{if .FAIcon}}<i class="fas fa-{{.FAIcon}}"></i> {{end}}{{.Text}}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        {{- range .Children}}
+                          <li class="nav-itsem">
+                            <a class="dropdown-item{{if .Active}} active{{end}}{{if .Disabled}} disabled{{end}}" href="{{.URL}}">
+                                {{if .FAIcon}}<i class="fas fa-{{.FAIcon}}"></i> {{end}}{{.Text}}
+                            </a>
+                          </li>
+                        {{- end}}
+                    </ul>
+                  </li>
+                {{- else}}
+                  <li class="nav-item">
+                    <a class="nav-link{{if .Active}} active{{end}}{{if .Disabled}} disabled{{end}}"{{if .Active}} aria-current="page"{{end}} href="{{.URL}}">
+                        {{if .FAIcon}}<i class="fas fa-{{.FAIcon}}"></i> {{end}}{{.Text}}
+                    </a>
+                  </li>
+                {{- end -}}
+            {{- end}}
+        </ul>
+        <span class="d-flex">
+          <ul class="navbar-nav">
+          {{- if .Account }}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-user"></i> {{ .Account.Username }}@{{ .Account.Instance.Domain }}
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+              </ul>
+            </li>
+          {{- else }}
+            <li class="nav-item">
+              <a class="nav-link" href="/login">
+                <i class="fas fa-user"></i> Login
+              </a>
+            </li>
+          {{- end }}
+          </ul>
+        </span>
+      </div>
+    </div>
+  </nav>
+{{- end }}
+
+{{define "pagination" -}}
+  <nav>
+    <ul class="pagination">
+        {{- range $rm := . }}
+          <li class="page-item{{if .Active}} active{{end}}{{if .Disabled}} disabled{{end}}"{{if .Active}} aria-current="page"{{end}}>
+              {{- if .HRef }}
+                <a class="page-link" href="{{.HRef}}">
+                    {{if .DisplayHTML}}<span aria-hidden="true">{{.DisplayHTML | htmlSafe}}</span>{{else}}{{.Text}}{{end}}{{if .Active}} <span class="sr-only">(current)</span>{{end}}
+                </a>
+              {{- else }}
+                <span class="page-link"{{if .DisplayHTML}} aria-label="{{.Text}}"{{end}}>
+        {{if .DisplayHTML}}<span aria-hidden="true">{{.DisplayHTML | htmlSafe}}</span>{{else}}{{.Text}}{{end}}{{if .Active}} <span class="sr-only">(current)</span>{{end}}
+      </span>
+              {{- end }}
+          </li>
+        {{- end }}
+    </ul>
+  </nav>
+{{- end}}
+
 {{ define "script" }}<script src="{{ .Src }}"{{if .Integrity}} integrity="{{ htmlSafe .Integrity }}"{{end}}{{if .CrossOrigin}} crossorigin="{{ .CrossOrigin }}"{{end}}></script>{{ end }}
+
+{{ define "sidebar" }}
+  <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+    <div class="position-sticky pt-3">
+        {{- range . -}}
+        {{- if .Text }}
+      <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+        <span>{{ .Text }}</span>
+          {{- if .URL -}}
+            <a class="link-secondary" href="{{ .URL }}" aria-label="{{ .Label }}">
+              <i class="fa-solid fa-{{ .Icon }}"></i>
+            </a>
+          {{- end }}
+      </h6>
+      <ul class="nav nav-pills flex-column mb-2">
+          {{- else }}
+        <ul class="nav nav-pills flex-column mb-auto">
+            {{- end }}
+            {{- range .Children }}
+              <li class="nav-item">
+                <a class="nav-link{{ if .Active }} active{{ end }}" aria-current="page" href="{{ .URL }}">
+                    {{ if .Icon }}<i class="fa-solid fa-{{ .Icon }}"></i> {{ end }}{{ .Text }}
+                </a>
+              </li>
+            {{- end }}
+        </ul>
+          {{- end }}
+    </div>
+  </nav>
+{{- end }}

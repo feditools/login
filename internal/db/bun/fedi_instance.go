@@ -43,6 +43,21 @@ func (c *Client) ReadFediInstanceByDomain(ctx context.Context, domain string) (*
 	return fediInstance, nil
 }
 
+// ReadFediInstancesPage returns a page of federated social instances
+func (c *Client) ReadFediInstancesPage(ctx context.Context, index, count int) ([]*models.FediInstance, db.Error) {
+	var instances []*models.FediInstance
+
+	err := c.newFediInstancesQ(&instances).
+		Limit(count).
+		Offset(offset(index, count)).
+		Scan(ctx)
+	if err != nil {
+		return nil, c.bun.ProcessError(err)
+	}
+
+	return instances, nil
+}
+
 // UpdateFediInstance updates the stored federated instance
 func (c *Client) UpdateFediInstance(ctx context.Context, instance *models.FediInstance) db.Error {
 	return c.Update(ctx, instance)
@@ -52,4 +67,10 @@ func (c *Client) newFediInstanceQ(instance *models.FediInstance) *bun.SelectQuer
 	return c.bun.
 		NewSelect().
 		Model(instance)
+}
+
+func (c *Client) newFediInstancesQ(instances *[]*models.FediInstance) *bun.SelectQuery {
+	return c.bun.
+		NewSelect().
+		Model(instances)
 }

@@ -12,10 +12,14 @@ const (
 
 	// parts
 
+	// PartAdmin is used in a path for administrative tasks
+	PartAdmin = "admin"
 	// PartAuthorize is used in a path for authorization
 	PartAuthorize = "authorize"
 	// PartCallback is used in a path for callback
 	PartCallback = "callback"
+	// PartClients is used in a path for oauth clients
+	PartClients = "clients"
 	// PartLogin is used in a path for login
 	PartLogin = "login"
 	// PartOauth is used in a path for oauth
@@ -27,6 +31,12 @@ const (
 
 	// paths
 
+	// Admin is the path for the admin page
+	Admin = "/" + PartAdmin
+	// AdminOauthClients is the sub path for the oauth clients admin page
+	AdminOauthClients = Admin + AdminSubOauthClients
+	// AdminSubOauthClients is the sub path for the oauth clients admin page
+	AdminSubOauthClients = "/" + PartClients
 	// CallbackOauth is the path for an oauth callback
 	CallbackOauth = "/" + PartCallback + "/" + PartOauth + "/" + VarInstance
 	// Login is the path for the login page
@@ -42,15 +52,10 @@ const (
 	// StaticCSS is the path
 	StaticCSS = Static + "css"
 
-	// regexes
-
-	// ReToken is regex to match a token
-	ReToken = `[a-zA-Z0-9_]{16,}`
-
 	// vars
 
 	// VarInstanceID is the id of the instance variable
 	VarInstanceID = "instance"
 	// VarInstance is the var path of the instance variable
-	VarInstance = "{" + VarInstanceID + ":" + ReToken + "}"
+	VarInstance = "{" + VarInstanceID + ":" + reToken + "}"
 )

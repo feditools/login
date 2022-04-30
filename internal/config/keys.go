@@ -40,11 +40,14 @@ type KeyNames struct {
 	ServerRoles            string
 
 	// webapp
-	WebappBootstrapCSSURI       string
-	WebappBootstrapCSSIntegrity string
-	WebappBootstrapJSURI        string
-	WebappBootstrapJSIntegrity  string
-	WebappLogoURI               string
+	WebappBootstrapCSSURI         string
+	WebappBootstrapCSSIntegrity   string
+	WebappBootstrapJSURI          string
+	WebappBootstrapJSIntegrity    string
+	WebappFontAwesomeCSSURI       string
+	WebappFontAwesomeCSSIntegrity string
+	WebappLogoSrcDark             string
+	WebappLogoSrcLight            string
 	// metrics
 	MetricsStatsDAddress string
 	MetricsStatsDPrefix  string
@@ -90,11 +93,14 @@ var Keys = KeyNames{
 	ServerRoles:            "server-role",
 
 	// webapp
-	WebappBootstrapCSSURI:       "webapp-bootstrap-css-uri",
-	WebappBootstrapCSSIntegrity: "webapp-bootstrap-css-integrity",
-	WebappBootstrapJSURI:        "webapp-bootstrap-js-uri",
-	WebappBootstrapJSIntegrity:  "webapp-bootstrap-js-integrity",
-	WebappLogoURI:               "webapp-logo-uri",
+	WebappBootstrapCSSURI:         "webapp-bootstrap-css-uri",
+	WebappBootstrapCSSIntegrity:   "webapp-bootstrap-css-integrity",
+	WebappBootstrapJSURI:          "webapp-bootstrap-js-uri",
+	WebappBootstrapJSIntegrity:    "webapp-bootstrap-js-integrity",
+	WebappFontAwesomeCSSURI:       "webapp-fontawesome-css-uri",
+	WebappFontAwesomeCSSIntegrity: "webapp-fontawesome-css-integrity",
+	WebappLogoSrcDark:             "webapp-logo-src-dark",
+	WebappLogoSrcLight:            "webapp-logo-src-light",
 
 	// metrics
 	MetricsStatsDAddress: "statsd-addr",

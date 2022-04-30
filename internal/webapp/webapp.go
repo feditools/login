@@ -40,7 +40,8 @@ type Module struct {
 	templates *htmltemplate.Template
 	tokenizer *token.Tokenizer
 
-	logoURI       string
+	logoSrcDark   string
+	logoSrcLight  string
 	headLinks     []template.HeadLink
 	footerScripts []template.Script
 
@@ -111,6 +112,12 @@ func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *lang
 			CrossOrigin: "anonymous",
 			Integrity:   viper.GetString(config.Keys.WebappBootstrapCSSIntegrity),
 		},
+		{
+			HRef:        viper.GetString(config.Keys.WebappFontAwesomeCSSURI),
+			Rel:         "stylesheet",
+			CrossOrigin: "anonymous",
+			Integrity:   viper.GetString(config.Keys.WebappFontAwesomeCSSIntegrity),
+		},
 	}
 	paths := []string{
 		path.FileDefaultCSS,
@@ -149,7 +156,8 @@ func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *lang
 		templates: tmpl,
 		tokenizer: t,
 
-		logoURI:       viper.GetString(config.Keys.WebappLogoURI),
+		logoSrcDark:   viper.GetString(config.Keys.WebappLogoSrcDark),
+		logoSrcLight:  viper.GetString(config.Keys.WebappLogoSrcLight),
 		headLinks:     hl,
 		footerScripts: fs,
 

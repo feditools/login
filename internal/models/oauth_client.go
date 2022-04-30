@@ -12,7 +12,7 @@ type OauthClient struct {
 	CreatedAt   time.Time    `validate:"-" bun:",nullzero,notnull,default:current_timestamp"`
 	UpdatedAt   time.Time    `validate:"-" bun:",nullzero,notnull,default:current_timestamp"`
 	Secret      []byte       `validate:"-" bun:",nullzero,notnull"`
-	Domain      string       `validate:"required,url" bun:",nullzero,notnull"`
+	RedirectURI string       `validate:"required,url" bun:",nullzero,notnull"`
 	Description string       `validate:"-" bun:",nullzero"`
 	OwnerID     int64        `validate:"-" bun:",nullzero,notnull"`
 	Owner       *FediAccount `validate:"-" bun:"rel:belongs-to"`

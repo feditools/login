@@ -67,7 +67,7 @@ func (c *AdapterClientStore) GetByID(ctx context.Context, tok string) (oauth2.Cl
 	return &models.Client{
 		ID:     tok,
 		Secret: clientSecret,
-		Domain: dbClient.Domain,
+		Domain: dbClient.RedirectURI,
 		UserID: accountToken,
 	}, nil
 }

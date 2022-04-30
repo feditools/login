@@ -2,6 +2,7 @@ package template
 
 import (
 	"github.com/feditools/login/internal/language"
+	"github.com/feditools/login/internal/models"
 )
 
 // Common contains the variables used in nearly every template
@@ -9,11 +10,13 @@ type Common struct {
 	Language  string
 	Localizer *language.Localizer
 
+	Account       *models.FediAccount
 	FooterScripts []Script
 	HeadLinks     []HeadLink
+	LogoSrcDark   string
+	LogoSrcLight  string
 	NavBar        Navbar
 	PageTitle     string
-	AccountID     int64
 }
 
 // AddHeadLink adds a headder link to the template
@@ -46,14 +49,21 @@ func (t *Common) SetLocalizer(l *language.Localizer) {
 	return
 }
 
+// SetLogoSrc sets the src for the logo image
+func (t *Common) SetLogoSrc(dark, light string) {
+	t.LogoSrcDark = dark
+	t.LogoSrcLight = light
+	return
+}
+
 // SetNavbar sets the top level navbar used by the template
 func (t *Common) SetNavbar(nodes Navbar) {
 	t.NavBar = nodes
 	return
 }
 
-// SetAccountID sets the currently logged-in account
-func (t *Common) SetAccountID(accountID int64) {
-	t.AccountID = accountID
+// SetAccount sets the currently logged-in account
+func (t *Common) SetAccount(account *models.FediAccount) {
+	t.Account = account
 	return
 }

@@ -28,5 +28,10 @@ func (m *Module) Route(s *http.Server) error {
 	webapp.HandleFunc(path.OauthAuthorize, m.OauthAuthorizeHandler)
 	webapp.HandleFunc(path.OauthToken, m.OauthTokenHandler)
 
+	admin := webapp.PathPrefix(path.Admin).Subrouter()
+	admin.NotFoundHandler = m.notFoundHandler()
+	admin.MethodNotAllowedHandler = m.methodNotAllowedHandler()
+	admin.HandleFunc(path.AdminSubOauthClients, m.AdminOauthClientsGetHandler).Methods("GET")
+
 	return nil
 }
