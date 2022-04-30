@@ -3,7 +3,7 @@ module github.com/feditools/login
 go 1.18
 
 require (
-	github.com/BurntSushi/toml v1.0.0
+	github.com/BurntSushi/toml v1.1.0
 	github.com/cactus/go-statsd-client/v5 v5.0.0
 	github.com/go-playground/validator/v10 v10.10.1
 	github.com/gorilla/handlers v1.5.1
