@@ -39,6 +39,12 @@ type KeyNames struct {
 	ServerMinifyHTML       string
 	ServerRoles            string
 
+	// webapp
+	WebappBootstrapCSSURI       string
+	WebappBootstrapCSSIntegrity string
+	WebappBootstrapJSURI        string
+	WebappBootstrapJSIntegrity  string
+	WebappLogoURI               string
 	// metrics
 	MetricsStatsDAddress string
 	MetricsStatsDPrefix  string
@@ -82,6 +88,13 @@ var Keys = KeyNames{
 	ServerHTTPBind:         "http-bind",
 	ServerMinifyHTML:       "minify-html",
 	ServerRoles:            "server-role",
+
+	// webapp
+	WebappBootstrapCSSURI:       "webapp-bootstrap-css-uri",
+	WebappBootstrapCSSIntegrity: "webapp-bootstrap-css-integrity",
+	WebappBootstrapJSURI:        "webapp-bootstrap-js-uri",
+	WebappBootstrapJSIntegrity:  "webapp-bootstrap-js-integrity",
+	WebappLogoURI:               "webapp-logo-uri",
 
 	// metrics
 	MetricsStatsDAddress: "statsd-addr",

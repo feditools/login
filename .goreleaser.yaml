@@ -3,6 +3,7 @@
 before:
   hooks:
     - make clean
+    - make stage-static
     - go generate ./...
 builds:
   - main: ./cmd/login

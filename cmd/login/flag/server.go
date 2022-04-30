@@ -20,4 +20,11 @@ func Server(cmd *cobra.Command, values config.Values) {
 	cmd.PersistentFlags().String(config.Keys.AccessSecret, values.AccessSecret, usage.AccessSecret)
 	cmd.PersistentFlags().Duration(config.Keys.RefreshExpiration, values.RefreshExpiration, usage.RefreshExpiration)
 	cmd.PersistentFlags().String(config.Keys.RefreshSecret, values.RefreshSecret, usage.RefreshSecret)
+
+	// webapp
+	cmd.PersistentFlags().String(config.Keys.WebappBootstrapCSSURI, values.WebappBootstrapCSSURI, usage.WebappBootstrapCSSURI)
+	cmd.PersistentFlags().String(config.Keys.WebappBootstrapCSSIntegrity, values.WebappBootstrapCSSIntegrity, usage.WebappBootstrapCSSIntegrity)
+	cmd.PersistentFlags().String(config.Keys.WebappBootstrapJSURI, values.WebappBootstrapJSURI, usage.WebappBootstrapJSURI)
+	cmd.PersistentFlags().String(config.Keys.WebappBootstrapJSIntegrity, values.WebappBootstrapJSIntegrity, usage.WebappBootstrapJSIntegrity)
+	cmd.PersistentFlags().String(config.Keys.WebappLogoURI, values.WebappLogoURI, usage.WebappLogoURI)
 }

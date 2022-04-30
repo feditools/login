@@ -17,7 +17,6 @@ pipeline {
         script {
           sh """#!/bin/bash
           make clean
-          make npm-scss
           make stage-static
           """
         }

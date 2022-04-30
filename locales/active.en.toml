@@ -2,3 +2,11 @@
 description = "the common phrase for account"
 one = "Account"
 other = "Accounts"
+
+[Login]
+description = "the common phrase for logging in"
+other = "Login"
+
+[LoginShort]
+description = "a single word representation of logging in"
+other = "Login"

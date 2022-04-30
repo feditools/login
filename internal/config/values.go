@@ -41,6 +41,13 @@ type Values struct {
 	ServerMinifyHTML       bool
 	ServerRoles            []string
 
+	// webapp
+	WebappBootstrapCSSURI       string
+	WebappBootstrapCSSIntegrity string
+	WebappBootstrapJSURI        string
+	WebappBootstrapJSIntegrity  string
+	WebappLogoURI               string
+
 	// metrics
 	MetricsStatsDAddress string
 	MetricsStatsDPrefix  string
@@ -52,7 +59,7 @@ var Defaults = Values{
 	LogLevel:   "info",
 
 	// application
-	ApplicationName: "feditools",
+	ApplicationName: "feditools-login",
 
 	// database
 	DbType:         "postgres",
@@ -60,7 +67,7 @@ var Defaults = Values{
 	DbPort:         5432,
 	DbUser:         "",
 	DbPassword:     "",
-	DbDatabase:     "feditools",
+	DbDatabase:     "ft_login",
 	DbTLSMode:      "disable",
 	DbTLSCACert:    "",
 	DbLoadTestData: false,
@@ -82,7 +89,14 @@ var Defaults = Values{
 		ServerRoleWebapp,
 	},
 
+	// webapp
+	WebappBootstrapCSSURI:       "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+	WebappBootstrapCSSIntegrity: "sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3",
+	WebappBootstrapJSURI:        "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+	WebappBootstrapJSIntegrity:  "sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p",
+	WebappLogoURI:               "https://cdn.fedi.tools/img/feditools-logo.svg",
+
 	// metrics
 	MetricsStatsDAddress: "localhost:8125",
-	MetricsStatsDPrefix:  "feditools",
+	MetricsStatsDPrefix:  "login",
 }

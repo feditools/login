@@ -4,11 +4,18 @@ import (
 	"context"
 	"fmt"
 	"github.com/feditools/login/cmd/login/action"
+	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/db/bun"
+	"github.com/feditools/login/internal/fedi"
 	"github.com/feditools/login/internal/http"
+	"github.com/feditools/login/internal/kv/redis"
 	"github.com/feditools/login/internal/language"
 	"github.com/feditools/login/internal/metrics/statsd"
 	"github.com/feditools/login/internal/token"
+	"github.com/feditools/login/internal/webapp"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
+	"github.com/tyrm/go-util"
 	"os"
 	"os/signal"
 	"syscall"
@@ -43,9 +50,27 @@ var Start action.Action = func(ctx context.Context) error {
 		}
 	}()
 
+	redisClient, err := redis.New(ctx)
+	if err != nil {
+		l.Errorf("redis: %s", err.Error())
+		return err
+	}
+	defer func() {
+		err := redisClient.Close(ctx)
+		if err != nil {
+			l.Errorf("closing redis: %s", err.Error())
+		}
+	}()
+
 	tokz, err := token.New()
 	if err != nil {
 		l.Errorf("create tokenizer: %s", err.Error())
+		return err
+	}
+
+	fediMod, err := fedi.New(dbClient, redisClient, tokz)
+	if err != nil {
+		l.Errorf("fedihelper: %s", err.Error())
 		return err
 	}
 
@@ -65,8 +90,15 @@ var Start action.Action = func(ctx context.Context) error {
 
 	// create web modules
 	var webModules []http.Module
-	_ = tokz
-	_ = languageMod
+	if util.ContainsString(viper.GetStringSlice(config.Keys.ServerRoles), config.ServerRoleWebapp) {
+		l.Infof("adding webapp module")
+		webMod, err := webapp.New(ctx, dbClient, redisClient, fediMod, languageMod, tokz, metricsCollector)
+		if err != nil {
+			logrus.Errorf("webapp module: %s", err.Error())
+			return err
+		}
+		webModules = append(webModules, webMod)
+	}
 
 	// add modules to servers
 	for _, mod := range webModules {

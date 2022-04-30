@@ -19,8 +19,8 @@ func TestNew(t *testing.T) {
 		return
 	}
 
-	if langMod.Language() != defaultLanguage {
-		t.Errorf("got invalid language, got: %v, want: %v,", langMod.Language().String(), defaultLanguage.String())
+	if langMod.Language() != DefaultLanguage {
+		t.Errorf("got invalid language, got: %v, want: %v,", langMod.Language().String(), DefaultLanguage.String())
 		return
 	}
 }

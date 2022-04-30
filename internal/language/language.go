@@ -9,7 +9,8 @@ import (
 	"strings"
 )
 
-var defaultLanguage = language.English
+// DefaultLanguage is the default language of the application
+var DefaultLanguage = language.English
 
 // Module represent the language module for translating text
 type Module struct {
@@ -22,8 +23,8 @@ func New() (*Module, error) {
 	l := logger.WithField("func", "New")
 
 	module := Module{
-		lang:       defaultLanguage,
-		langBundle: i18n.NewBundle(defaultLanguage),
+		lang:       DefaultLanguage,
+		langBundle: i18n.NewBundle(DefaultLanguage),
 	}
 
 	module.langBundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
