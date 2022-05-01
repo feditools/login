@@ -5,25 +5,51 @@ import (
 	"time"
 )
 
+// DBQuery is a new database query metric measurer
+type DBQuery struct{}
+
+// Done is called when the db query is complete
+func (DBQuery) Done(isError bool) {
+	return
+}
+
+// DBCacheQuery is a new database cache query metric measurer
+type DBCacheQuery struct{}
+
+// Done is called when the db cache query is complete
+func (DBCacheQuery) Done(hit, isError bool) {
+	return
+}
+
 // MetricsCollector is a mock metrics collection
 type MetricsCollector struct{}
 
-// NewMetricsCollector creates a new mock metrics collector
-func NewMetricsCollector() (metrics.Collector, error) {
-	return &MetricsCollector{}, nil
-}
-
 // Close does nothing
-func (m MetricsCollector) Close() error {
+func (MetricsCollector) Close() error {
 	return nil
 }
 
 // DBQuery does nothing
-func (m MetricsCollector) DBQuery(t time.Duration, name string, error bool) {
+func (MetricsCollector) DBQuery(t time.Duration, name string, error bool) {
 	return
 }
 
+// NewDBQuery creates a new db query metrics collector
+func (MetricsCollector) NewDBQuery(name string) metrics.DBQuery {
+	return &DBQuery{}
+}
+
+// NewDBCacheQuery creates a new db cache query metrics collector
+func (c MetricsCollector) NewDBCacheQuery(name string) metrics.DBCacheQuery {
+	return &DBCacheQuery{}
+}
+
 // HTTPRequestTiming does nothing
-func (m MetricsCollector) HTTPRequestTiming(t time.Duration, status int, method, path string) {
+func (MetricsCollector) HTTPRequestTiming(t time.Duration, status int, method, path string) {
 	return
+}
+
+// NewMetricsCollector creates a new mock metrics collector
+func NewMetricsCollector() (metrics.Collector, error) {
+	return &MetricsCollector{}, nil
 }

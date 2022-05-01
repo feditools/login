@@ -4,11 +4,10 @@ import (
 	"context"
 	"github.com/feditools/login/internal/http"
 	"github.com/go-http-utils/etag"
-	"golang.org/x/text/language"
 	nethttp "net/http"
 )
 
-// Middleware runs on every nethttp request
+// Middleware runs on every http request
 func (m *Module) Middleware(next nethttp.Handler) nethttp.Handler {
 	return etag.Handler(nethttp.HandlerFunc(func(w nethttp.ResponseWriter, r *nethttp.Request) {
 		l := logger.WithField("func", "Middleware")
@@ -66,35 +65,18 @@ func (m *Module) Middleware(next nethttp.Handler) nethttp.Handler {
 	}), false)
 }
 
-func getPageLang(query, header, defaultLang string) string {
-	l := logger.WithField("func", "getPageLang")
-
-	if query != "" {
-		t, _, err := language.ParseAcceptLanguage(query)
-		if err == nil {
-			l.Debugf("query languages: %v", t)
-			if len(t) > 0 {
-				l.Debugf("returning language: %s", t[0].String())
-				return t[0].String()
-			}
-		} else {
-			l.Debugf("query '%s' did not contain a valid lanaugae: %s", query, err.Error())
+// MiddlewareRequireAuth will redirect a user to login page if user not in context
+func (m *Module) MiddlewareRequireAuth(next nethttp.Handler) nethttp.Handler {
+	return nethttp.HandlerFunc(func(w nethttp.ResponseWriter, r *nethttp.Request) {
+		account, shouldReturn := m.authRequireLoggedIn(w, r)
+		if shouldReturn {
+			return
 		}
-	}
 
-	if header != "" {
-		t, _, err := language.ParseAcceptLanguage(header)
-		if err == nil {
-			l.Debugf("header languages: %v", t)
-			if len(t) > 0 {
-				l.Debugf("returning language: %s", t[0].String())
-				return t[0].String()
-			}
-		} else {
-			l.Debugf("query '%s' did not contain a valid lanaugae: %s", query, err.Error())
+		if !account.Admin {
+
 		}
-	}
 
-	l.Debugf("returning default language: %s", defaultLang)
-	return defaultLang
+		next.ServeHTTP(w, r)
+	})
 }

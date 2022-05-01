@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/BurntSushi/toml v1.1.0
+	github.com/allegro/bigcache/v3 v3.0.2
 	github.com/cactus/go-statsd-client/v5 v5.0.0
 	github.com/go-http-utils/etag v0.0.0-20161124023236-513ea8f21eb1
 	github.com/go-oauth2/oauth2/v4 v4.4.3

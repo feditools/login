@@ -6,6 +6,7 @@ import (
 	"github.com/feditools/login/cmd/login/action"
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/db/bun"
+	cachemem "github.com/feditools/login/internal/db/cache_mem"
 	"github.com/feditools/login/internal/fedi"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/kv/redis"
@@ -43,8 +44,13 @@ var Start action.Action = func(ctx context.Context) error {
 		l.Errorf("db: %s", err.Error())
 		return err
 	}
+	cachedDBClient, err := cachemem.New(ctx, dbClient, metricsCollector)
+	if err != nil {
+		l.Errorf("db-cachemem: %s", err.Error())
+		return err
+	}
 	defer func() {
-		err := dbClient.Close(ctx)
+		err := cachedDBClient.Close(ctx)
 		if err != nil {
 			l.Errorf("closing db: %s", err.Error())
 		}
@@ -68,7 +74,7 @@ var Start action.Action = func(ctx context.Context) error {
 		return err
 	}
 
-	fediMod, err := fedi.New(dbClient, redisClient, tokz)
+	fediMod, err := fedi.New(cachedDBClient, redisClient, tokz)
 	if err != nil {
 		l.Errorf("fedihelper: %s", err.Error())
 		return err
@@ -92,7 +98,7 @@ var Start action.Action = func(ctx context.Context) error {
 	var webModules []http.Module
 	if util.ContainsString(viper.GetStringSlice(config.Keys.ServerRoles), config.ServerRoleWebapp) {
 		l.Infof("adding webapp module")
-		webMod, err := webapp.New(ctx, dbClient, redisClient, fediMod, languageMod, tokz, metricsCollector)
+		webMod, err := webapp.New(ctx, cachedDBClient, redisClient, fediMod, languageMod, tokz, metricsCollector)
 		if err != nil {
 			logrus.Errorf("webapp module: %s", err.Error())
 			return err

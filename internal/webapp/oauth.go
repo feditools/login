@@ -1,9 +1,16 @@
 package webapp
 
-import nethttp "net/http"
+import (
+	nethttp "net/http"
+)
 
-// OauthAuthorizeHandler handles oauth authorization
-func (m *Module) OauthAuthorizeHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
+// OauthAuthorizeGetHandler handles oauth authorization
+func (m *Module) OauthAuthorizeGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
+	_, shouldReturn := m.authRequireLoggedIn(w, r)
+	if shouldReturn {
+		return
+	}
+
 	err := m.oauth.HandleAuthorizeRequest(w, r)
 	if err != nil {
 		m.returnErrorPage(w, r, nethttp.StatusBadRequest, err.Error())
@@ -12,8 +19,5 @@ func (m *Module) OauthAuthorizeHandler(w nethttp.ResponseWriter, r *nethttp.Requ
 
 // OauthTokenHandler handles oauth tokens
 func (m *Module) OauthTokenHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
-	err := m.oauth.HandleAuthorizeRequest(w, r)
-	if err != nil {
-		m.returnErrorPage(w, r, nethttp.StatusBadRequest, err.Error())
-	}
+	m.oauth.HandleTokenRequest(w, r)
 }

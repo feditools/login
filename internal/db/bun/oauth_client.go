@@ -10,14 +10,19 @@ import (
 
 // ReadOauthClient returns one federated social account
 func (c *Client) ReadOauthClient(ctx context.Context, id int64) (*models.OauthClient, db.Error) {
+	metric := c.metrics.NewDBQuery("ReadOauthClient")
+
 	oauthClient := new(models.OauthClient)
 	err := c.newOauthClientQ(oauthClient).Where("id = ?", id).Scan(ctx)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	}
 	if err != nil {
+		go metric.Done(true)
 		return nil, c.bun.ProcessError(err)
 	}
+
+	go metric.Done(false)
 	return oauthClient, nil
 }
 
