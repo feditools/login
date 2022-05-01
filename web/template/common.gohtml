@@ -1,6 +1,13 @@
 {{ define "a_lang_plus" }}{{ if ne . "" }}+lang={{ . }}{{ end }}{{ end }}
 {{ define "a_lang_question" }}{{ if ne . "" }}?lang={{ . }}{{ end }}{{ end }}
 
+{{ define "form_input" }}
+<label class="{{ .LabelClass }}" for="{{ .ID }}"{{ if ne .LabelClass "" }}{{ end }} lang="{{ .Label.Language }}">{{ .Label }}</label>
+{{ if ne .WrappedClass "" }}<div class="{{ .WrappedClass }}">{{ end }}
+{{ if ne .WrappedClass "" }}  {{ end }}<input class="form-control" id="{{ .ID }}" name="{{ .Name }}"{{ if ne .Placeholder "" }} placeholder="{{ .Placeholder }}"{{ end }} type="{{ .Type }}"{{ if ne .Value "" }} value="{{ .Value }}"{{ end }}{{ if .Disabled }} disabled{{ end }}{{ if .Required }} required{{ end }}>
+{{ if ne .WrappedClass "" }}</div>{{ end }}
+{{ end }}
+
 {{ define "head_link" }}<link href="{{ .HRef }}"{{if .Rel}} rel="{{ .Rel }}"{{end}}{{if .Integrity}} integrity="{{ .Integrity }}"{{end}}{{if .Sizes}} sizes="{{ .Sizes }}"{{end}}{{if .CrossOrigin}} crossorigin="{{ .CrossOrigin }}"{{end}}{{if .Type}} type="{{ .Type }}"{{end}}>{{ end }}
 
 {{ define "image" }}<img src="{{ .Src }}"{{ if .Alt }} alt="{{ .Alt }}"{{ end }}{{ if gt .Height 0 }} height="{{ .Height }}"{{ end }}{{ if gt .Width 0 }} width="{{ .Width }}"{{ end }}{{ if .Class }} class="{{ .Class }}"{{ end }}>{{ end }}

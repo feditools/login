@@ -23,7 +23,12 @@ type AdminOauthClientAdd struct {
 
 	FormInputDescriptionDisabled bool
 	FormInputDescriptionValue    string
-	FormButtonSubmitText         string
+	FormInputReturnURIDisabled   bool
+	FormInputReturnURIValue      string
+
+	FormInputDescription *FormInput
+	FormInputReturnURI   *FormInput
+	FormButtonSubmitText string
 }
 
 // AdminOauthClientAddedName is the name of the admin oauth added clients template
