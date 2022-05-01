@@ -17,7 +17,7 @@ func (m *Module) AdminOauthClientsGetHandler(w nethttp.ResponseWriter, r *nethtt
 			PageTitle: "Admin Clients",
 		},
 		Admin: template.Admin{
-			Sidebar: makeAdminSidebar(r),
+			Sidebar: makeAdminOauthSidebar(r),
 		},
 	}
 

@@ -25,10 +25,12 @@ func (m *Module) Route(s *http.Server) error {
 
 	webapp.HandleFunc(path.CallbackOauth, m.CallbackOauthGetHandler).Methods("GET")
 	webapp.HandleFunc(path.Login, m.LoginGetHandler).Methods("GET")
+	webapp.HandleFunc(path.Login, m.LoginPostHandler).Methods("POST")
 	webapp.HandleFunc(path.OauthAuthorize, m.OauthAuthorizeGetHandler).Methods("GET")
 	webapp.HandleFunc(path.OauthToken, m.OauthTokenHandler)
 
 	admin := webapp.PathPrefix(path.Admin).Subrouter()
+	admin.Use(m.MiddlewareRequireAdmin)
 	admin.NotFoundHandler = m.notFoundHandler()
 	admin.MethodNotAllowedHandler = m.methodNotAllowedHandler()
 	admin.HandleFunc(path.AdminSubOauthClients, m.AdminOauthClientsGetHandler).Methods("GET")

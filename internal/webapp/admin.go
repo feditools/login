@@ -41,3 +41,27 @@ func makeAdminSidebar(r *nethttp.Request) template.Sidebar {
 
 	return newSidebar
 }
+
+func makeAdminOauthSidebar(r *nethttp.Request) template.Sidebar {
+	// get localizer
+	localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
+
+	// create sidebar
+	newSidebar := template.Sidebar{
+		{
+			Text: localizer.TextOauth20Settings().String(),
+			Children: []template.SidebarNode{
+				{
+					Text:     localizer.TextClient(2).String(),
+					MatchStr: path.ReAdminOauthClientsPre,
+					Icon:     "desktop",
+					URL:      path.AdminOauthClients,
+				},
+			},
+		},
+	}
+
+	newSidebar.ActivateFromPath(r.URL.Path)
+
+	return newSidebar
+}

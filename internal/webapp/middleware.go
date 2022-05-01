@@ -3,6 +3,7 @@ package webapp
 import (
 	"context"
 	"github.com/feditools/login/internal/http"
+	"github.com/feditools/login/internal/language"
 	"github.com/go-http-utils/etag"
 	nethttp "net/http"
 )
@@ -65,8 +66,9 @@ func (m *Module) Middleware(next nethttp.Handler) nethttp.Handler {
 	}), false)
 }
 
-// MiddlewareRequireAuth will redirect a user to login page if user not in context
-func (m *Module) MiddlewareRequireAuth(next nethttp.Handler) nethttp.Handler {
+// MiddlewareRequireAdmin will redirect a user to login page if user not in context and will return unauthorized for
+// a non admin user.
+func (m *Module) MiddlewareRequireAdmin(next nethttp.Handler) nethttp.Handler {
 	return nethttp.HandlerFunc(func(w nethttp.ResponseWriter, r *nethttp.Request) {
 		account, shouldReturn := m.authRequireLoggedIn(w, r)
 		if shouldReturn {
@@ -74,7 +76,9 @@ func (m *Module) MiddlewareRequireAuth(next nethttp.Handler) nethttp.Handler {
 		}
 
 		if !account.Admin {
-
+			localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
+			m.returnErrorPage(w, r, nethttp.StatusUnauthorized, localizer.TextUnauthorized().String())
+			return
 		}
 
 		next.ServeHTTP(w, r)

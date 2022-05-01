@@ -2,9 +2,11 @@ package cachemem
 
 import (
 	"context"
+	"encoding/gob"
 	bigcache "github.com/allegro/bigcache/v3"
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/metrics"
+	"github.com/feditools/login/internal/models"
 	"time"
 )
 
@@ -34,6 +36,9 @@ func New(_ context.Context, d db.DB, m metrics.Collector) (db.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	gob.Register(models.FediAccount{})
+	gob.Register(models.FediInstance{})
 
 	fediAccountUsernameToID, err := bigcache.NewBigCache(bigcache.Config{
 		Shards:             32,

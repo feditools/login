@@ -36,7 +36,9 @@ func (c *CacheMem) ReadFediInstance(ctx context.Context, id int64) (*models.Fedi
 		go metric.Done(false, true)
 		return nil, err
 	}
-	c.setFediInstance(ctx, instance)
+	if instance != nil {
+		c.setFediInstance(ctx, instance)
+	}
 	go metric.Done(false, false)
 	return instance, nil
 }
@@ -55,7 +57,9 @@ func (c *CacheMem) ReadFediInstanceByDomain(ctx context.Context, domain string) 
 		go metric.Done(false, true)
 		return nil, err
 	}
-	c.setFediInstance(ctx, instance)
+	if instance != nil {
+		c.setFediInstance(ctx, instance)
+	}
 	go metric.Done(false, false)
 	return instance, nil
 }
@@ -67,7 +71,7 @@ func (c *CacheMem) ReadFediInstancesPage(ctx context.Context, index, count int) 
 
 // UpdateFediInstance updates the stored federated instance and caches it
 func (c *CacheMem) UpdateFediInstance(ctx context.Context, instance *models.FediInstance) db.Error {
-	err := c.db.CreateFediInstance(ctx, instance)
+	err := c.db.UpdateFediInstance(ctx, instance)
 	if err != nil {
 		return err
 	}

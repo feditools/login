@@ -26,17 +26,19 @@ func (c *CacheMem) CreateFediAccount(ctx context.Context, account *models.FediAc
 func (c *CacheMem) ReadFediAccount(ctx context.Context, id int64) (*models.FediAccount, db.Error) {
 	metric := c.metrics.NewDBCacheQuery("ReadFediAccount")
 
-	instance, hit := c.getFediAccount(ctx, id)
+	account, hit := c.getFediAccount(ctx, id)
 	if hit {
 		go metric.Done(true, false)
-		return instance, nil
+		return account, nil
 	}
 	account, err := c.db.ReadFediAccount(ctx, id)
 	if err != nil {
 		go metric.Done(false, true)
 		return nil, err
 	}
-	c.setFediAccount(ctx, account)
+	if account != nil {
+		c.setFediAccount(ctx, account)
+	}
 	go metric.Done(false, false)
 	return account, nil
 }
@@ -45,17 +47,19 @@ func (c *CacheMem) ReadFediAccount(ctx context.Context, id int64) (*models.FediA
 func (c *CacheMem) ReadFediAccountByUsername(ctx context.Context, instanceID int64, username string) (*models.FediAccount, db.Error) {
 	metric := c.metrics.NewDBCacheQuery("ReadFediAccountByUsername")
 
-	instance, hit := c.getFediAccountByUsername(ctx, instanceID, username)
+	account, hit := c.getFediAccountByUsername(ctx, instanceID, username)
 	if hit {
 		go metric.Done(true, false)
-		return instance, nil
+		return account, nil
 	}
 	account, err := c.db.ReadFediAccountByUsername(ctx, instanceID, username)
 	if err != nil {
 		go metric.Done(false, true)
 		return nil, err
 	}
-	c.setFediAccount(ctx, account)
+	if account != nil {
+		c.setFediAccount(ctx, account)
+	}
 	go metric.Done(false, false)
 	return account, nil
 }
