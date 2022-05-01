@@ -13,6 +13,8 @@ const (
 var (
 	// ReAdmin matches the admin page
 	ReAdmin = regexp.MustCompile(fmt.Sprintf(`^?/%s$`, PartAdmin))
+	// ReAdminOauthPre matches the admin oauth page prefix
+	ReAdminOauthPre = regexp.MustCompile(fmt.Sprintf(`^?/%s/%s`, PartAdmin, PartOauth))
 	// ReAdminOauthClientsPre matches the admin oauth clients page prefix
-	ReAdminOauthClientsPre = regexp.MustCompile(fmt.Sprintf(`^?/%s/%s`, PartAdmin, PartClients))
+	ReAdminOauthClientsPre = regexp.MustCompile(fmt.Sprintf(`^?/%s/%s/%s`, PartAdmin, PartOauth, PartClients))
 )

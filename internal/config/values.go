@@ -29,6 +29,10 @@ type Values struct {
 	RedisDB       int
 	RedisPassword string
 
+	// account
+	AccountAccount  string
+	AccountAddGroup []string
+
 	// auth
 	AccessExpiration  time.Duration
 	AccessSecret      string

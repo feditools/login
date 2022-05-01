@@ -2,6 +2,26 @@ package language
 
 import "github.com/nicksnyder/go-i18n/v2/i18n"
 
+// TextOauth returns a translated phrase
+func (l *Localizer) TextOauth() *LocalizedString {
+	lg := logger.WithField("func", "TextOauth")
+
+	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:          "Oauth",
+			Description: "the common phrase for oauth settings",
+			Other:       "OAuth",
+		},
+	})
+	if err != nil {
+		lg.Warningf("missing translation: %s", err.Error())
+	}
+	return &LocalizedString{
+		language: tag,
+		string:   text,
+	}
+}
+
 // TextOauth20Client returns a translated phrase
 func (l *Localizer) TextOauth20Client(count int) *LocalizedString {
 	lg := logger.WithField("func", "TextOauth20Client")

@@ -1,7 +1,19 @@
 {{ define "admin_oauth_client" -}}
 {{- template "admin_header" . }}
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  {{ $textClients := .Localizer.TextOauth20Client 2 }}<h1 lang="{{ $textClients.Language }}"><i class="fas fa-globe"></i> {{ $textClients }}</h1>
+<div class="row">
+  <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      {{ $textOauth := .Localizer.TextOauth }}<h1 lang="{{ $textOauth.Language }}"><i class="fa-solid fa-globe"></i> {{ $textOauth }}</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      {{ $textClients := .Localizer.TextOauth20Client 2 }}<h2 lang="{{ $textClients.Language }}"><i class="fa-solid fa-person-digging"></i> {{ $textClients }}</h2>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group">
+        <a href="{{ .HrefAddClient }}" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-plus"></i></a>
+      </div>
+    </div>
+  </div>
 </div>
 {{ template "admin_footer" . }}
 {{ end }}

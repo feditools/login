@@ -46,6 +46,12 @@ type DB interface {
 
 	// OauthClient
 
+	// CreateOauthClient stores the oauth client
+	CreateOauthClient(ctx context.Context, client *models.OauthClient) (err Error)
 	// ReadOauthClient returns one oauth client
-	ReadOauthClient(ctx context.Context, id int64) (instance *models.OauthClient, err Error)
+	ReadOauthClient(ctx context.Context, id int64) (client *models.OauthClient, err Error)
+	// ReadOauthClientsPage returns a page of oauth clients
+	ReadOauthClientsPage(ctx context.Context, index, count int) (clients []*models.OauthClient, err Error)
+	// UpdateOauthClient updates the stored oauth client
+	UpdateOauthClient(ctx context.Context, client *models.OauthClient) (err Error)
 }

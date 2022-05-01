@@ -48,6 +48,7 @@ func main() {
 	}
 
 	// add commands
+	rootCmd.AddCommand(accountCommands())
 	rootCmd.AddCommand(databaseCommands())
 	rootCmd.AddCommand(serverCommands())
 

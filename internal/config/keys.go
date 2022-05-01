@@ -27,6 +27,10 @@ type KeyNames struct {
 	RedisDB       string
 	RedisPassword string
 
+	// account
+	AccountAccount  string
+	AccountAddGroup string
+
 	// auth
 	AccessExpiration  string
 	AccessSecret      string
@@ -48,6 +52,7 @@ type KeyNames struct {
 	WebappFontAwesomeCSSIntegrity string
 	WebappLogoSrcDark             string
 	WebappLogoSrcLight            string
+
 	// metrics
 	MetricsStatsDAddress string
 	MetricsStatsDPrefix  string
@@ -79,6 +84,10 @@ var Keys = KeyNames{
 	RedisAddress:  "redis-address",
 	RedisDB:       "redis-db",
 	RedisPassword: "redis-password",
+
+	// account
+	AccountAccount:  "account",
+	AccountAddGroup: "add-group",
 
 	// auth
 	AccessExpiration:  "access-expiration",

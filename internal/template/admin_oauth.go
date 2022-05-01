@@ -7,4 +7,6 @@ const AdminOauthClientName = "admin_oauth_client"
 type AdminOauthClient struct {
 	Common
 	Admin
+
+	HrefAddClient string
 }

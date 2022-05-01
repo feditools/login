@@ -80,10 +80,29 @@ func (m *Module) CallbackOauthGetHandler(w nethttp.ResponseWriter, r *nethttp.Re
 		}
 
 		l.Debugf("account: %#v", account)
+
+		// redirect to last page
+		val := us.Values[SessionKeyLoginRedirect]
+		var loginRedirect string
+		if loginRedirect, ok = val.(string); !ok {
+			// redirect home page if no login-redirect
+			nethttp.Redirect(w, r, path.Me, nethttp.StatusFound)
+			return
+		}
+
+		// Set login redirect to nil
+		us.Values[SessionKeyLoginRedirect] = nil
+		err := us.Save(r, w)
+		if err != nil {
+			m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+			return
+		}
+
+		nethttp.Redirect(w, r, loginRedirect, nethttp.StatusFound)
+		return
 	default:
 		m.returnErrorPage(w, r, nethttp.StatusNotImplemented, fmt.Sprintf("no helper for '%s'", instance.Software))
 		return
 	}
 
-	nethttp.Redirect(w, r, "/", nethttp.StatusFound)
 }

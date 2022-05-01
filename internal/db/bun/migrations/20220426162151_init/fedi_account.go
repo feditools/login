@@ -12,7 +12,7 @@ type FediAccount struct {
 	Instance             *FediInstance `validate:"-" bun:"rel:belongs-to,join:instance_id=id"`
 	DisplayName          string        `validate:"-" bun:",notnull"`
 	DisplayNameUpdatedAt time.Time     `validate:"-" bun:",notnull"`
-	SignInCount          int           `validate:"min=0" bun:",notnull,default:0"`
+	SignInCount          int           `validate:"-" bun:",default:0"`
 	AccessToken          []byte        `validate:"-" bun:",nullzero"`
 
 	// login stuff

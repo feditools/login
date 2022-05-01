@@ -4,15 +4,15 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/feditools/go-lib"
 	"github.com/feditools/login/internal/models"
 	"net/url"
-	"strings"
 )
 
 // GetLoginURL retrieves an oauth url for a federated instance
 func (f *Fedi) GetLoginURL(ctx context.Context, act string) (*url.URL, error) {
 	l := logger.WithField("func", "GetLoginURL")
-	_, domain, err := SplitAccount(act)
+	_, domain, err := lib.SplitAccount(act)
 	if err != nil {
 		l.Errorf("split account: %s", err.Error())
 		return nil, err
@@ -74,20 +74,6 @@ func (f *Fedi) GetLoginURL(ctx context.Context, act string) (*url.URL, error) {
 		return nil, err
 	}
 	return u, nil
-}
-
-// SplitAccount splits a federated account into a username and domain
-func SplitAccount(act string) (string, string, error) {
-	actFragments := strings.Split(strings.ToLower(act), "@")
-
-	switch len(actFragments) {
-	case 2:
-		return actFragments[0], actFragments[1], nil
-	case 3:
-		return actFragments[1], actFragments[2], nil
-	default:
-		return "", "", errors.New("invalid account format")
-	}
 }
 
 func (f *Fedi) loginURLForInstance(ctx context.Context, instance *models.FediInstance) (*url.URL, error) {

@@ -44,8 +44,8 @@ func (c *Client) ReadFediAccount(ctx context.Context, id int64) (*models.FediAcc
 func (c *Client) ReadFediAccountByUsername(ctx context.Context, instanceID int64, username string) (*models.FediAccount, db.Error) {
 	metric := c.metrics.NewDBQuery("ReadFediAccountByUsername")
 
-	var account *models.FediAccount
-	err := c.newFediAccountQ(account).
+	fediAccount := new(models.FediAccount)
+	err := c.newFediAccountQ(fediAccount).
 		ColumnExpr("fedi_account.*").
 		Join("RIGHT JOIN fedi_instances").
 		JoinOn("fedi_account.instance_id = fedi_instances.id").
@@ -61,7 +61,7 @@ func (c *Client) ReadFediAccountByUsername(ctx context.Context, instanceID int64
 	}
 
 	go metric.Done(false)
-	return account, nil
+	return fediAccount, nil
 }
 
 // UpdateFediAccount updates the stored federated social account

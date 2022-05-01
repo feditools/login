@@ -36,7 +36,6 @@ func (m *Module) LoginPostHandler(w nethttp.ResponseWriter, r *nethttp.Request) 
 		return
 	}
 
-	l.Debugf("login url: %s", loginURL.String())
 	nethttp.Redirect(w, r, loginURL.String(), nethttp.StatusFound)
 	return
 }

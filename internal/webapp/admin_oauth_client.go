@@ -3,6 +3,7 @@ package webapp
 import (
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/language"
+	"github.com/feditools/login/internal/path"
 	"github.com/feditools/login/internal/template"
 	nethttp "net/http"
 )
@@ -19,6 +20,7 @@ func (m *Module) AdminOauthClientsGetHandler(w nethttp.ResponseWriter, r *nethtt
 		Admin: template.Admin{
 			Sidebar: makeAdminOauthSidebar(r),
 		},
+		HrefAddClient: path.AdminOauthClientAdd,
 	}
 
 	// make admin navbar
