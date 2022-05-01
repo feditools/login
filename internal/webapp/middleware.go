@@ -2,8 +2,8 @@ package webapp
 
 import (
 	"context"
+	"github.com/feditools/go-lib/language"
 	"github.com/feditools/login/internal/http"
-	"github.com/feditools/login/internal/language"
 	"github.com/go-http-utils/etag"
 	nethttp "net/http"
 )

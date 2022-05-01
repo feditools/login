@@ -5,8 +5,8 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
+	"github.com/feditools/go-lib/language"
 	"github.com/feditools/login/internal/http"
-	"github.com/feditools/login/internal/language"
 	"github.com/feditools/login/internal/models"
 	"github.com/feditools/login/internal/path"
 	"github.com/feditools/login/internal/template"
@@ -87,7 +87,7 @@ func makeAdminNavbar(r *nethttp.Request) template.Navbar {
 	// create navbar
 	newNavbar := template.Navbar{
 		{
-			Text:     l.TextHomeShort().String(),
+			Text:     l.TextHome(1).String(),
 			MatchStr: path.ReAdmin,
 			FAIcon:   "home",
 			URL:      path.Admin,

@@ -1,13 +1,17 @@
 package language
 
 import (
+	"embed"
 	"github.com/BurntSushi/toml"
-	"github.com/feditools/login"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"golang.org/x/text/language"
 	"io/ioutil"
 	"strings"
 )
+
+// Locales contains static files required by the application
+//go:embed locales/active.*.toml
+var Locales embed.FS
 
 // DefaultLanguage is the default language of the application
 var DefaultLanguage = language.English
@@ -29,7 +33,7 @@ func New() (*Module, error) {
 
 	module.langBundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
 
-	dir, err := login.Files.ReadDir("locales")
+	dir, err := Locales.ReadDir("locales")
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +44,7 @@ func New() (*Module, error) {
 		l.Debugf("loading language file: %s", d.Name())
 
 		// open it
-		file, err := login.Files.Open("locales/" + d.Name())
+		file, err := Locales.Open("locales/" + d.Name())
 		if err != nil {
 			return nil, err
 		}

@@ -1,8 +1,8 @@
 package template
 
 import (
+	"github.com/feditools/go-lib/language"
 	"github.com/feditools/login"
-	"github.com/feditools/login/internal/language"
 	"github.com/feditools/login/internal/models"
 	"github.com/feditools/login/internal/token"
 	"html/template"

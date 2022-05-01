@@ -25,15 +25,17 @@ func (l *Localizer) TextDashboard(count int) *LocalizedString {
 }
 
 // TextDescription returns a translated phrase
-func (l *Localizer) TextDescription() *LocalizedString {
+func (l *Localizer) TextDescription(count int) *LocalizedString {
 	lg := logger.WithField("func", "TextDescription")
 
 	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
 			ID:          "Description",
 			Description: "the common phrase for description",
-			Other:       "Description",
+			One:         "Description",
+			Other:       "Descriptions",
 		},
+		PluralCount: count,
 	})
 	if err != nil {
 		lg.Warningf("missing translation: %s", err.Error())

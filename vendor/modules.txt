@@ -18,10 +18,12 @@ github.com/dgryski/go-rendezvous
 # github.com/fatih/color v1.13.0
 ## explicit; go 1.13
 github.com/fatih/color
-# github.com/feditools/go-lib v0.2.0
+# github.com/feditools/go-lib v0.3.0
 ## explicit; go 1.18
 github.com/feditools/go-lib
 github.com/feditools/go-lib/dblib
+github.com/feditools/go-lib/language
+github.com/feditools/go-lib/log
 # github.com/felixge/httpsnoop v1.0.2
 ## explicit; go 1.13
 github.com/felixge/httpsnoop

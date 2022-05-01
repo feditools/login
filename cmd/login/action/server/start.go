@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"github.com/feditools/go-lib/language"
 	"github.com/feditools/login/cmd/login/action"
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/db/bun"
@@ -10,7 +11,6 @@ import (
 	"github.com/feditools/login/internal/fedi"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/kv/redis"
-	"github.com/feditools/login/internal/language"
 	"github.com/feditools/login/internal/metrics/statsd"
 	"github.com/feditools/login/internal/token"
 	"github.com/feditools/login/internal/webapp"

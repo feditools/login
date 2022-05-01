@@ -1,0 +1,54 @@
+[Account]
+description = "the common phrase for account"
+one = "Account"
+other = "Accounts"
+
+[AddOauth20Client]
+description = "the common phrase for add oauth 2.0 client"
+one = "Add OAuth 2.0 Client"
+other = "Add OAuth 2.0 Clients"
+
+[Client]
+description = "the common phrase for client"
+one = "Client"
+other = "Clients"
+
+[Create]
+description = "the common phrase for create"
+other = "Create"
+
+[Dashboard]
+description = "the common phrase for dashboard"
+one = "Dashboard"
+other = "Dashboards"
+
+[Description]
+description = "the common phrase for description"
+one = "Description"
+other = "Descriptions"
+
+[HomeShort]
+description = "a single word representation of home, as in home page."
+one = "Home"
+other = "Homes"
+
+[Login]
+description = "the common phrase for logging in"
+other = "Login"
+
+[Oauth]
+description = "the common phrase for oauth settings"
+other = "OAuth"
+
+[Oauth20Client]
+description = "the common phrase for oauth 2.0 client"
+one = "OAuth 2.0 Client"
+other = "OAuth 2.0 Clients"
+
+[Oauth20Settings]
+description = "the common phrase for oauth 2.0 settings"
+other = "OAuth 2.0 Settings"
+
+[Unauthorized]
+description = "the common phrase for unauthorized"
+other = "Unauthorized"
