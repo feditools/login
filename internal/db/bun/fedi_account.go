@@ -10,7 +10,7 @@ import (
 
 // CreateFediAccount stores the federated social account
 func (c *Client) CreateFediAccount(ctx context.Context, account *models.FediAccount) db.Error {
-	metric := c.metrics.NewDBQuery("CreateInstance")
+	metric := c.metrics.NewDBQuery("CreateFediAccount")
 
 	err := c.Create(ctx, account)
 	if err != nil {
