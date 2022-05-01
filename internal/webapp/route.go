@@ -34,6 +34,7 @@ func (m *Module) Route(s *http.Server) error {
 	admin.Use(m.MiddlewareRequireAdmin)
 	admin.NotFoundHandler = m.notFoundHandler()
 	admin.MethodNotAllowedHandler = m.methodNotAllowedHandler()
+	admin.HandleFunc(path.AdminSubOauthClientAdd, m.AdminOauthClientAddGetHandler).Methods("GET")
 	admin.HandleFunc(path.AdminSubOauthClients, m.AdminOauthClientsGetHandler).Methods("GET")
 
 	return nil

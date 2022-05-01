@@ -17,7 +17,7 @@ func makeAdminSidebar(r *nethttp.Request) template.Sidebar {
 		{
 			Children: []template.SidebarNode{
 				{
-					Text:     localizer.TextDashboard().String(),
+					Text:     localizer.TextDashboard(1).String(),
 					MatchStr: path.ReAdmin,
 					Icon:     "home",
 					URL:      path.Admin,

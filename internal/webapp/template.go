@@ -80,7 +80,10 @@ func (m *Module) executeTemplate(w nethttp.ResponseWriter, name string, tmplVars
 	return m.minify.Minify("text/html", w, b)
 }
 
-func makeAdminNavbar(r *nethttp.Request, l *language.Localizer) template.Navbar {
+func makeAdminNavbar(r *nethttp.Request) template.Navbar {
+	// get localizer
+	l := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
+
 	// create navbar
 	newNavbar := template.Navbar{
 		{

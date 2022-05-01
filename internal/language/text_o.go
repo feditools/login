@@ -29,7 +29,7 @@ func (l *Localizer) TextOauth20Client(count int) *LocalizedString {
 	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
 			ID:          "Oauth20Client",
-			Description: "the common phrase for account",
+			Description: "the common phrase for oauth 2.0 client",
 			One:         "OAuth 2.0 Client",
 			Other:       "OAuth 2.0 Clients",
 		},
@@ -51,7 +51,7 @@ func (l *Localizer) TextOauth20Settings() *LocalizedString {
 	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
 			ID:          "Oauth20Settings",
-			Description: "the common phrase for oauth settings",
+			Description: "the common phrase for oauth 2.0 settings",
 			Other:       "OAuth 2.0 Settings",
 		},
 	})

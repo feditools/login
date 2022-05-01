@@ -23,3 +23,25 @@ func (l *Localizer) TextAccount(count int) *LocalizedString {
 		string:   text,
 	}
 }
+
+// TextAddOauth20Client returns a translated phrase
+func (l *Localizer) TextAddOauth20Client(count int) *LocalizedString {
+	lg := logger.WithField("func", "TextAddOauth20Client")
+
+	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:          "AddOauth20Client",
+			Description: "the common phrase for add oauth 2.0 client",
+			One:         "Add OAuth 2.0 Client",
+			Other:       "Add OAuth 2.0 Clients",
+		},
+		PluralCount: count,
+	})
+	if err != nil {
+		lg.Warningf("missing translation: %s", err.Error())
+	}
+	return &LocalizedString{
+		language: tag,
+		string:   text,
+	}
+}
