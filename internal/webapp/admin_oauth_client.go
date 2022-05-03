@@ -15,10 +15,13 @@ import (
 func (m *Module) AdminOauthClientsGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
 	l := logger.WithField("func", "AdminOauthClientsGetHandler")
 
+	// get localizer
+	localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
+
 	// Init template variables
-	tmplVars := &template.AdminOauthClient{
+	tmplVars := &template.AdminOauthClients{
 		Common: template.Common{
-			PageTitle: "Admin Clients",
+			PageTitle: localizer.TextOauth20Client(2).String(),
 		},
 		Admin: template.Admin{
 			Sidebar: makeAdminOauthSidebar(r),
@@ -36,9 +39,9 @@ func (m *Module) AdminOauthClientsGetHandler(w nethttp.ResponseWriter, r *nethtt
 		return
 	}
 
-	err = m.executeTemplate(w, template.AdminOauthClientName, tmplVars)
+	err = m.executeTemplate(w, template.AdminOauthClientsName, tmplVars)
 	if err != nil {
-		l.Errorf("could not render %s template: %s", template.AdminOauthClientName, err.Error())
+		l.Errorf("could not render %s template: %s", template.AdminOauthClientsName, err.Error())
 	}
 }
 

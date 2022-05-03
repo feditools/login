@@ -1,10 +1,10 @@
 package template
 
-// AdminOauthClientName is the name of the admin oauth clients template
-const AdminOauthClientName = "admin_oauth_client"
+// AdminOauthClientsName is the name of the admin oauth clients template
+const AdminOauthClientsName = "admin_oauth_clients"
 
-// AdminOauthClient contains the variables for the "admin_oauth_client" template.
-type AdminOauthClient struct {
+// AdminOauthClients contains the variables for the "admin_oauth_client" template.
+type AdminOauthClients struct {
 	Common
 	Admin
 
