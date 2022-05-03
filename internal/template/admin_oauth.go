@@ -1,7 +1,5 @@
 package template
 
-import "github.com/feditools/login/internal/models"
-
 // AdminOauthClientName is the name of the admin oauth clients template
 const AdminOauthClientName = "admin_oauth_client"
 
@@ -21,11 +19,6 @@ type AdminOauthClientAdd struct {
 	Common
 	Admin
 
-	FormInputDescriptionDisabled bool
-	FormInputDescriptionValue    string
-	FormInputReturnURIDisabled   bool
-	FormInputReturnURIValue      string
-
 	FormInputDescription *FormInput
 	FormInputReturnURI   *FormInput
 	FormButtonSubmitText string
@@ -39,6 +32,8 @@ type AdminOauthClientAdded struct {
 	Common
 	Admin
 
-	Client       *models.OauthClient
-	ClientSecret string
+	FormInputDescription  *FormInput
+	FormInputClientID     *FormInput
+	FormInputClientSecret *FormInput
+	FormInputReturnURI    *FormInput
 }

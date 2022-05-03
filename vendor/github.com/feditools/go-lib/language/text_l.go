@@ -21,3 +21,23 @@ func (l *Localizer) TextLogin() *LocalizedString {
 		string:   text,
 	}
 }
+
+// TextLooksGood returns a translated phrase
+func (l *Localizer) TextLooksGood() *LocalizedString {
+	lg := logger.WithField("func", "TextLooksGood")
+
+	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:          "LooksGood",
+			Description: "the common phrase for looks good in an excited fashion",
+			Other:       "Looks Good!",
+		},
+	})
+	if err != nil {
+		lg.Warningf("missing translation: %s", err.Error())
+	}
+	return &LocalizedString{
+		language: tag,
+		string:   text,
+	}
+}

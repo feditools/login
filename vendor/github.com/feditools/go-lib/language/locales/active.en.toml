@@ -13,6 +13,16 @@ description = "the common phrase for client"
 one = "Client"
 other = "Clients"
 
+[ClientID]
+description = "the common phrase for client IDs"
+one = "Client ID"
+other = "Client IDs"
+
+[ClientSecret]
+description = "the common phrase for client secrets"
+one = "Client Secret"
+other = "Client Secrets"
+
 [Create]
 description = "the common phrase for create"
 other = "Create"
@@ -36,6 +46,10 @@ other = "Homes"
 description = "the common phrase for logging in"
 other = "Login"
 
+[LooksGood]
+description = "the common phrase for looks good in an excited fashion"
+other = "Looks Good!"
+
 [Oauth]
 description = "the common phrase for oauth settings"
 other = "OAuth"
@@ -48,6 +62,10 @@ other = "OAuth 2.0 Clients"
 [Oauth20Settings]
 description = "the common phrase for oauth 2.0 settings"
 other = "OAuth 2.0 Settings"
+
+[ReturnURI]
+description = "the common phrase for return uri"
+other = "Return URI"
 
 [Unauthorized]
 description = "the common phrase for unauthorized"

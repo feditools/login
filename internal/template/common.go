@@ -10,7 +10,9 @@ type Common struct {
 	Language  string
 	Localizer *language.Localizer
 
-	Account       *models.FediAccount
+	Account *models.FediAccount
+
+	Alerts        *[]Alert
 	FooterScripts []Script
 	HeadLinks     []HeadLink
 	LogoSrcDark   string
