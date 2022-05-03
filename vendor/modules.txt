@@ -18,7 +18,7 @@ github.com/dgryski/go-rendezvous
 # github.com/fatih/color v1.13.0
 ## explicit; go 1.13
 github.com/fatih/color
-# github.com/feditools/go-lib v0.6.0
+# github.com/feditools/go-lib v0.6.2
 ## explicit; go 1.18
 github.com/feditools/go-lib
 github.com/feditools/go-lib/dblib
@@ -445,3 +445,6 @@ modernc.org/strutil
 # modernc.org/token v1.0.0
 ## explicit
 modernc.org/token
+# mvdan.cc/xurls/v2 v2.4.0
+## explicit; go 1.16
+mvdan.cc/xurls/v2

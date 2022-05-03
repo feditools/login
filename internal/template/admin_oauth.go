@@ -20,7 +20,7 @@ type AdminOauthClientAdd struct {
 	Admin
 
 	FormInputDescription *FormInput
-	FormInputReturnURI   *FormInput
+	FormInputRedirectURI *FormInput
 	FormButtonSubmitText string
 }
 
@@ -35,5 +35,5 @@ type AdminOauthClientAdded struct {
 	FormInputDescription  *FormInput
 	FormInputClientID     *FormInput
 	FormInputClientSecret *FormInput
-	FormInputReturnURI    *FormInput
+	FormInputRedirectURI  *FormInput
 }

@@ -22,7 +22,7 @@
       </div>
 {{- end }}
       <input class="form-control" type="text" name="account" {{if .FormAccount}}value="{{.FormAccount}}" {{end}}placeholder="{{ .Localizer.TextAccount 1 }}" aria-label="account">
-      <button type="submit" class="btn btn-lg btn-primary btn-block">{{ .Localizer.TextLoginShort }}</button>
+      <button type="submit" class="btn btn-lg btn-primary btn-block">{{ .Localizer.TextLogin }}</button>
     </form>
   </div>
 {{- range $link := .FooterScripts}}

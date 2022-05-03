@@ -3,10 +3,12 @@ package webapp
 import (
 	"github.com/feditools/go-lib/language"
 	"github.com/feditools/login/internal/http"
+	"github.com/feditools/login/internal/models"
 	"github.com/feditools/login/internal/path"
 	"github.com/feditools/login/internal/template"
+	"github.com/google/uuid"
+	"mvdan.cc/xurls/v2"
 	nethttp "net/http"
-	"net/url"
 )
 
 // AdminOauthClientsGetHandler serves the admin client page
@@ -68,34 +70,69 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 	if description == "" {
 		descriptionValidation = &template.FormValidation{
 			Valid:    false,
-			Response: localizer.TextLooksGood().String(),
+			Response: localizer.TextRequired().String(),
 		}
 		valid = false
 	}
-	returnURIValidation := &template.FormValidation{
+	redirectURIValidation := &template.FormValidation{
 		Valid:    true,
 		Response: localizer.TextLooksGood().String(),
 	}
-	returnURI := r.Form.Get(FormReturnURI)
-	if returnURI == "" {
-		returnURIValidation = &template.FormValidation{
+	redirectURI := r.Form.Get(FormRedirectURI)
+	if redirectURI == "" {
+		redirectURIValidation = &template.FormValidation{
 			Valid:    false,
-			Response: localizer.TextLooksGood().String(),
+			Response: localizer.TextRequired().String(),
 		}
 		valid = false
 	}
-	_, err = url.Parse(returnURI)
-	if err != nil {
-		returnURIValidation = &template.FormValidation{
-			Valid:    false,
-			Response: localizer.TextLooksGood().String(),
+	if redirectURIValidation.Valid {
+		rxStrict, err := xurls.StrictMatchingScheme("(http|https)")
+		if err != nil {
+			l.Warnf("couldn't compile regex")
 		}
-		valid = false
+		matches := rxStrict.FindAllString(redirectURI, -1)
+		if len(matches) != 1 {
+			// url not found or too many uris
+			redirectURIValidation = &template.FormValidation{
+				Valid:    false,
+				Response: localizer.TextInvalidURI(1).String(),
+			}
+			valid = false
+		} else if matches[0] != redirectURI {
+			// check for extraneous text
+			redirectURIValidation = &template.FormValidation{
+				Valid:    false,
+				Response: localizer.TextInvalidURI(1).String(),
+			}
+			valid = false
+		}
 	}
 
 	// return form if invalid
 	if !valid {
-		m.displayOauthClientAdd(w, r, description, returnURI, descriptionValidation, returnURIValidation)
+		m.displayOauthClientAdd(w, r, description, redirectURI, descriptionValidation, redirectURIValidation)
+		return
+	}
+
+	// get account
+	account := r.Context().Value(http.ContextKeyAccount).(*models.FediAccount)
+
+	// add to the database
+	newClientSecret := uuid.New().String()
+	newClient := &models.OauthClient{
+		Description: description,
+		RedirectURI: redirectURI,
+		OwnerID:     account.ID,
+	}
+	err = newClient.SetSecret(newClientSecret)
+	if err != nil {
+		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+		return
+	}
+	err = m.db.CreateOauthClient(r.Context(), newClient)
+	if err != nil {
+		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -115,7 +152,7 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 			Placeholder:  localizer.TextDescription(1).String(),
 			Label:        localizer.TextDescription(1),
 			LabelClass:   "col-sm-2 col-form-label",
-			Value:        "",
+			Value:        newClient.Description,
 			WrappedClass: "col-sm-10",
 			Disabled:     true,
 			Required:     true,
@@ -127,7 +164,7 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 			Placeholder:  localizer.TextClientID(1).String(),
 			Label:        localizer.TextClientID(1),
 			LabelClass:   "col-sm-2 col-form-label",
-			Value:        "",
+			Value:        m.tokenizer.GetToken(newClient),
 			WrappedClass: "col-sm-10",
 			Disabled:     true,
 			Required:     true,
@@ -139,19 +176,19 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 			Placeholder:  localizer.TextClientSecret(1).String(),
 			Label:        localizer.TextClientSecret(1),
 			LabelClass:   "col-sm-2 col-form-label",
-			Value:        "",
+			Value:        newClientSecret,
 			WrappedClass: "col-sm-10",
 			Disabled:     true,
 			Required:     true,
 		},
-		FormInputReturnURI: &template.FormInput{
-			ID:           "inputReturnURI",
+		FormInputRedirectURI: &template.FormInput{
+			ID:           "inputRedirectURI",
 			Type:         "text",
-			Name:         "return-uri",
-			Placeholder:  localizer.TextReturnURI().String(),
-			Label:        localizer.TextReturnURI(),
+			Name:         FormRedirectURI,
+			Placeholder:  localizer.TextRedirectURI(1).String(),
+			Label:        localizer.TextRedirectURI(1),
 			LabelClass:   "col-sm-2 col-form-label",
-			Value:        "",
+			Value:        newClient.RedirectURI,
 			WrappedClass: "col-sm-10",
 			Disabled:     true,
 			Required:     true,
@@ -174,7 +211,7 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 	}
 }
 
-func (m *Module) displayOauthClientAdd(w nethttp.ResponseWriter, r *nethttp.Request, description, returnURI string, descriptionVal, returnURIVal *template.FormValidation) {
+func (m *Module) displayOauthClientAdd(w nethttp.ResponseWriter, r *nethttp.Request, description, redirectURI string, descriptionVal, redirectURIVal *template.FormValidation) {
 	l := logger.WithField("func", "displayOauthClientAdd")
 
 	// get localizer
@@ -202,18 +239,18 @@ func (m *Module) displayOauthClientAdd(w nethttp.ResponseWriter, r *nethttp.Requ
 			Required:     true,
 			Validation:   descriptionVal,
 		},
-		FormInputReturnURI: &template.FormInput{
-			ID:           "inputReturnURI",
+		FormInputRedirectURI: &template.FormInput{
+			ID:           "inputRedirectURI",
 			Type:         "text",
-			Name:         "return-uri",
-			Placeholder:  localizer.TextReturnURI().String(),
-			Label:        localizer.TextReturnURI(),
+			Name:         FormRedirectURI,
+			Placeholder:  localizer.TextRedirectURI(1).String(),
+			Label:        localizer.TextRedirectURI(1),
 			LabelClass:   "col-sm-2 col-form-label",
-			Value:        returnURI,
+			Value:        redirectURI,
 			WrappedClass: "col-sm-10",
 			Disabled:     false,
 			Required:     true,
-			Validation:   returnURIVal,
+			Validation:   redirectURIVal,
 		},
 
 		FormButtonSubmitText: localizer.TextCreate().String(),

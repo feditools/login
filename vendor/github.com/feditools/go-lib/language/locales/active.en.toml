@@ -42,6 +42,11 @@ description = "a single word representation of home, as in home page."
 one = "Home"
 other = "Homes"
 
+[InvalidURI]
+description = "the common phrase for invalid uri"
+one = "Invalid URI"
+other = "Invalid URIs"
+
 [Login]
 description = "the common phrase for logging in"
 other = "Login"
@@ -63,9 +68,14 @@ other = "OAuth 2.0 Clients"
 description = "the common phrase for oauth 2.0 settings"
 other = "OAuth 2.0 Settings"
 
-[ReturnURI]
+[RedirectURI]
 description = "the common phrase for return uri"
-other = "Return URI"
+one = "Redirect URI"
+other = "Redirect URIs"
+
+[Required]
+description = "the common phrase for required"
+other = "Required"
 
 [Unauthorized]
 description = "the common phrase for unauthorized"

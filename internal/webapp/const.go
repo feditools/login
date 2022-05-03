@@ -18,6 +18,6 @@ const (
 
 	// FormDescription is the ket for a description form field
 	FormDescription = "description"
-	// FormReturnURI is the ket for a return uri form field
-	FormReturnURI = "return-uri"
+	// FormRedirectURI is the ket for a redirect uri form field
+	FormRedirectURI = "redirect-uri"
 )
