@@ -8,10 +8,9 @@ func (l *Localizer) TextAccount(count int) *LocalizedString {
 
 	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
-			ID:          "Account",
-			Description: "the common phrase for account",
-			One:         "Account",
-			Other:       "Accounts",
+			ID:    "Account",
+			One:   "Account",
+			Other: "Accounts",
 		},
 		PluralCount: count,
 	})
@@ -30,10 +29,9 @@ func (l *Localizer) TextAddOauth20Client(count int) *LocalizedString {
 
 	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
-			ID:          "AddOauth20Client",
-			Description: "the common phrase for add oauth 2.0 client",
-			One:         "Add OAuth 2.0 Client",
-			Other:       "Add OAuth 2.0 Clients",
+			ID:    "AddOauth20Client",
+			One:   "Add OAuth 2.0 Client",
+			Other: "Add OAuth 2.0 Clients",
 		},
 		PluralCount: count,
 	})

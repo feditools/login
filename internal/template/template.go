@@ -2,6 +2,7 @@ package template
 
 import (
 	"github.com/feditools/go-lib/language"
+	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login"
 	"github.com/feditools/login/internal/models"
 	"github.com/feditools/login/internal/token"
@@ -14,8 +15,8 @@ const templateDir = "web/template"
 
 // InitTemplate are the functions a template implementing Common will have
 type InitTemplate interface {
-	AddHeadLink(l HeadLink)
-	AddFooterScript(s Script)
+	AddHeadLink(l libtemplate.HeadLink)
+	AddFooterScript(s libtemplate.Script)
 	SetAccount(account *models.FediAccount)
 	SetLanguage(l string)
 	SetLocalizer(l *language.Localizer)

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/gob"
 	"github.com/feditools/go-lib/language"
+	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/fedi"
@@ -42,8 +43,8 @@ type Module struct {
 
 	logoSrcDark   string
 	logoSrcLight  string
-	headLinks     []template.HeadLink
-	footerScripts []template.Script
+	headLinks     []libtemplate.HeadLink
+	footerScripts []libtemplate.Script
 
 	sigCache     map[string]string
 	sigCacheLock sync.RWMutex
@@ -105,7 +106,7 @@ func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *lang
 	}
 
 	// generate head links
-	hl := []template.HeadLink{
+	hl := []libtemplate.HeadLink{
 		{
 			HRef:        viper.GetString(config.Keys.WebappBootstrapCSSURI),
 			Rel:         "stylesheet",
@@ -128,7 +129,7 @@ func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *lang
 			l.Errorf("getting signature for %s: %s", path, err.Error())
 		}
 
-		hl = append(hl, template.HeadLink{
+		hl = append(hl, libtemplate.HeadLink{
 			HRef:        path,
 			Rel:         "stylesheet",
 			CrossOrigin: "anonymous",
@@ -137,7 +138,7 @@ func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *lang
 	}
 
 	// generate head links
-	fs := []template.Script{
+	fs := []libtemplate.Script{
 		{
 			Src:         viper.GetString(config.Keys.WebappBootstrapJSURI),
 			CrossOrigin: "anonymous",

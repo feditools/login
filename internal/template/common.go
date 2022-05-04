@@ -2,6 +2,7 @@ package template
 
 import (
 	"github.com/feditools/go-lib/language"
+	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/models"
 )
 
@@ -12,9 +13,9 @@ type Common struct {
 
 	Account *models.FediAccount
 
-	Alerts        *[]Alert
-	FooterScripts []Script
-	HeadLinks     []HeadLink
+	Alerts        *[]libtemplate.Alert
+	FooterScripts []libtemplate.Script
+	HeadLinks     []libtemplate.HeadLink
 	LogoSrcDark   string
 	LogoSrcLight  string
 	NavBar        Navbar
@@ -22,18 +23,18 @@ type Common struct {
 }
 
 // AddHeadLink adds a headder link to the template
-func (t *Common) AddHeadLink(l HeadLink) {
+func (t *Common) AddHeadLink(l libtemplate.HeadLink) {
 	if t.HeadLinks == nil {
-		t.HeadLinks = []HeadLink{}
+		t.HeadLinks = []libtemplate.HeadLink{}
 	}
 	t.HeadLinks = append(t.HeadLinks, l)
 	return
 }
 
 // AddFooterScript adds a footer script to the template
-func (t *Common) AddFooterScript(s Script) {
+func (t *Common) AddFooterScript(s libtemplate.Script) {
 	if t.FooterScripts == nil {
-		t.FooterScripts = []Script{}
+		t.FooterScripts = []libtemplate.Script{}
 	}
 	t.FooterScripts = append(t.FooterScripts, s)
 	return

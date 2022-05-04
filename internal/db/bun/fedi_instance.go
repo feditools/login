@@ -3,7 +3,7 @@ package bun
 import (
 	"context"
 	"database/sql"
-	"github.com/feditools/go-lib/dblib"
+	libdatabase "github.com/feditools/go-lib/database"
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/models"
 	"github.com/uptrace/bun"
@@ -69,7 +69,7 @@ func (c *Client) ReadFediInstancesPage(ctx context.Context, index, count int) ([
 
 	err := c.newFediInstancesQ(&instances).
 		Limit(count).
-		Offset(dblib.Offset(index, count)).
+		Offset(libdatabase.Offset(index, count)).
 		Scan(ctx)
 	if err != nil {
 		go metric.Done(true)

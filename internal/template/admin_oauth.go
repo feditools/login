@@ -1,5 +1,7 @@
 package template
 
+import libtemplate "github.com/feditools/go-lib/template"
+
 // AdminOauthClientsName is the name of the admin oauth clients template
 const AdminOauthClientsName = "admin_oauth_clients"
 
@@ -19,8 +21,8 @@ type AdminOauthClientAdd struct {
 	Common
 	Admin
 
-	FormInputDescription *FormInput
-	FormInputRedirectURI *FormInput
+	FormInputDescription *libtemplate.FormInput
+	FormInputRedirectURI *libtemplate.FormInput
 	FormButtonSubmitText string
 }
 
@@ -32,8 +34,8 @@ type AdminOauthClientAdded struct {
 	Common
 	Admin
 
-	FormInputDescription  *FormInput
-	FormInputClientID     *FormInput
-	FormInputClientSecret *FormInput
-	FormInputRedirectURI  *FormInput
+	FormInputDescription  *libtemplate.FormInput
+	FormInputClientID     *libtemplate.FormInput
+	FormInputClientSecret *libtemplate.FormInput
+	FormInputRedirectURI  *libtemplate.FormInput
 }

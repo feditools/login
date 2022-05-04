@@ -8,9 +8,8 @@ func (l *Localizer) TextLogin() *LocalizedString {
 
 	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
-			ID:          "Login",
-			Description: "the common phrase for logging in",
-			Other:       "Login",
+			ID:    "Login",
+			Other: "Login",
 		},
 	})
 	if err != nil {
@@ -28,9 +27,8 @@ func (l *Localizer) TextLooksGood() *LocalizedString {
 
 	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
-			ID:          "LooksGood",
-			Description: "the common phrase for looks good in an excited fashion",
-			Other:       "Looks Good!",
+			ID:    "LooksGood",
+			Other: "Looks Good!",
 		},
 	})
 	if err != nil {

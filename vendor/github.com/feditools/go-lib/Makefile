@@ -7,13 +7,13 @@ fmt:
 	@go fmt $(shell go list ./... | grep -v /vendor/)
 
 i18n-extract:
-	goi18n extract -outdir language/locales
+	goi18n extract -format yaml -outdir language/locales
 
 i18n-merge:
-	goi18n merge -outdir language/locales language/locales/active.*.toml language/locales/translate.*.toml
+	goi18n merge -format yaml -outdir language/locales language/locales/active.*.toml language/locales/translate.*.toml
 
 i18n-translations:
-	goi18n merge -outdir language/locales language/locales/active.*.toml
+	goi18n merge -format yaml -outdir language/locales language/locales/active.*.toml
 
 lint:
 	@echo linting

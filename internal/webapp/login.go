@@ -2,6 +2,7 @@ package webapp
 
 import (
 	"github.com/feditools/go-lib/language"
+	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/path"
 	"github.com/feditools/login/internal/template"
@@ -59,7 +60,7 @@ func (m *Module) displayLoginPage(w nethttp.ResponseWriter, r *nethttp.Request, 
 	if err != nil {
 		l.Errorf("getting signature for %s: %s", path.FileLoginCSS, err.Error())
 	}
-	tmplVars.AddHeadLink(template.HeadLink{
+	tmplVars.AddHeadLink(libtemplate.HeadLink{
 		HRef:        path.FileLoginCSS,
 		Rel:         "stylesheet",
 		CrossOrigin: "anonymous",

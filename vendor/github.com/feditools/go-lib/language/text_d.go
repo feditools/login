@@ -8,10 +8,9 @@ func (l *Localizer) TextDashboard(count int) *LocalizedString {
 
 	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
-			ID:          "Dashboard",
-			Description: "the common phrase for dashboard",
-			One:         "Dashboard",
-			Other:       "Dashboards",
+			ID:    "Dashboard",
+			One:   "Dashboard",
+			Other: "Dashboards",
 		},
 		PluralCount: count,
 	})
@@ -30,10 +29,9 @@ func (l *Localizer) TextDescription(count int) *LocalizedString {
 
 	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
-			ID:          "Description",
-			Description: "the common phrase for description",
-			One:         "Description",
-			Other:       "Descriptions",
+			ID:    "Description",
+			One:   "Description",
+			Other: "Descriptions",
 		},
 		PluralCount: count,
 	})

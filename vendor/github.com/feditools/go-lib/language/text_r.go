@@ -8,9 +8,8 @@ func (l *Localizer) TextRequired() *LocalizedString {
 
 	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
-			ID:          "Required",
-			Description: "the common phrase for required",
-			Other:       "Required",
+			ID:    "Required",
+			Other: "Required",
 		},
 	})
 	if err != nil {
@@ -28,10 +27,9 @@ func (l *Localizer) TextRedirectURI(count int) *LocalizedString {
 
 	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
-			ID:          "RedirectURI",
-			Description: "the common phrase for return uri",
-			One:         "Redirect URI",
-			Other:       "Redirect URIs",
+			ID:    "RedirectURI",
+			One:   "Redirect URI",
+			Other: "Redirect URIs",
 		},
 		PluralCount: count,
 	})

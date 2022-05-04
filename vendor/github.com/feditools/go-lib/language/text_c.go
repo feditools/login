@@ -8,10 +8,9 @@ func (l *Localizer) TextClient(count int) *LocalizedString {
 
 	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
-			ID:          "Client",
-			Description: "the common phrase for client",
-			One:         "Client",
-			Other:       "Clients",
+			ID:    "Client",
+			One:   "Client",
+			Other: "Clients",
 		},
 		PluralCount: count,
 	})
@@ -30,10 +29,9 @@ func (l *Localizer) TextClientID(count int) *LocalizedString {
 
 	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
-			ID:          "ClientID",
-			Description: "the common phrase for client IDs",
-			One:         "Client ID",
-			Other:       "Client IDs",
+			ID:    "ClientID",
+			One:   "Client ID",
+			Other: "Client IDs",
 		},
 		PluralCount: count,
 	})
@@ -52,10 +50,9 @@ func (l *Localizer) TextClientSecret(count int) *LocalizedString {
 
 	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
-			ID:          "ClientSecret",
-			Description: "the common phrase for client secrets",
-			One:         "Client Secret",
-			Other:       "Client Secrets",
+			ID:    "ClientSecret",
+			One:   "Client Secret",
+			Other: "Client Secrets",
 		},
 		PluralCount: count,
 	})
@@ -74,9 +71,8 @@ func (l *Localizer) TextCreate() *LocalizedString {
 
 	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
-			ID:          "Create",
-			Description: "the common phrase for create",
-			Other:       "Create",
+			ID:    "Create",
+			Other: "Create",
 		},
 	})
 	if err != nil {

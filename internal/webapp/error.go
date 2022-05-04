@@ -2,6 +2,7 @@ package webapp
 
 import (
 	"fmt"
+	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/path"
 	"github.com/feditools/login/internal/template"
 	"net/http"
@@ -35,7 +36,7 @@ func (m *Module) returnErrorPage(w http.ResponseWriter, r *http.Request, code in
 	if err != nil {
 		l.Errorf("getting signature for %s: %s", path.FileErrorCSS, err.Error())
 	}
-	tmplVars.AddHeadLink(template.HeadLink{
+	tmplVars.AddHeadLink(libtemplate.HeadLink{
 		HRef:        path.FileErrorCSS,
 		Rel:         "stylesheet",
 		CrossOrigin: "anonymous",

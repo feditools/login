@@ -2,6 +2,7 @@ package webapp
 
 import (
 	"github.com/feditools/go-lib/language"
+	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/models"
 	"github.com/feditools/login/internal/path"
@@ -65,25 +66,25 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 
 	// get vars and validate
 	valid := true
-	descriptionValidation := &template.FormValidation{
+	descriptionValidation := &libtemplate.FormValidation{
 		Valid:    true,
 		Response: localizer.TextLooksGood().String(),
 	}
 	description := r.Form.Get(FormDescription)
 	if description == "" {
-		descriptionValidation = &template.FormValidation{
+		descriptionValidation = &libtemplate.FormValidation{
 			Valid:    false,
 			Response: localizer.TextRequired().String(),
 		}
 		valid = false
 	}
-	redirectURIValidation := &template.FormValidation{
+	redirectURIValidation := &libtemplate.FormValidation{
 		Valid:    true,
 		Response: localizer.TextLooksGood().String(),
 	}
 	redirectURI := r.Form.Get(FormRedirectURI)
 	if redirectURI == "" {
-		redirectURIValidation = &template.FormValidation{
+		redirectURIValidation = &libtemplate.FormValidation{
 			Valid:    false,
 			Response: localizer.TextRequired().String(),
 		}
@@ -97,14 +98,14 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 		matches := rxStrict.FindAllString(redirectURI, -1)
 		if len(matches) != 1 {
 			// url not found or too many uris
-			redirectURIValidation = &template.FormValidation{
+			redirectURIValidation = &libtemplate.FormValidation{
 				Valid:    false,
 				Response: localizer.TextInvalidURI(1).String(),
 			}
 			valid = false
 		} else if matches[0] != redirectURI {
 			// check for extraneous text
-			redirectURIValidation = &template.FormValidation{
+			redirectURIValidation = &libtemplate.FormValidation{
 				Valid:    false,
 				Response: localizer.TextInvalidURI(1).String(),
 			}
@@ -148,7 +149,7 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 			Sidebar: makeAdminOauthSidebar(r),
 		},
 
-		FormInputDescription: &template.FormInput{
+		FormInputDescription: &libtemplate.FormInput{
 			ID:           "inputDescription",
 			Type:         "text",
 			Name:         FormDescription,
@@ -160,7 +161,7 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 			Disabled:     true,
 			Required:     true,
 		},
-		FormInputClientID: &template.FormInput{
+		FormInputClientID: &libtemplate.FormInput{
 			ID:           "inputClientID",
 			Type:         "text",
 			Name:         "client-id",
@@ -172,7 +173,7 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 			Disabled:     true,
 			Required:     true,
 		},
-		FormInputClientSecret: &template.FormInput{
+		FormInputClientSecret: &libtemplate.FormInput{
 			ID:           "inputClientSecret",
 			Type:         "text",
 			Name:         "client-secret",
@@ -184,7 +185,7 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 			Disabled:     true,
 			Required:     true,
 		},
-		FormInputRedirectURI: &template.FormInput{
+		FormInputRedirectURI: &libtemplate.FormInput{
 			ID:           "inputRedirectURI",
 			Type:         "text",
 			Name:         FormRedirectURI,
@@ -214,7 +215,7 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 	}
 }
 
-func (m *Module) displayOauthClientAdd(w nethttp.ResponseWriter, r *nethttp.Request, description, redirectURI string, descriptionVal, redirectURIVal *template.FormValidation) {
+func (m *Module) displayOauthClientAdd(w nethttp.ResponseWriter, r *nethttp.Request, description, redirectURI string, descriptionVal, redirectURIVal *libtemplate.FormValidation) {
 	l := logger.WithField("func", "displayOauthClientAdd")
 
 	// get localizer
@@ -229,7 +230,7 @@ func (m *Module) displayOauthClientAdd(w nethttp.ResponseWriter, r *nethttp.Requ
 			Sidebar: makeAdminOauthSidebar(r),
 		},
 
-		FormInputDescription: &template.FormInput{
+		FormInputDescription: &libtemplate.FormInput{
 			ID:           "inputDescription",
 			Type:         "text",
 			Name:         FormDescription,
@@ -242,7 +243,7 @@ func (m *Module) displayOauthClientAdd(w nethttp.ResponseWriter, r *nethttp.Requ
 			Required:     true,
 			Validation:   descriptionVal,
 		},
-		FormInputRedirectURI: &template.FormInput{
+		FormInputRedirectURI: &libtemplate.FormInput{
 			ID:           "inputRedirectURI",
 			Type:         "text",
 			Name:         FormRedirectURI,

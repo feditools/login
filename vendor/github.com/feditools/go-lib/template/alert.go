@@ -6,3 +6,6 @@ type Alert struct {
 	Level  string
 	Text   string
 }
+
+// AlertBars is a set of alerts to display together
+type AlertBars *[]Alert

@@ -20,7 +20,7 @@ func (s *Sidebar) GetChildren(i int) ActivableSlice {
 
 // GetMatcher returns the matcher of the node or nil if no matcher
 func (s *Sidebar) GetMatcher(i int) *regexp.Regexp {
-	return (*s)[i].MatchStr
+	return (*s)[i].Matcher
 }
 
 // SetActive sets the active bool based on the match regex
@@ -35,11 +35,11 @@ func (s *Sidebar) Len() int {
 
 // SidebarNode is an entry on a sidebar
 type SidebarNode struct {
-	Text     string
-	URL      string
-	MatchStr *regexp.Regexp
-	Icon     string
-	Label    string
+	Text    string
+	URI     string
+	Matcher *regexp.Regexp
+	Icon    string
+	Label   string
 
 	Active   bool
 	Disabled bool

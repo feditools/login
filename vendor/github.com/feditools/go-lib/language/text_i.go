@@ -8,10 +8,9 @@ func (l *Localizer) TextInvalidURI(count int) *LocalizedString {
 
 	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
-			ID:          "InvalidURI",
-			Description: "the common phrase for invalid uri",
-			One:         "Invalid URI",
-			Other:       "Invalid URIs",
+			ID:    "InvalidURI",
+			One:   "Invalid URI",
+			Other: "Invalid URIs",
 		},
 		PluralCount: count,
 	})

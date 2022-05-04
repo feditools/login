@@ -1,6 +1,7 @@
 package template
 
 import (
+	libtemplate "github.com/feditools/go-lib/template"
 	"regexp"
 )
 
@@ -9,11 +10,11 @@ type Navbar []NavbarNode
 
 // ActivateFromPath sets the active bool based on the match regex
 func (n *Navbar) ActivateFromPath(path string) {
-	SetActive(n, path)
+	libtemplate.SetActive(n, path)
 }
 
 // GetChildren returns the children of the node or nil if no children
-func (n *Navbar) GetChildren(i int) ActivableSlice {
+func (n *Navbar) GetChildren(i int) libtemplate.ActivableSlice {
 	if len((*n)[i].Children) == 0 {
 		return nil
 	}

@@ -8,9 +8,8 @@ func (l *Localizer) TextUnauthorized() *LocalizedString {
 
 	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
-			ID:          "Unauthorized",
-			Description: "the common phrase for unauthorized",
-			Other:       "Unauthorized",
+			ID:    "Unauthorized",
+			Other: "Unauthorized",
 		},
 	})
 	if err != nil {
