@@ -1,6 +1,9 @@
 package template
 
-import libtemplate "github.com/feditools/go-lib/template"
+import (
+	libtemplate "github.com/feditools/go-lib/template"
+	"github.com/feditools/login/internal/models"
+)
 
 // AdminOauthClientsName is the name of the admin oauth clients template
 const AdminOauthClientsName = "admin_oauth_clients"
@@ -11,6 +14,7 @@ type AdminOauthClients struct {
 	Admin
 
 	HrefAddClient string
+	OauthClients  *[]*models.OauthClient
 }
 
 // AdminOauthClientAddName is the name of the admin oauth clients template

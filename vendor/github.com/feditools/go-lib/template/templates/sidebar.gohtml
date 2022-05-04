@@ -5,8 +5,8 @@
   {{- if .Text }}
     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
       <span>{{ .Text }}</span>
-    {{- if .URL -}}
-      <a class="link-secondary" href="{{ .URL }}" aria-label="{{ .Label }}">
+    {{- if .URI -}}
+      <a class="link-secondary" href="{{ .URI }}" aria-label="{{ .Label }}">
         <i class="fa-solid fa-{{ .Icon }}"></i>
       </a>
     {{- end }}
@@ -17,7 +17,7 @@
     {{- end }}
     {{- range .Children }}
       <li class="nav-item">
-        <a class="nav-link{{ if .Active }} active{{ end }}" aria-current="page" href="{{ .URL }}">
+        <a class="nav-link{{ if .Active }} active{{ end }}" aria-current="page" href="{{ .URI }}">
             {{ if .Icon }}<i class="fa-solid fa-{{ .Icon }}"></i> {{ end }}{{ .Text }}
         </a>
       </li>

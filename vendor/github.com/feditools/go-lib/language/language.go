@@ -55,7 +55,11 @@ func New() (*Module, error) {
 			return nil, err
 		}
 
-		module.langBundle.MustParseMessageFileBytes(buffer, d.Name())
+		// paris if not empty
+		empty := isEmptyYaml(buffer)
+		if !empty {
+			module.langBundle.MustParseMessageFileBytes(buffer, d.Name())
+		}
 	}
 
 	return &module, nil

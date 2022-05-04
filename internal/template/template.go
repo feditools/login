@@ -26,22 +26,12 @@ type InitTemplate interface {
 
 // New creates a new template
 func New(t *token.Tokenizer) (*template.Template, error) {
-	tpl := template.New("")
-	tpl.Funcs(template.FuncMap{
-		"dec": func(i int) int {
-			i--
-			return i
-		},
-		"htmlSafe": func(html string) template.HTML {
-			/* #nosec G203 */
-			return template.HTML(html)
-		},
-		"inc": func(i int) int {
-			i++
-			return i
-		},
+	tpl, err := libtemplate.New(template.FuncMap{
 		"token": t.GetToken,
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	dir, err := login.Files.ReadDir(templateDir)
 	if err != nil {

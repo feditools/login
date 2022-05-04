@@ -30,11 +30,7 @@ func (m *Module) AdminOauthClientsGetHandler(w nethttp.ResponseWriter, r *nethtt
 		HrefAddClient: path.AdminOauthClientAdd,
 	}
 
-	// make admin navbar
-	navbar := makeAdminNavbar(r)
-	tmplVars.SetNavbar(navbar)
-
-	err := m.initTemplate(w, r, tmplVars)
+	err := m.initTemplateAdmin(w, r, tmplVars)
 	if err != nil {
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
 		return
@@ -199,11 +195,7 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 		},
 	}
 
-	// make admin navbar
-	navbar := makeAdminNavbar(r)
-	tmplVars.SetNavbar(navbar)
-
-	err = m.initTemplate(w, r, tmplVars)
+	err = m.initTemplateAdmin(w, r, tmplVars)
 	if err != nil {
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
 		return
@@ -260,11 +252,7 @@ func (m *Module) displayOauthClientAdd(w nethttp.ResponseWriter, r *nethttp.Requ
 		FormButtonSubmitText: localizer.TextCreate().String(),
 	}
 
-	// make admin navbar
-	navbar := makeAdminNavbar(r)
-	tmplVars.SetNavbar(navbar)
-
-	err := m.initTemplate(w, r, tmplVars)
+	err := m.initTemplateAdmin(w, r, tmplVars)
 	if err != nil {
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
 		return
