@@ -80,6 +80,30 @@ func (t *Tokenizer) GetToken(o interface{}) string {
 			l.Errorf("couldn't generate token for %s: %s", KindFediAccount, err.Error())
 		}
 		return tok
+	case models.OauthClient:
+		tok, err := t.EncodeToken(KindOauthClient, o.ID)
+		if err != nil {
+			l.Errorf("couldn't generate token for %s: %s", KindOauthClient, err.Error())
+		}
+		return tok
+	case *models.OauthClient:
+		tok, err := t.EncodeToken(KindOauthClient, o.ID)
+		if err != nil {
+			l.Errorf("couldn't generate token for %s: %s", KindOauthClient, err.Error())
+		}
+		return tok
+	case models.OauthScope:
+		tok, err := t.EncodeToken(KindOauthScope, o.ID)
+		if err != nil {
+			l.Errorf("couldn't generate token for %s: %s", KindOauthScope, err.Error())
+		}
+		return tok
+	case *models.OauthScope:
+		tok, err := t.EncodeToken(KindOauthScope, o.ID)
+		if err != nil {
+			l.Errorf("couldn't generate token for %s: %s", KindOauthScope, err.Error())
+		}
+		return tok
 	default:
 		l.Errorf("unknown kind: %T", o)
 		return ""

@@ -13,8 +13,11 @@ type AdminOauthClients struct {
 	Common
 	Admin
 
-	HrefAddClient string
-	OauthClients  *[]*models.OauthClient
+	HRefAddClient       string
+	HRefViewClient      string
+	HRefViewFediAddress string
+	OauthClients        *[]*models.OauthClient
+	Pagination          libtemplate.Pagination
 }
 
 // AdminOauthClientAddName is the name of the admin oauth clients template

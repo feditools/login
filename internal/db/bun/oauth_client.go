@@ -9,6 +9,20 @@ import (
 	"github.com/uptrace/bun"
 )
 
+// CountOauthClients returns the number of oauth clients
+func (c *Client) CountOauthClients(ctx context.Context) (int64, db.Error) {
+	metric := c.metrics.NewDBQuery("CreateOauthClient")
+
+	count, err := c.newOauthClientQ((*models.OauthClient)(nil)).Count(ctx)
+	if err != nil {
+		go metric.Done(true)
+		return 0, c.bun.errProc(err)
+	}
+
+	go metric.Done(false)
+	return int64(count), nil
+}
+
 // CreateOauthClient stores the oauth client
 func (c *Client) CreateOauthClient(ctx context.Context, client *models.OauthClient) db.Error {
 	metric := c.metrics.NewDBQuery("CreateOauthClient")

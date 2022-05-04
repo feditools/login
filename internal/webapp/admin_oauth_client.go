@@ -1,6 +1,7 @@
 package webapp
 
 import (
+	"github.com/feditools/go-lib"
 	"github.com/feditools/go-lib/language"
 	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/http"
@@ -27,7 +28,9 @@ func (m *Module) AdminOauthClientsGetHandler(w nethttp.ResponseWriter, r *nethtt
 		Admin: template.Admin{
 			Sidebar: makeAdminOauthSidebar(r),
 		},
-		HrefAddClient: path.AdminOauthClientAdd,
+		HRefAddClient:       path.AdminOauthClientAdd,
+		HRefViewClient:      path.AdminOauthClients,
+		HRefViewFediAddress: path.AdminFediverseAccounts,
 	}
 
 	err := m.initTemplateAdmin(w, r, tmplVars)
@@ -35,6 +38,58 @@ func (m *Module) AdminOauthClientsGetHandler(w nethttp.ResponseWriter, r *nethtt
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
 		return
 	}
+
+	page, count, countFound := lib.GetPaginationFromURL(r.URL, defaultCount)
+
+	// get oauth clients
+	oauthClients, err := m.db.ReadOauthClientsPage(r.Context(), page-1, count)
+	if err != nil {
+		l.Errorf("db read: %s", err.Error())
+		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+		return
+	}
+	for _, c := range oauthClients {
+		if c.Owner == nil {
+			owner, err := m.db.ReadFediAccount(r.Context(), c.OwnerID)
+			if err != nil {
+				l.Errorf("db read fedi account %d: %s", c.OwnerID, err.Error())
+				m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+				return
+			}
+			if owner.Instance == nil {
+				ownerInstance, err := m.db.ReadFediInstance(r.Context(), owner.InstanceID)
+				if err != nil {
+					l.Errorf("db read fedi account %d: %s", c.OwnerID, err.Error())
+					m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+					return
+				}
+				owner.Instance = ownerInstance
+			}
+			c.Owner = owner
+		}
+	}
+	tmplVars.OauthClients = &oauthClients
+
+	// count oauth clients
+	oauthClientCount, err := m.db.CountOauthClients(r.Context())
+	if err != nil {
+		l.Errorf("db count: %s", err.Error())
+		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+		return
+	}
+
+	// make pagination
+	pageConf := &libtemplate.PaginationConfig{
+		Count:         int(oauthClientCount),
+		DisplayCount:  count,
+		HRef:          path.AdminOauthClients,
+		MaxPagination: 5,
+		Page:          page,
+	}
+	if countFound {
+		pageConf.HRefCount = count
+	}
+	tmplVars.Pagination = libtemplate.MakePagination(pageConf)
 
 	err = m.executeTemplate(w, template.AdminOauthClientsName, tmplVars)
 	if err != nil {

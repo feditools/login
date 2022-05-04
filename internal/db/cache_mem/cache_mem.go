@@ -15,6 +15,8 @@ type CacheMem struct {
 	db      db.DB
 	metrics metrics.Collector
 
+	count *bigcache.BigCache
+
 	fediAccount             *bigcache.BigCache
 	fediAccountUsernameToID *bigcache.BigCache
 
@@ -24,6 +26,22 @@ type CacheMem struct {
 
 // New creates a new in memory cache
 func New(_ context.Context, d db.DB, m metrics.Collector) (db.DB, error) {
+	gob.Register(models.FediAccount{})
+	gob.Register(models.FediInstance{})
+
+	count, err := bigcache.NewBigCache(bigcache.Config{
+		Shards:             32,
+		LifeWindow:         30 * time.Second,
+		CleanWindow:        1 * time.Minute,
+		MaxEntriesInWindow: 10000,
+		MaxEntrySize:       8,
+		Verbose:            true,
+		HardMaxCacheSize:   8192,
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	fediAccount, err := bigcache.NewBigCache(bigcache.Config{
 		Shards:             32,
 		LifeWindow:         10 * time.Minute,
@@ -36,9 +54,6 @@ func New(_ context.Context, d db.DB, m metrics.Collector) (db.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	gob.Register(models.FediAccount{})
-	gob.Register(models.FediInstance{})
 
 	fediAccountUsernameToID, err := bigcache.NewBigCache(bigcache.Config{
 		Shards:             32,
@@ -82,6 +97,8 @@ func New(_ context.Context, d db.DB, m metrics.Collector) (db.DB, error) {
 	return &CacheMem{
 		db:      d,
 		metrics: m,
+
+		count: count,
 
 		fediAccount:             fediAccount,
 		fediAccountUsernameToID: fediAccountUsernameToID,

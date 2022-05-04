@@ -10,11 +10,48 @@
     {{ $textClients := .Localizer.TextOauth20Client 2 }}<h2 lang="{{ $textClients.Language }}"><i class="fa-solid fa-person-digging"></i> {{ $textClients }}</h2>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group">
-        <a href="{{ .HrefAddClient }}" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-plus"></i></a>
+        <a href="{{ .HRefAddClient }}" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-plus"></i></a>
       </div>
     </div>
   </div>
 </div>
+<div class="row">
+  <div class="col">
+  {{- $HRefViewClient := .HRefViewClient -}}
+  {{- $HRefViewFediAddress := .HRefViewFediAddress -}}
+  {{- if .OauthClients }}
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Description</th>
+        <th scope="col">Owner</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      {{- range .OauthClients }}
+        <tr>
+          <th scope="row"><a href="{{ $HRefViewClient }}/{{ token . }}">{{ token . }}</a></th>
+          <td><a href="{{ $HRefViewClient }}/{{ token . }}">{{ .Description }}</a></td>
+          <td><a href="{{ $HRefViewFediAddress }}/{{ token .Owner }}">{{ .Owner.Username }}@{{ .Owner.Instance.Domain }}</a></td>
+          <td></td>
+        </tr>
+      {{- end }}
+      </tbody>
+    </table>
+  {{- else }}
+    No Data
+  {{- end }}
+  </div>
+</div>
+{{- if .Pagination }}
+<div class="row">
+  <div class="col text-center">
+      {{ template "pagination" .Pagination }}
+  </div>
+</div>
+{{- end }}
 {{ template "admin_footer" . }}
 {{ end }}
 

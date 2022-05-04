@@ -12,6 +12,8 @@ const (
 
 	// parts
 
+	// PartAccounts is used in a path for accounts
+	PartAccounts = "accounts"
 	// PartAdd is used in a path for adding data
 	PartAdd = "add"
 	// PartAdmin is used in a path for administrative tasks
@@ -22,6 +24,8 @@ const (
 	PartCallback = "callback"
 	// PartClients is used in a path for oauth clients
 	PartClients = "clients"
+	// PartFediverse is used in a path for federated things
+	PartFediverse = "fedi"
 	// PartLogin is used in a path for login
 	PartLogin = "login"
 	// PartLogout is used in a path for logout
@@ -39,12 +43,24 @@ const (
 
 	// Admin is the path for the admin page
 	Admin = "/" + PartAdmin
+
+	// AdminFediverse is the sub path for the fediverse admin page
+	AdminFediverse = Admin + AdminSubFediverse
+	// AdminFediverseAccounts is the sub path for the fediverse admin page
+	AdminFediverseAccounts = Admin + AdminSubFediverseAccounts
+
+	// AdminSubFediverse is the sub path for the fediverse admin page
+	AdminSubFediverse = "/" + PartFediverse
+	// AdminSubFediverseAccounts is the sub path for the fediverse admin accounts page
+	AdminSubFediverseAccounts = AdminSubFediverse + "/" + PartAccounts
+
 	// AdminOauth is the sub path for the oauth admin page
 	AdminOauth = Admin + AdminSubOauth
 	// AdminOauthClients is the sub path for the oauth clients admin page
 	AdminOauthClients = Admin + AdminSubOauthClients
 	// AdminOauthClientAdd is the sub path for the oauth clients add admin page
 	AdminOauthClientAdd = Admin + "/" + AdminSubOauthClientAdd
+
 	// AdminSubOauth is the sub path for the oauth admin page
 	AdminSubOauth = "/" + PartOauth
 	// AdminSubOauthClient is the sub path for the oauth clients view client admin page
@@ -53,6 +69,7 @@ const (
 	AdminSubOauthClients = AdminSubOauth + "/" + PartClients
 	// AdminSubOauthClientAdd is the sub path for the oauth clients add admin page
 	AdminSubOauthClientAdd = AdminSubOauthClients + "/" + PartAdd
+
 	// CallbackOauth is the path for an oauth callback
 	CallbackOauth = "/" + PartCallback + "/" + PartOauth + "/" + VarInstance
 	// Login is the path for the login page

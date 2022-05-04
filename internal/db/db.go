@@ -46,6 +46,8 @@ type DB interface {
 
 	// OauthClient
 
+	// CountOauthClients returns the number of oauth clients
+	CountOauthClients(ctx context.Context) (count int64, err Error)
 	// CreateOauthClient stores the oauth client
 	CreateOauthClient(ctx context.Context, client *models.OauthClient) (err Error)
 	// ReadOauthClient returns one oauth client

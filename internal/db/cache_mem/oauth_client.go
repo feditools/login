@@ -6,6 +6,27 @@ import (
 	"github.com/feditools/login/internal/models"
 )
 
+// CountOauthClients returns the number of oauth clients
+func (c *CacheMem) CountOauthClients(ctx context.Context) (int64, db.Error) {
+	metric := c.metrics.NewDBCacheQuery("CountOauthClients")
+
+	count, hit := c.getCount(ctx, keyCountFullTable(tableNameOauthClients))
+	if hit {
+		go metric.Done(true, false)
+		return count, nil
+	}
+	count, err := c.db.CountOauthClients(ctx)
+	if err != nil {
+		go metric.Done(false, true)
+		return 0, err
+	}
+	if count != 0 {
+		c.setCount(ctx, keyCountFullTable(tableNameOauthClients), count)
+	}
+	go metric.Done(false, false)
+	return count, nil
+}
+
 // CreateOauthClient stores the oauth client
 func (c *CacheMem) CreateOauthClient(ctx context.Context, client *models.OauthClient) (err db.Error) {
 	return c.db.CreateOauthClient(ctx, client)
