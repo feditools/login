@@ -4,10 +4,10 @@ import (
 	"crypto/sha512"
 	"encoding/base64"
 	"fmt"
-	"github.com/feditools/login"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/models"
 	"github.com/feditools/login/internal/path"
+	"github.com/feditools/login/web"
 	"github.com/gorilla/sessions"
 	"golang.org/x/text/language"
 	"io/ioutil"
@@ -81,7 +81,7 @@ func getPageLang(query, header, defaultLang string) string {
 func getSignature(path string) (string, error) {
 	l := logger.WithField("func", "getSignature")
 
-	file, err := login.Files.Open(path)
+	file, err := web.Files.Open(path)
 	if err != nil {
 		l.Errorf("opening file: %s", err.Error())
 		return "", err

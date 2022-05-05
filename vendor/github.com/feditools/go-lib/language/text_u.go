@@ -2,7 +2,7 @@ package language
 
 import "github.com/nicksnyder/go-i18n/v2/i18n"
 
-// TextUnauthorized returns a translated phrase
+// TextUnauthorized returns a translated phrase.
 func (l *Localizer) TextUnauthorized() *LocalizedString {
 	lg := logger.WithField("func", "TextUnauthorized")
 
@@ -13,8 +13,9 @@ func (l *Localizer) TextUnauthorized() *LocalizedString {
 		},
 	})
 	if err != nil {
-		lg.Warningf("missing translation: %s", err.Error())
+		lg.Warningf(missingTranslationWarning, err.Error())
 	}
+
 	return &LocalizedString{
 		language: tag,
 		string:   text,

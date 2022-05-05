@@ -2,7 +2,7 @@ package template
 
 import "github.com/feditools/go-lib/language"
 
-// FormInput is a templated form input
+// FormInput is a templated form input.
 type FormInput struct {
 	ID           string
 	Type         string
@@ -17,7 +17,7 @@ type FormInput struct {
 	Validation   *FormValidation
 }
 
-// FormValidation is a validation response to a form input
+// FormValidation is a validation response to a form input.
 type FormValidation struct {
 	Valid    bool
 	Response string

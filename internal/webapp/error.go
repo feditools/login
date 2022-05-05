@@ -6,6 +6,7 @@ import (
 	"github.com/feditools/login/internal/path"
 	"github.com/feditools/login/internal/template"
 	"net/http"
+	"strings"
 )
 
 // ErrorPageTemplate contains the variables for the "error" template.
@@ -32,7 +33,7 @@ func (m *Module) returnErrorPage(w http.ResponseWriter, r *http.Request, code in
 	}
 
 	// add error css file
-	signature, err := m.getSignatureCached(DirWeb + path.FileErrorCSS)
+	signature, err := getSignature(strings.TrimPrefix(path.FileErrorCSS, "/"))
 	if err != nil {
 		l.Errorf("getting signature for %s: %s", path.FileErrorCSS, err.Error())
 	}

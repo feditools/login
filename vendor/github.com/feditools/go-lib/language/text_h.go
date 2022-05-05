@@ -13,8 +13,9 @@ func (l *Localizer) TextHomeWeb() *LocalizedString {
 		},
 	})
 	if err != nil {
-		lg.Warningf("missing translation: %s", err.Error())
+		lg.Warningf(missingTranslationWarning, err.Error())
 	}
+
 	return &LocalizedString{
 		language: tag,
 		string:   text,

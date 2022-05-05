@@ -11,6 +11,7 @@ const (
 var (
 	funcDec = func(i int) int {
 		i--
+
 		return i
 	}
 	funcHTMLSafe = func(html string) template.HTML {
@@ -19,6 +20,7 @@ var (
 	}
 	funcInc = func(i int) int {
 		i++
+
 		return i
 	}
 

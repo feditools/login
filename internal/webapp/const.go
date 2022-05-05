@@ -4,9 +4,7 @@ const (
 	defaultCount = 10
 
 	// DirStatic is the location of static assets
-	DirStatic = DirWeb + "/static"
-	// DirWeb is the location of files
-	DirWeb = "web"
+	DirStatic = "static"
 
 	// FormDescription is the ket for a description form field
 	FormDescription = "description"

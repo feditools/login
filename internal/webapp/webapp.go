@@ -26,6 +26,7 @@ import (
 	"github.com/tdewolff/minify/v2"
 	"github.com/tdewolff/minify/v2/html"
 	htmltemplate "html/template"
+	"strings"
 	"sync"
 )
 
@@ -124,7 +125,7 @@ func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *lang
 		path.FileDefaultCSS,
 	}
 	for _, path := range paths {
-		signature, err := getSignature(DirWeb + path)
+		signature, err := getSignature(strings.TrimPrefix(path, "/"))
 		if err != nil {
 			l.Errorf("getting signature for %s: %s", path, err.Error())
 		}

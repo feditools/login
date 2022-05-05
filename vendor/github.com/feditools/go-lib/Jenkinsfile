@@ -1,5 +1,6 @@
 pipeline {
   environment {
+    BUILD_IMAGE = 'gobuild:1.17'
     PATH = '/go/bin:~/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin'
   }
 
@@ -7,11 +8,26 @@ pipeline {
 
   stages {
 
+    stage('Check Formatting') {
+      agent {
+        docker {
+          image "${BUILD_IMAGE}"
+          args '-e HOME=${WORKSPACE}'
+          reuseNode true
+        }
+      }
+      steps {
+        script {
+          sh "make check"
+        }
+      }
+    }
+
     stage('Test') {
       agent {
         docker {
-          image 'gobuild:1.18'
-          args '-e HOME=${WORKSPACE} -v /var/lib/jenkins/go:/go'
+          image "${BUILD_IMAGE}"
+          args '-e HOME=${WORKSPACE}'
           reuseNode true
         }
       }

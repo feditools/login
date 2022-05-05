@@ -7,6 +7,7 @@ import (
 	"github.com/feditools/login/internal/path"
 	"github.com/feditools/login/internal/template"
 	nethttp "net/http"
+	"strings"
 )
 
 // LoginGetHandler serves the login page
@@ -56,7 +57,7 @@ func (m *Module) displayLoginPage(w nethttp.ResponseWriter, r *nethttp.Request, 
 	}
 
 	// add error css file
-	signature, err := m.getSignatureCached(DirWeb + path.FileLoginCSS)
+	signature, err := getSignature(strings.TrimPrefix(path.FileLoginCSS, "/"))
 	if err != nil {
 		l.Errorf("getting signature for %s: %s", path.FileLoginCSS, err.Error())
 	}

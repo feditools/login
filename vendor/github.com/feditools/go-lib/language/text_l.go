@@ -2,7 +2,7 @@ package language
 
 import "github.com/nicksnyder/go-i18n/v2/i18n"
 
-// TextLogin returns a translated phrase
+// TextLogin returns a translated phrase.
 func (l *Localizer) TextLogin() *LocalizedString {
 	lg := logger.WithField("func", "TextLogin")
 
@@ -13,15 +13,16 @@ func (l *Localizer) TextLogin() *LocalizedString {
 		},
 	})
 	if err != nil {
-		lg.Warningf("missing translation: %s", err.Error())
+		lg.Warningf(missingTranslationWarning, err.Error())
 	}
+
 	return &LocalizedString{
 		language: tag,
 		string:   text,
 	}
 }
 
-// TextLooksGood returns a translated phrase
+// TextLooksGood returns a translated phrase.
 func (l *Localizer) TextLooksGood() *LocalizedString {
 	lg := logger.WithField("func", "TextLooksGood")
 
@@ -32,8 +33,9 @@ func (l *Localizer) TextLooksGood() *LocalizedString {
 		},
 	})
 	if err != nil {
-		lg.Warningf("missing translation: %s", err.Error())
+		lg.Warningf(missingTranslationWarning, err.Error())
 	}
+
 	return &LocalizedString{
 		language: tag,
 		string:   text,

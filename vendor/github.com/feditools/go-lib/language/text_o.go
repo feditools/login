@@ -2,7 +2,7 @@ package language
 
 import "github.com/nicksnyder/go-i18n/v2/i18n"
 
-// TextOauth returns a translated phrase
+// TextOauth returns a translated phrase.
 func (l *Localizer) TextOauth() *LocalizedString {
 	lg := logger.WithField("func", "TextOauth")
 
@@ -13,15 +13,16 @@ func (l *Localizer) TextOauth() *LocalizedString {
 		},
 	})
 	if err != nil {
-		lg.Warningf("missing translation: %s", err.Error())
+		lg.Warningf(missingTranslationWarning, err.Error())
 	}
+
 	return &LocalizedString{
 		language: tag,
 		string:   text,
 	}
 }
 
-// TextOauth20Client returns a translated phrase
+// TextOauth20Client returns a translated phrase.
 func (l *Localizer) TextOauth20Client(count int) *LocalizedString {
 	lg := logger.WithField("func", "TextOauth20Client")
 
@@ -34,15 +35,16 @@ func (l *Localizer) TextOauth20Client(count int) *LocalizedString {
 		PluralCount: count,
 	})
 	if err != nil {
-		lg.Warningf("missing translation: %s", err.Error())
+		lg.Warningf(missingTranslationWarning, err.Error())
 	}
+
 	return &LocalizedString{
 		language: tag,
 		string:   text,
 	}
 }
 
-// TextOauth20Settings returns a translated phrase
+// TextOauth20Settings returns a translated phrase.
 func (l *Localizer) TextOauth20Settings() *LocalizedString {
 	lg := logger.WithField("func", "TextOauth20Settings")
 
@@ -53,8 +55,9 @@ func (l *Localizer) TextOauth20Settings() *LocalizedString {
 		},
 	})
 	if err != nil {
-		lg.Warningf("missing translation: %s", err.Error())
+		lg.Warningf(missingTranslationWarning, err.Error())
 	}
+
 	return &LocalizedString{
 		language: tag,
 		string:   text,

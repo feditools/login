@@ -1,16 +1,16 @@
 package webapp
 
 import (
-	"github.com/feditools/login"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/path"
+	"github.com/feditools/login/web"
 	iofs "io/fs"
 	nethttp "net/http"
 )
 
 // Route attaches routes to the web server
 func (m *Module) Route(s *http.Server) error {
-	staticFS, err := iofs.Sub(login.Files, DirStatic)
+	staticFS, err := iofs.Sub(web.Files, DirStatic)
 	if err != nil {
 		return err
 	}

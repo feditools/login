@@ -13,7 +13,7 @@ const templateDir = "templates"
 //go:embed templates/*.gohtml
 var templateFS embed.FS
 
-// New creates a new template
+// New creates a new template.
 func New(f template.FuncMap) (*template.Template, error) {
 	tpl := template.New("")
 

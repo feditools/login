@@ -4,7 +4,7 @@ import (
 	"regexp"
 )
 
-// ActivableSlice a slice where each element has an active bit which can be set based on a string
+// ActivableSlice a slice where each element has an active bit which can be set based on a string.
 type ActivableSlice interface {
 	GetChildren(i int) ActivableSlice
 	GetMatcher(i int) *regexp.Regexp
@@ -12,7 +12,7 @@ type ActivableSlice interface {
 	Len() int
 }
 
-// SetActive sets an active bit in a slice
+// SetActive sets an active bit in a slice.
 func SetActive(a ActivableSlice, s string) {
 	for i := 0; i < a.Len(); i++ {
 		matcher := a.GetMatcher(i)
@@ -27,5 +27,4 @@ func SetActive(a ActivableSlice, s string) {
 			SetActive(children, s)
 		}
 	}
-	return
 }

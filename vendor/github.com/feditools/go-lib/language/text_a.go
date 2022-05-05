@@ -2,7 +2,7 @@ package language
 
 import "github.com/nicksnyder/go-i18n/v2/i18n"
 
-// TextAccount returns a translated phrase
+// TextAccount returns a translated phrase.
 func (l *Localizer) TextAccount(count int) *LocalizedString {
 	lg := logger.WithField("func", "TextAccount")
 
@@ -15,15 +15,16 @@ func (l *Localizer) TextAccount(count int) *LocalizedString {
 		PluralCount: count,
 	})
 	if err != nil {
-		lg.Warningf("missing translation: %s", err.Error())
+		lg.Warningf(missingTranslationWarning, err.Error())
 	}
+
 	return &LocalizedString{
 		language: tag,
 		string:   text,
 	}
 }
 
-// TextAddOauth20Client returns a translated phrase
+// TextAddOauth20Client returns a translated phrase.
 func (l *Localizer) TextAddOauth20Client(count int) *LocalizedString {
 	lg := logger.WithField("func", "TextAddOauth20Client")
 
@@ -36,8 +37,9 @@ func (l *Localizer) TextAddOauth20Client(count int) *LocalizedString {
 		PluralCount: count,
 	})
 	if err != nil {
-		lg.Warningf("missing translation: %s", err.Error())
+		lg.Warningf(missingTranslationWarning, err.Error())
 	}
+
 	return &LocalizedString{
 		language: tag,
 		string:   text,

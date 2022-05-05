@@ -1,6 +1,6 @@
 package template
 
-// HeadLink is the data for a header link
+// HeadLink is the data for a header link.
 type HeadLink struct {
 	HRef        string
 	Rel         string

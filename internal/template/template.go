@@ -3,15 +3,15 @@ package template
 import (
 	"github.com/feditools/go-lib/language"
 	libtemplate "github.com/feditools/go-lib/template"
-	"github.com/feditools/login"
 	"github.com/feditools/login/internal/models"
 	"github.com/feditools/login/internal/token"
+	"github.com/feditools/login/web"
 	"html/template"
 	"io/ioutil"
 	"strings"
 )
 
-const templateDir = "web/template"
+const templateDir = "template"
 
 // InitTemplate are the functions a template implementing Common will have
 type InitTemplate interface {
@@ -33,7 +33,7 @@ func New(t *token.Tokenizer) (*template.Template, error) {
 		return nil, err
 	}
 
-	dir, err := login.Files.ReadDir(templateDir)
+	dir, err := web.Files.ReadDir(templateDir)
 	if err != nil {
 		panic(err)
 	}
@@ -44,7 +44,7 @@ func New(t *token.Tokenizer) (*template.Template, error) {
 		}
 
 		// open it
-		file, err := login.Files.Open(filePath)
+		file, err := web.Files.Open(filePath)
 		if err != nil {
 			return nil, err
 		}
