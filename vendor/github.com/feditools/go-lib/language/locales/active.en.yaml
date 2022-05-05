@@ -21,7 +21,11 @@ Dashboard:
 Description:
   one: Description
   other: Descriptions
+Fediverse: Fediverse
 HomeWeb: Home
+Instance:
+  one: Instance
+  other: Instances
 InvalidURI:
   one: Invalid URI
   other: Invalid URIs

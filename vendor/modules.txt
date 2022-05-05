@@ -14,7 +14,7 @@ github.com/dgryski/go-rendezvous
 # github.com/fatih/color v1.13.0
 ## explicit; go 1.13
 github.com/fatih/color
-# github.com/feditools/go-lib v0.8.1-0.20220505032124-46de766ba174
+# github.com/feditools/go-lib v0.9.0
 ## explicit; go 1.17
 github.com/feditools/go-lib
 github.com/feditools/go-lib/database
