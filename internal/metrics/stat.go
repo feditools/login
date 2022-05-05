@@ -5,6 +5,19 @@ const (
 	StatBaseDB = "db"
 	// StatDBQuery is the timing for a db query
 	StatDBQuery = StatBaseDB + ".query"
+	// StatDBQueryTiming is the timing for a db query
+	StatDBQueryTiming = StatDBQuery + ".timing"
+	// StatDBQueryCount is the counts for db queries
+	StatDBQueryCount = StatDBQuery + ".count"
+
+	// StatBaseDBCache is the base state name for database cache metrics
+	StatBaseDBCache = "dbcache"
+	// StatDBCacheQuery is the timing for a db query
+	StatDBCacheQuery = StatBaseDBCache + ".query"
+	// StatDBCacheQueryTiming is the timing for a db query
+	StatDBCacheQueryTiming = StatBaseDBCache + ".timing"
+	// StatDBCacheQueryCount is the counts for db queries
+	StatDBCacheQueryCount = StatBaseDBCache + ".count"
 
 	// StatBaseHTTP is the base state name for http metrics
 	StatBaseHTTP = "http"

@@ -27,6 +27,10 @@ type KeyNames struct {
 	RedisDB       string
 	RedisPassword string
 
+	// account
+	AccountAccount  string
+	AccountAddGroup string
+
 	// auth
 	AccessExpiration  string
 	AccessSecret      string
@@ -38,6 +42,16 @@ type KeyNames struct {
 	ServerHTTPBind         string
 	ServerMinifyHTML       string
 	ServerRoles            string
+
+	// webapp
+	WebappBootstrapCSSURI         string
+	WebappBootstrapCSSIntegrity   string
+	WebappBootstrapJSURI          string
+	WebappBootstrapJSIntegrity    string
+	WebappFontAwesomeCSSURI       string
+	WebappFontAwesomeCSSIntegrity string
+	WebappLogoSrcDark             string
+	WebappLogoSrcLight            string
 
 	// metrics
 	MetricsStatsDAddress string
@@ -71,6 +85,10 @@ var Keys = KeyNames{
 	RedisDB:       "redis-db",
 	RedisPassword: "redis-password",
 
+	// account
+	AccountAccount:  "account",
+	AccountAddGroup: "add-group",
+
 	// auth
 	AccessExpiration:  "access-expiration",
 	AccessSecret:      "access-secret",
@@ -82,6 +100,16 @@ var Keys = KeyNames{
 	ServerHTTPBind:         "http-bind",
 	ServerMinifyHTML:       "minify-html",
 	ServerRoles:            "server-role",
+
+	// webapp
+	WebappBootstrapCSSURI:         "webapp-bootstrap-css-uri",
+	WebappBootstrapCSSIntegrity:   "webapp-bootstrap-css-integrity",
+	WebappBootstrapJSURI:          "webapp-bootstrap-js-uri",
+	WebappBootstrapJSIntegrity:    "webapp-bootstrap-js-integrity",
+	WebappFontAwesomeCSSURI:       "webapp-fontawesome-css-uri",
+	WebappFontAwesomeCSSIntegrity: "webapp-fontawesome-css-integrity",
+	WebappLogoSrcDark:             "webapp-logo-src-dark",
+	WebappLogoSrcLight:            "webapp-logo-src-light",
 
 	// metrics
 	MetricsStatsDAddress: "statsd-addr",

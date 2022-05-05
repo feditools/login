@@ -12,8 +12,10 @@ func init() {
 	up := func(ctx context.Context, db *bun.DB) error {
 		return db.RunInTx(ctx, nil, func(ctx context.Context, tx bun.Tx) error {
 			modelList := []interface{}{
-				&models.Instance{},
-				&models.Block{},
+				&models.FediInstance{},
+				&models.FediAccount{},
+				&models.OauthScope{},
+				&models.OauthClient{},
 			}
 			for _, i := range modelList {
 				l.Infof("creating table %T", i)

@@ -4,8 +4,12 @@ package http
 type ContextKey int
 
 const (
-	// ContextKeyKeyVerifier is a http signature verifier
-	ContextKeyKeyVerifier ContextKey = iota
-	// ContextKeyHTTPSignature is a http signature
-	ContextKeyHTTPSignature
+	// ContextKeySession is the persistent session
+	ContextKeySession ContextKey = iota
+	// ContextKeyLocalizer is the language localizer
+	ContextKeyLocalizer
+	// ContextKeyLanguage is the language
+	ContextKeyLanguage
+	// ContextKeyAccount is the logged in user's account
+	ContextKeyAccount
 )

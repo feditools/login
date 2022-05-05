@@ -31,8 +31,8 @@ func main() {
 	viper.Set(config.Keys.SoftwareVersion, v)
 
 	rootCmd := &cobra.Command{
-		Use:   "relay",
-		Short: "relay - an activitypub relay",
+		Use:   "login",
+		Short: "login - fediverse login server",
 		//TODO Long:          "",
 		Version:       v,
 		SilenceErrors: true,
@@ -48,6 +48,8 @@ func main() {
 	}
 
 	// add commands
+	rootCmd.AddCommand(accountCommands())
+	rootCmd.AddCommand(databaseCommands())
 	rootCmd.AddCommand(serverCommands())
 
 	err = rootCmd.Execute()

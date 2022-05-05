@@ -17,6 +17,7 @@ clean:
 	@echo cleaning up workspace
 	@rm -Rvf coverage.txt dist relay
 	@find . -name ".DS_Store" -exec rm -v {} \;
+	@rm -Rvf web/static/css/bootstrap.min.css web/static/css/bootstrap.min.css.map web/static/css/default.min.css web/static/css/error.min.css web/static/css/login.min.css
 
 fmt:
 	@echo formatting
@@ -34,6 +35,11 @@ i18n-translations:
 lint:
 	@echo linting
 	@golint $(shell go list ./... | grep -v /vendor/)
+
+stage-static:
+	minify web/static-src/css/default.css > web/static/css/default.min.css
+	minify web/static-src/css/error.css > web/static/css/error.min.css
+	minify web/static-src/css/login.css > web/static/css/login.min.css
 
 test-docker-restart: test-docker-stop test-docker-start
 

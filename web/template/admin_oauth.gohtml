@@ -1,0 +1,121 @@
+{{ define "admin_oauth_clients" -}}
+{{- template "admin_header" . }}
+<div class="row">
+  <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    {{ $textOauth := .Localizer.TextOauth }}<h1 lang="{{ $textOauth.Language }}"><i class="fa-solid fa-globe"></i> {{ $textOauth }}</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    {{ $textClients := .Localizer.TextOauth20Client 2 }}<h2 lang="{{ $textClients.Language }}"><i class="fa-solid fa-person-digging"></i> {{ $textClients }}</h2>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group">
+        <a href="{{ .HRefAddClient }}" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-plus"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+  {{- $HRefViewClient := .HRefViewClient -}}
+  {{- $HRefViewFediAddress := .HRefViewFediAddress -}}
+  {{- if .OauthClients }}
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Description</th>
+        <th scope="col">Owner</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      {{- range .OauthClients }}
+        <tr>
+          <th scope="row"><a href="{{ $HRefViewClient }}/{{ token . }}">{{ token . }}</a></th>
+          <td><a href="{{ $HRefViewClient }}/{{ token . }}">{{ .Description }}</a></td>
+          <td><a href="{{ $HRefViewFediAddress }}/{{ token .Owner }}">{{ .Owner.Username }}@{{ .Owner.Instance.Domain }}</a></td>
+          <td></td>
+        </tr>
+      {{- end }}
+      </tbody>
+    </table>
+  {{- else }}
+    No Data
+  {{- end }}
+  </div>
+</div>
+{{- if .Pagination }}
+<div class="row">
+  <div class="col text-center">
+      {{ template "pagination" .Pagination }}
+  </div>
+</div>
+{{- end }}
+{{ template "admin_footer" . }}
+{{ end }}
+
+{{ define "admin_oauth_client_add" -}}
+{{- template "admin_header" . }}
+<div class="row">
+  <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      {{ $textOauth := .Localizer.TextOauth }}<h1 lang="{{ $textOauth.Language }}"><i class="fa-solid fa-globe"></i> {{ $textOauth }}</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      {{ $textClient := .Localizer.TextAddOauth20Client 1 }}<h2 lang="{{ $textClient.Language }}"><i class="fa-solid fa-person-digging"></i> {{ $textClient }}</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <form method="post">
+      <div class="form-group row mb-1">
+        {{ template "form_input" .FormInputDescription }}
+      </div>
+      <div class="form-group row mb-1">
+        {{ template "form_input" .FormInputRedirectURI }}
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-10">
+          <button type="submit" class="btn btn-success">{{.FormButtonSubmitText}}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{{ template "admin_footer" . }}
+{{ end }}
+
+{{ define "admin_oauth_client_added" -}}
+{{- template "admin_header" . }}
+<div class="row">
+  <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      {{ $textOauth := .Localizer.TextOauth }}<h1 lang="{{ $textOauth.Language }}"><i class="fa-solid fa-globe"></i> {{ $textOauth }}</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      {{ $textClient := .Localizer.TextAddOauth20Client 1 }}<h2 lang="{{ $textClient.Language }}"><i class="fa-solid fa-person-digging"></i> {{ $textClient }}</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <form method="post">
+      <div class="form-group row mb-1">
+          {{ template "form_input" .FormInputDescription }}
+      </div>
+      <div class="form-group row mb-1">
+          {{ template "form_input" .FormInputClientID }}
+      </div>
+      <div class="form-group row mb-1">
+          {{ template "form_input" .FormInputClientSecret }}
+      </div>
+      <div class="form-group row mb-1">
+          {{ template "form_input" .FormInputRedirectURI }}
+      </div>
+    </form>
+  </div>
+</div>
+{{ template "admin_footer" . }}
+{{ end }}
