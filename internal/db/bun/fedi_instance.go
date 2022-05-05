@@ -9,6 +9,20 @@ import (
 	"github.com/uptrace/bun"
 )
 
+// CountFediInstances returns the number of federated instance
+func (c *Client) CountFediInstances(ctx context.Context) (int64, db.Error) {
+	metric := c.metrics.NewDBQuery("CountFediInstances")
+
+	count, err := c.newFediInstanceQ((*models.FediInstance)(nil)).Count(ctx)
+	if err != nil {
+		go metric.Done(true)
+		return 0, c.bun.errProc(err)
+	}
+
+	go metric.Done(false)
+	return int64(count), nil
+}
+
 // CreateFediInstance stores the federated instance
 func (c *Client) CreateFediInstance(ctx context.Context, instance *models.FediInstance) db.Error {
 	metric := c.metrics.NewDBQuery("CreateFediInstance")

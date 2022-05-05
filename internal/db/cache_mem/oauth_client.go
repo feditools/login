@@ -10,7 +10,7 @@ import (
 func (c *CacheMem) CountOauthClients(ctx context.Context) (int64, db.Error) {
 	metric := c.metrics.NewDBCacheQuery("CountOauthClients")
 
-	count, hit := c.getCount(ctx, keyCountFullTable(tableNameOauthClients))
+	count, hit := c.getCount(ctx, keyCountOauthClients())
 	if hit {
 		go metric.Done(true, false)
 		return count, nil
@@ -21,7 +21,7 @@ func (c *CacheMem) CountOauthClients(ctx context.Context) (int64, db.Error) {
 		return 0, err
 	}
 	if count != 0 {
-		c.setCount(ctx, keyCountFullTable(tableNameOauthClients), count)
+		c.setCount(ctx, keyCountOauthClients(), count)
 	}
 	go metric.Done(false, false)
 	return count, nil

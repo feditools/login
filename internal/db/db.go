@@ -22,7 +22,11 @@ type DB interface {
 
 	// FediAccount
 
-	// CreateFediAccount stores the federated instance
+	// CountFediAccounts returns the number of federated social account
+	CountFediAccounts(ctx context.Context) (count int64, err Error)
+	// CountFediAccountsForInstance returns the number of federated social account for an instance
+	CountFediAccountsForInstance(ctx context.Context, instanceID int64) (count int64, err Error)
+	// CreateFediAccount stores the federated social account
 	CreateFediAccount(ctx context.Context, account *models.FediAccount) (err Error)
 	// ReadFediAccount returns one federated social account
 	ReadFediAccount(ctx context.Context, id int64) (account *models.FediAccount, err Error)
@@ -33,6 +37,8 @@ type DB interface {
 
 	// FediInstance
 
+	// CountFediInstances returns the number of federated instances
+	CountFediInstances(ctx context.Context) (count int64, err Error)
 	// CreateFediInstance stores the federated instance
 	CreateFediInstance(ctx context.Context, instance *models.FediInstance) (err Error)
 	// ReadFediInstance returns one federated social instance

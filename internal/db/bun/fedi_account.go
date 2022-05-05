@@ -8,6 +8,34 @@ import (
 	"github.com/uptrace/bun"
 )
 
+// CountFediAccounts returns the number of federated social account
+func (c *Client) CountFediAccounts(ctx context.Context) (int64, db.Error) {
+	metric := c.metrics.NewDBQuery("CountFediAccounts")
+
+	count, err := c.newFediAccountQ((*models.FediAccount)(nil)).Count(ctx)
+	if err != nil {
+		go metric.Done(true)
+		return 0, c.bun.errProc(err)
+	}
+
+	go metric.Done(false)
+	return int64(count), nil
+}
+
+// CountFediAccountsForInstance returns the number of federated social account for an instance
+func (c *Client) CountFediAccountsForInstance(ctx context.Context, instanceID int64) (int64, db.Error) {
+	metric := c.metrics.NewDBQuery("CountFediAccountsForInstance")
+
+	count, err := c.newFediAccountQ((*models.FediAccount)(nil)).Where("fedi_instances.id = ?", instanceID).Count(ctx)
+	if err != nil {
+		go metric.Done(true)
+		return 0, c.bun.errProc(err)
+	}
+
+	go metric.Done(false)
+	return int64(count), nil
+}
+
 // CreateFediAccount stores the federated social account
 func (c *Client) CreateFediAccount(ctx context.Context, account *models.FediAccount) db.Error {
 	metric := c.metrics.NewDBQuery("CreateFediAccount")

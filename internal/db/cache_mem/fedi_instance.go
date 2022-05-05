@@ -12,6 +12,27 @@ import (
 	"strings"
 )
 
+// CountFediInstances returns the number of federated instances
+func (c *CacheMem) CountFediInstances(ctx context.Context) (int64, db.Error) {
+	metric := c.metrics.NewDBCacheQuery("CountFediInstance")
+
+	count, hit := c.getCount(ctx, keyCountFediInstances())
+	if hit {
+		go metric.Done(true, false)
+		return count, nil
+	}
+	count, err := c.db.CountFediInstances(ctx)
+	if err != nil {
+		go metric.Done(false, true)
+		return 0, err
+	}
+	if count != 0 {
+		c.setCount(ctx, keyCountFediInstances(), count)
+	}
+	go metric.Done(false, false)
+	return count, nil
+}
+
 // CreateFediInstance stores the federated instance and caches it
 func (c *CacheMem) CreateFediInstance(ctx context.Context, instance *models.FediInstance) db.Error {
 	err := c.db.CreateFediInstance(ctx, instance)
