@@ -9,7 +9,8 @@ import (
 
 func TestFediInstance_BeforeAppendModel_Insert(t *testing.T) {
 	obj := &FediInstance{
-		Domain: "test.com",
+		Domain:   "test.com",
+		ActorURI: "https://test.com/actor",
 	}
 
 	err := obj.BeforeAppendModel(context.Background(), &bun.InsertQuery{})
@@ -29,7 +30,8 @@ func TestFediInstance_BeforeAppendModel_Insert(t *testing.T) {
 
 func TestFediInstance_BeforeAppendModel_Update(t *testing.T) {
 	obj := &FediInstance{
-		Domain: "test.com",
+		Domain:   "test.com",
+		ActorURI: "https://test.com/actor",
 	}
 
 	err := obj.BeforeAppendModel(context.Background(), &bun.UpdateQuery{})

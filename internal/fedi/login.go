@@ -2,7 +2,6 @@ package fedi
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/feditools/go-lib"
 	"github.com/feditools/login/internal/models"
@@ -33,34 +32,11 @@ func (f *Fedi) GetLoginURL(ctx context.Context, act string) (*url.URL, error) {
 		return u, nil
 	}
 
-	// get nodeinfo endpoints from well-known location
-	wkni, err := f.GetWellknownNodeInfo(ctx, domain)
+	// get instance data from instance apis
+	newInstance, err := f.GenerateFediInstanceFromDomain(ctx, domain)
 	if err != nil {
 		l.Errorf("get nodeinfo: %s", err.Error())
 		return nil, err
-	}
-
-	// check for nodeinfo 2.0 schema
-	nodeinfoURI, err := findNodeInfo20URI(wkni)
-	if err != nil {
-		return nil, err
-	}
-	if nodeinfoURI == nil {
-		return nil, errors.New("no nodeinfo 2.0 uri")
-	}
-
-	// get nodeinfo from
-	nodeinfo, err := f.GetNodeInfo20(ctx, domain, nodeinfoURI)
-	if err != nil {
-		l.Errorf("get nodeinfo 2.0: %s", err.Error())
-		return nil, err
-	}
-
-	// create instance for db
-	newInstance := &models.FediInstance{
-		Domain:         domain,
-		ServerHostname: nodeinfoURI.Host,
-		Software:       nodeinfo.Software.Name,
 	}
 	err = f.db.CreateFediInstance(ctx, newInstance)
 	if err != nil {

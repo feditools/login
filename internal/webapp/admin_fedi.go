@@ -8,30 +8,26 @@ import (
 	nethttp "net/http"
 )
 
-func makeAdminSidebar(r *nethttp.Request) libtemplate.Sidebar {
+func makeAdminFediverseSidebar(r *nethttp.Request) libtemplate.Sidebar {
 	// get localizer
 	localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
 
 	// create sidebar
 	newSidebar := libtemplate.Sidebar{
 		{
-			Children: []libtemplate.SidebarNode{
-				{
-					Text:    localizer.TextDashboard(1).String(),
-					Matcher: path.ReAdmin,
-					Icon:    "home",
-					URI:     path.Admin,
-				},
-			},
-		},
-		{
 			Text: localizer.TextOauth20Settings().String(),
 			Children: []libtemplate.SidebarNode{
 				{
-					Text:    localizer.TextClient(2).String(),
-					Matcher: path.ReAdminOauthClientsPre,
+					Text:    localizer.TextInstance(2).String(),
+					Matcher: path.ReAdminFediverseInstancesPre,
 					Icon:    "desktop",
-					URI:     path.AdminOauthClients,
+					URI:     path.AdminFediverseInstances,
+				},
+				{
+					Text:    localizer.TextAccount(2).String(),
+					Matcher: path.ReAdminFediverseAccountsPre,
+					Icon:    "user",
+					URI:     path.AdminFediverseAccounts,
 				},
 			},
 		},

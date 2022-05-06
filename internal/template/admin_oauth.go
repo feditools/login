@@ -15,7 +15,7 @@ type AdminOauthClients struct {
 
 	HRefAddClient       string
 	HRefViewClient      string
-	HRefViewFediAddress string
+	HRefViewFediAccount string
 	OauthClients        *[]*models.OauthClient
 	Pagination          libtemplate.Pagination
 }

@@ -18,7 +18,7 @@
 <div class="row">
   <div class="col">
   {{- $HRefViewClient := .HRefViewClient -}}
-  {{- $HRefViewFediAddress := .HRefViewFediAddress -}}
+  {{- $HRefViewFediAccount := .HRefViewFediAccount -}}
   {{- if .OauthClients }}
     <table class="table">
       <thead>
@@ -34,7 +34,7 @@
         <tr>
           <th scope="row"><a href="{{ $HRefViewClient }}/{{ token . }}">{{ token . }}</a></th>
           <td><a href="{{ $HRefViewClient }}/{{ token . }}">{{ .Description }}</a></td>
-          <td><a href="{{ $HRefViewFediAddress }}/{{ token .Owner }}">{{ .Owner.Username }}@{{ .Owner.Instance.Domain }}</a></td>
+          <td><a href="{{ $HRefViewFediAccount }}/{{ token .Owner }}">{{ .Owner.Username }}@{{ .Owner.Instance.Domain }}</a></td>
           <td></td>
         </tr>
       {{- end }}

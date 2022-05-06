@@ -13,6 +13,8 @@ func TestKind_String(t *testing.T) {
 		{Kind(0), "unknown"},
 		{KindFediInstance, "FediInstance"},
 		{KindFediAccount, "FediAccount"},
+		{KindOauthClient, "OauthClient"},
+		{KindOauthScope, "OauthScope"},
 	}
 
 	for i, table := range tables {

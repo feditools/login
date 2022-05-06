@@ -3,7 +3,6 @@ package fedi
 import (
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/db"
-	"github.com/feditools/login/internal/fedi/mastodon"
 	"github.com/feditools/login/internal/kv"
 	"github.com/feditools/login/internal/token"
 	"github.com/spf13/viper"
@@ -22,12 +21,13 @@ type Fedi struct {
 	appClientName    string
 	externalHostname string
 
-	nodeinfoCacheExp     time.Duration
-	nodeinfoRequestGroup singleflight.Group
+	nodeinfoCacheExp time.Duration
+
+	requestGroup singleflight.Group
 }
 
 // New creates a new fedi module
-func New(d db.DB, k kv.KV, t *token.Tokenizer) (*Fedi, error) {
+func New(d db.DB, k kv.KV, t *token.Tokenizer, helpers []Helper) (*Fedi, error) {
 	newFedi := &Fedi{
 		db:   d,
 		kv:   k,
@@ -41,12 +41,10 @@ func New(d db.DB, k kv.KV, t *token.Tokenizer) (*Fedi, error) {
 		nodeinfoCacheExp: 60 * time.Minute,
 	}
 
-	// mastodon helper
-	mastoHelper, err := mastodon.New(d, k, t, AppWebsite)
-	if err != nil {
-		return nil, err
+	// add helpers
+	for _, h := range helpers {
+		newFedi.helpers[h.GetSoftware()] = h
 	}
-	newFedi.helpers[SoftwareMastodon] = mastoHelper
 
 	return newFedi, nil
 }

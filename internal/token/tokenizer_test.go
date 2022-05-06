@@ -15,6 +15,8 @@ var testTables = []struct {
 }{
 	{KindFediInstance, 84685, "MeLrPDrcOg5agV8K"},
 	{KindFediAccount, 69420, "n4jbQJEimvjP5WZy"},
+	{KindOauthClient, 184, "p6jKkP6VIlgPqrEl"},
+	{KindOauthScope, 1, "pwM9xPkwuZP7ve0n"},
 }
 
 func TestNew(t *testing.T) {
@@ -155,6 +157,10 @@ func TestTokenizer_GetToken(t *testing.T) {
 		{&models.FediAccount{ID: 1}, "RNrm2XxAiGPGpyD4"},
 		{models.FediInstance{ID: 1}, "5yp6YXmmcLX9Kgro"},
 		{&models.FediInstance{ID: 1}, "5yp6YXmmcLX9Kgro"},
+		{models.OauthClient{ID: 1}, "pMeLrPDzIxagV8KY"},
+		{&models.OauthClient{ID: 1}, "pMeLrPDzIxagV8KY"},
+		{models.OauthScope{ID: 1}, "pwM9xPkwuZP7ve0n"},
+		{&models.OauthScope{ID: 1}, "pwM9xPkwuZP7ve0n"},
 		{&struct{}{}, ""},
 	}
 

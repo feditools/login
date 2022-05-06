@@ -3,14 +3,28 @@ package cachemem
 import (
 	"context"
 	"encoding/binary"
+	"fmt"
 	"github.com/allegro/bigcache/v3"
 )
 
 const (
-	tableNameOauthClients = "oauth_clients"
+	tableNameFediAccounts  = "fedi_accounts"
+	tableNameFediInstances = "fedi_instances"
+	tableNameOauthClients  = "oauth_clients"
 )
 
-func keyCountFullTable(s string) string { return s }
+func keyCountOauthClients() string {
+	return tableNameOauthClients
+}
+func keyCountFediAccounts() string {
+	return tableNameFediAccounts
+}
+func keyCountFediAccountsForInstance(instanceID int64) string {
+	return fmt.Sprintf("%s-i-%d", tableNameFediAccounts, instanceID)
+}
+func keyCountFediInstances() string {
+	return tableNameFediInstances
+}
 
 func (c *CacheMem) getCount(_ context.Context, k string) (int64, bool) {
 	l := logger.WithField("func", "getCount")

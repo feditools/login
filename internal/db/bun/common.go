@@ -121,6 +121,11 @@ func (c *Client) ReadByID(ctx context.Context, id int64, i any) db.Error {
 	return c.bun.ProcessError(err)
 }
 
+// ResetCache does nothing. This module contains no cache
+func (c *Client) ResetCache(_ context.Context) db.Error {
+	return nil
+}
+
 // Update updates stored data
 func (c *Client) Update(ctx context.Context, i any) db.Error {
 	q := c.bun.NewUpdate().Model(i).WherePK()

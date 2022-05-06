@@ -26,6 +26,8 @@ const (
 	PartClients = "clients"
 	// PartFediverse is used in a path for federated things
 	PartFediverse = "fedi"
+	// PartInstances is used in a path for instances
+	PartInstances = "instances"
 	// PartLogin is used in a path for login
 	PartLogin = "login"
 	// PartLogout is used in a path for logout
@@ -48,11 +50,15 @@ const (
 	AdminFediverse = Admin + AdminSubFediverse
 	// AdminFediverseAccounts is the sub path for the fediverse admin page
 	AdminFediverseAccounts = Admin + AdminSubFediverseAccounts
+	// AdminFediverseInstances is the sub path for the fediverse instances page
+	AdminFediverseInstances = Admin + AdminSubFediverseInstances
 
 	// AdminSubFediverse is the sub path for the fediverse admin page
 	AdminSubFediverse = "/" + PartFediverse
 	// AdminSubFediverseAccounts is the sub path for the fediverse admin accounts page
 	AdminSubFediverseAccounts = AdminSubFediverse + "/" + PartAccounts
+	// AdminSubFediverseInstances is the sub path for the fediverse admin instances page
+	AdminSubFediverseInstances = AdminSubFediverse + "/" + PartInstances
 
 	// AdminOauth is the sub path for the oauth admin page
 	AdminOauth = Admin + AdminSubOauth

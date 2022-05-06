@@ -105,6 +105,12 @@ func makeAdminNavbar(r *nethttp.Request) template.Navbar {
 			URL:      path.Admin,
 		},
 		{
+			Text:     l.TextFediverse().String(),
+			MatchStr: path.ReAdminFediversePre,
+			FAIcon:   "home",
+			URL:      path.AdminFediverse,
+		},
+		{
 			Text:     l.TextOauth().String(),
 			MatchStr: path.ReAdminOauthPre,
 			FAIcon:   "desktop",
