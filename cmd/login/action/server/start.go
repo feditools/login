@@ -9,6 +9,7 @@ import (
 	"github.com/feditools/login/internal/db/bun"
 	cachemem "github.com/feditools/login/internal/db/cache_mem"
 	"github.com/feditools/login/internal/fedi"
+	"github.com/feditools/login/internal/fedi/mastodon"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/kv/redis"
 	"github.com/feditools/login/internal/metrics/statsd"
@@ -74,15 +75,23 @@ var Start action.Action = func(ctx context.Context) error {
 		return err
 	}
 
-	fediMod, err := fedi.New(cachedDBClient, redisClient, tokz)
-	if err != nil {
-		l.Errorf("fedihelper: %s", err.Error())
-		return err
-	}
-
 	languageMod, err := language.New()
 	if err != nil {
 		l.Errorf("language: %s", err.Error())
+		return err
+	}
+
+	// prep fedi helpers and fedi module
+	var fediHelpers []fedi.Helper
+	mastoHelper, err := mastodon.New(cachedDBClient, redisClient, tokz)
+	if err != nil {
+		return err
+	}
+	fediHelpers = append(fediHelpers, mastoHelper)
+
+	fediMod, err := fedi.New(cachedDBClient, redisClient, tokz, fediHelpers)
+	if err != nil {
+		l.Errorf("fedihelper: %s", err.Error())
 		return err
 	}
 

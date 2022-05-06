@@ -6,9 +6,10 @@ type KeyNames struct {
 	ConfigPath string
 
 	// application
-	ApplicationName string
-	SoftwareVersion string
-	TokenSalt       string
+	ApplicationName    string
+	ApplicationWebsite string
+	SoftwareVersion    string
+	TokenSalt          string
 
 	// database
 	DbType          string
@@ -64,9 +65,10 @@ var Keys = KeyNames{
 	LogLevel:   "log-level",
 
 	// application
-	ApplicationName: "application-name",
-	SoftwareVersion: "software-version", // Set at build
-	TokenSalt:       "token-salt",
+	ApplicationName:    "application-name",
+	ApplicationWebsite: "application-website",
+	SoftwareVersion:    "software-version", // Set at build
+	TokenSalt:          "token-salt",
 
 	// database
 	DbType:          "db-type",

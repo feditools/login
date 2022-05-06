@@ -5,6 +5,9 @@ PROJECT_NAME=login
 check:
 	golangci-lint run
 
+check-fix:
+	golangci-lint run --fix
+
 fmt:
 	@echo formatting
 	@go fmt $(shell go list ./... | grep -v /vendor/)
@@ -27,4 +30,4 @@ tidy:
 vendor: tidy
 	go mod vendor
 
-.PHONY: check fmt i18n-extract i18n-merge i18n-translations lint test tidy vendor
+.PHONY: check check-fix fmt i18n-extract i18n-merge i18n-translations lint test tidy vendor

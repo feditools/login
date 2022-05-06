@@ -10,6 +10,7 @@ import (
 type Helper interface {
 	GetAccessToken(ctx context.Context, instance *models.FediInstance, code string) (accessToken string, err error)
 	GetCurrentAccount(ctx context.Context, instance *models.FediInstance, accessToken string) (user *models.FediAccount, err error)
+	GetSoftware() Software
 	RegisterApp(ctx context.Context, instance *models.FediInstance) (clientID string, clientSecret string, err error)
 	MakeLoginURL(ctx context.Context, instance *models.FediInstance) (url *url.URL, err error)
 }

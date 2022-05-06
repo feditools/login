@@ -3,6 +3,7 @@ package mastodon
 import (
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/db"
+	"github.com/feditools/login/internal/fedi"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/kv"
 	"github.com/feditools/login/internal/models"
@@ -26,14 +27,14 @@ type Helper struct {
 }
 
 // New returns a new mastodon helper
-func New(d db.DB, k kv.KV, t *token.Tokenizer, website string) (*Helper, error) {
+func New(d db.DB, k kv.KV, t *token.Tokenizer) (*Helper, error) {
 	return &Helper{
 		db:   d,
 		kv:   k,
 		tokz: t,
 
 		appClientName:    viper.GetString(config.Keys.ApplicationName),
-		appWebsite:       website,
+		appWebsite:       viper.GetString(config.Keys.ApplicationWebsite),
 		externalHostname: viper.GetString(config.Keys.ServerExternalHostname),
 	}, nil
 }
@@ -61,3 +62,6 @@ func newClient(instance *models.FediInstance, accessToken string) (*mastodon.Cli
 	client.Transport = &http.Transport{}
 	return client, nil
 }
+
+// GetSoftware returns the software type of this module
+func (Helper) GetSoftware() fedi.Software { return fedi.SoftwareMastodon }

@@ -54,6 +54,7 @@ func (h *Helper) GetCurrentAccount(ctx context.Context, instance *models.FediIns
 	newFediAccount := &models.FediAccount{
 		InstanceID:           instance.ID,
 		Instance:             instance,
+		ActorURI:             account.URL,
 		Username:             account.Username,
 		DisplayName:          account.DisplayName,
 		DisplayNameUpdatedAt: time.Now(),

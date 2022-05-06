@@ -8,9 +8,10 @@ type Values struct {
 	LogLevel   string
 
 	// application
-	ApplicationName string
-	SoftwareVersion string
-	TokenSalt       string
+	ApplicationName    string
+	ApplicationWebsite string
+	SoftwareVersion    string
+	TokenSalt          string
 
 	// database
 	DbType          string
@@ -66,7 +67,8 @@ var Defaults = Values{
 	LogLevel:   "info",
 
 	// application
-	ApplicationName: "feditools-login",
+	ApplicationName:    "feditools-login",
+	ApplicationWebsite: "https://github.com/feditools/login",
 
 	// database
 	DbType:         "postgres",
