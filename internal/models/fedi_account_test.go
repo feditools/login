@@ -8,7 +8,9 @@ import (
 )
 
 func TestFediAccount_BeforeAppendModel_Insert(t *testing.T) {
-	obj := &FediAccount{}
+	obj := &FediAccount{
+		ActorURI: "https://example.com/actor",
+	}
 
 	err := obj.BeforeAppendModel(context.Background(), &bun.InsertQuery{})
 	if err != nil {
@@ -26,7 +28,9 @@ func TestFediAccount_BeforeAppendModel_Insert(t *testing.T) {
 }
 
 func TestFediAccount_BeforeAppendModel_Update(t *testing.T) {
-	obj := &FediAccount{}
+	obj := &FediAccount{
+		ActorURI: "https://example.com/actor",
+	}
 
 	err := obj.BeforeAppendModel(context.Background(), &bun.UpdateQuery{})
 	if err != nil {

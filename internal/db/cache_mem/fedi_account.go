@@ -106,6 +106,11 @@ func (c *CacheMem) ReadFediAccountByUsername(ctx context.Context, instanceID int
 	return account, nil
 }
 
+// ReadFediAccountsPage returns a page of federated social accounts
+func (c *CacheMem) ReadFediAccountsPage(ctx context.Context, index, count int) (instances []*models.FediAccount, err db.Error) {
+	return c.db.ReadFediAccountsPage(ctx, index, count)
+}
+
 // UpdateFediAccount updates the stored federated instance and caches it
 func (c *CacheMem) UpdateFediAccount(ctx context.Context, account *models.FediAccount) db.Error {
 	err := c.db.UpdateFediAccount(ctx, account)

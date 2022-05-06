@@ -3,6 +3,7 @@ package bun
 import (
 	"context"
 	"database/sql"
+	libdatabase "github.com/feditools/go-lib/database"
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/models"
 	"github.com/uptrace/bun"
@@ -26,7 +27,7 @@ func (c *Client) CountFediAccounts(ctx context.Context) (int64, db.Error) {
 func (c *Client) CountFediAccountsForInstance(ctx context.Context, instanceID int64) (int64, db.Error) {
 	metric := c.metrics.NewDBQuery("CountFediAccountsForInstance")
 
-	count, err := c.newFediAccountQ((*models.FediAccount)(nil)).Where("fedi_instances.id = ?", instanceID).Count(ctx)
+	count, err := c.newFediAccountQ((*models.FediAccount)(nil)).Where("instance_id = ?", instanceID).Count(ctx)
 	if err != nil {
 		go metric.Done(true)
 		return 0, c.bun.errProc(err)
@@ -92,6 +93,25 @@ func (c *Client) ReadFediAccountByUsername(ctx context.Context, instanceID int64
 	return fediAccount, nil
 }
 
+// ReadFediAccountsPage returns a page of federated social accounts
+func (c *Client) ReadFediAccountsPage(ctx context.Context, index, count int) ([]*models.FediAccount, db.Error) {
+	metric := c.metrics.NewDBQuery("ReadFediAccountsPage")
+
+	var accounts []*models.FediAccount
+
+	err := c.newFediAccountsQ(&accounts).
+		Limit(count).
+		Offset(libdatabase.Offset(index, count)).
+		Scan(ctx)
+	if err != nil {
+		go metric.Done(true)
+		return nil, c.bun.ProcessError(err)
+	}
+
+	go metric.Done(false)
+	return accounts, nil
+}
+
 // UpdateFediAccount updates the stored federated social account
 func (c *Client) UpdateFediAccount(ctx context.Context, account *models.FediAccount) db.Error {
 	metric := c.metrics.NewDBQuery("UpdateFediAccount")
@@ -110,4 +130,10 @@ func (c *Client) newFediAccountQ(account *models.FediAccount) *bun.SelectQuery {
 	return c.bun.
 		NewSelect().
 		Model(account)
+}
+
+func (c *Client) newFediAccountsQ(accounts *[]*models.FediAccount) *bun.SelectQuery {
+	return c.bun.
+		NewSelect().
+		Model(accounts)
 }

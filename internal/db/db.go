@@ -17,6 +17,8 @@ type DB interface {
 	LoadTestData(ctx context.Context) Error
 	// ReadByID returns a model by its ID
 	ReadByID(ctx context.Context, id int64, i any) Error
+	// ResetCache clears any caches in the module
+	ResetCache(ctx context.Context) Error
 	// Update updates stored data
 	Update(ctx context.Context, i any) Error
 
@@ -32,6 +34,8 @@ type DB interface {
 	ReadFediAccount(ctx context.Context, id int64) (account *models.FediAccount, err Error)
 	// ReadFediAccountByUsername returns one federated social account
 	ReadFediAccountByUsername(ctx context.Context, instanceID int64, username string) (account *models.FediAccount, err Error)
+	// ReadFediAccountsPage returns a page of federated social accounts
+	ReadFediAccountsPage(ctx context.Context, index, count int) (instances []*models.FediAccount, err Error)
 	// UpdateFediAccount updates the stored federated instance
 	UpdateFediAccount(ctx context.Context, account *models.FediAccount) (err Error)
 

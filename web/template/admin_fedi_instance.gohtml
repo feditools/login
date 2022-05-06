@@ -1,0 +1,51 @@
+{{ define "admin_fedi_instances" -}}
+{{- template "admin_header" . }}
+<div class="row">
+  <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    {{ $textFediverse := .Localizer.TextFediverse }}<h1 lang="{{ $textFediverse.Language }}"><i class="fa-solid fa-globe"></i> {{ $textFediverse }}</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    {{ $textInstances := .Localizer.TextInstance 2 }}<h2 lang="{{ $textInstances.Language }}"><i class="fa-solid fa-person-digging"></i> {{ $textInstances }}</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+  {{- $HRefViewFediInstance := .HRefViewFediInstance -}}
+  {{- $counts := .FediInstanceAccountCounts -}}
+  {{- if .FediInstances }}
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Description</th>
+        <th scope="col">Known Accounts</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      {{- range $i, $instance := .FediInstances }}
+        <tr>
+          <th scope="row"><a href="{{ $HRefViewFediInstance }}/{{ token $instance }}">{{ token $instance }}</a></th>
+          <td><a href="{{ $HRefViewFediInstance }}/{{ token $instance }}">{{ $instance.Domain }}</a></td>
+          <td>{{ index $counts $i }}</td>
+          <td></td>
+        </tr>
+      {{- end }}
+      </tbody>
+    </table>
+  {{- else }}
+    No Data
+  {{- end }}
+  </div>
+</div>
+{{- if .Pagination }}
+<div class="row">
+  <div class="col text-center">
+      {{ template "pagination" .Pagination }}
+  </div>
+</div>
+{{- end }}
+{{ template "admin_footer" . }}
+{{ end }}

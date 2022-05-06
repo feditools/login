@@ -2,10 +2,7 @@ package models
 
 // NodeInfo is a federated nodeinfo object
 type NodeInfo struct {
-	Links []struct {
-		Rel  string `json:"rel"`
-		HRef string `json:"href"`
-	} `json:"links"`
+	Links []Link `json:"links"`
 }
 
 // NodeInfo20 is a federated nodeinfo 2.0 object

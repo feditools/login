@@ -22,8 +22,9 @@ type Fedi struct {
 	appClientName    string
 	externalHostname string
 
-	nodeinfoCacheExp     time.Duration
-	nodeinfoRequestGroup singleflight.Group
+	nodeinfoCacheExp time.Duration
+
+	requestGroup singleflight.Group
 }
 
 // New creates a new fedi module

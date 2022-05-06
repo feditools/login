@@ -34,7 +34,7 @@ func findNodeInfo20URI(nodeinfo *models.NodeInfo) (*url.URL, error) {
 // GetNodeInfo20 retrieves wellknown nodeinfo from a federated instance
 func (f *Fedi) GetNodeInfo20(ctx context.Context, domain string, url *url.URL) (*models.NodeInfo20, error) {
 	l := logger.WithField("func", "GetNodeInfo20")
-	v, err, _ := f.nodeinfoRequestGroup.Do(url.String(), func() (interface{}, error) {
+	v, err, _ := f.requestGroup.Do(url.String(), func() (interface{}, error) {
 		// check cache
 		cache, err := f.kv.GetFediNodeInfo(ctx, domain)
 		if err != nil && err.Error() != "redis: nil" {

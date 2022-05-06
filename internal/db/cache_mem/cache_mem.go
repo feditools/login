@@ -22,6 +22,8 @@ type CacheMem struct {
 
 	fediInstance           *bigcache.BigCache
 	fediInstanceDomainToID *bigcache.BigCache
+
+	allCaches []*bigcache.BigCache
 }
 
 // New creates a new in memory cache
@@ -105,11 +107,22 @@ func New(_ context.Context, d db.DB, m metrics.Collector) (db.DB, error) {
 
 		fediInstance:           fediInstance,
 		fediInstanceDomainToID: fediInstanceDomainToID,
+
+		allCaches: []*bigcache.BigCache{
+			count,
+			fediAccount,
+			fediAccountUsernameToID,
+			fediInstance,
+			fediInstanceDomainToID,
+		},
 	}, nil
 }
 
 // Close is a pass through
 func (c *CacheMem) Close(ctx context.Context) db.Error {
+	for _, cache := range c.allCaches {
+		_ = cache.Close()
+	}
 	return c.db.Close(ctx)
 }
 
@@ -131,6 +144,14 @@ func (c *CacheMem) LoadTestData(ctx context.Context) db.Error {
 // ReadByID is a pass through
 func (c *CacheMem) ReadByID(ctx context.Context, id int64, i any) db.Error {
 	return c.db.ReadByID(ctx, id, i)
+}
+
+// ResetCache clears all the caches
+func (c *CacheMem) ResetCache(ctx context.Context) db.Error {
+	for _, cache := range c.allCaches {
+		_ = cache.Reset()
+	}
+	return c.db.ResetCache(ctx)
 }
 
 // Update is a pass through
