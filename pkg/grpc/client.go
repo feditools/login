@@ -3,6 +3,7 @@ package grpc
 import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/insecure"
 	"log"
 )
 
@@ -17,6 +18,7 @@ type Client struct {
 func NewClient(address string, cred credentials.PerRPCCredentials) (*Client, error) {
 	opts := []grpc.DialOption{
 		grpc.WithPerRPCCredentials(cred),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	}
 
 	conn, err := grpc.Dial(address, opts...)
