@@ -10,6 +10,8 @@ import (
 	cachemem "github.com/feditools/login/internal/db/cache_mem"
 	"github.com/feditools/login/internal/fedi"
 	"github.com/feditools/login/internal/fedi/mastodon"
+	"github.com/feditools/login/internal/grpc"
+	"github.com/feditools/login/internal/grpc/ping"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/kv/redis"
 	"github.com/feditools/login/internal/metrics/statsd"
@@ -95,11 +97,37 @@ var Start action.Action = func(ctx context.Context) error {
 		return err
 	}
 
+	// create grpc server
+	l.Debug("creating grpc server")
+	grpcServer, err := grpc.NewServer(ctx, metricsCollector)
+	if err != nil {
+		l.Errorf("http httpServer: %s", err.Error())
+		return err
+	}
+
+	// create web modules
+	var grpcModules []grpc.Module
+	pingGRPC, err := ping.New()
+	if err != nil {
+		logrus.Errorf("grpc module: %s", err.Error())
+		return err
+	}
+	grpcModules = append(grpcModules, pingGRPC)
+
+	// add modules to server
+	for _, mod := range grpcModules {
+		err := mod.Register(grpcServer)
+		if err != nil {
+			l.Errorf("loading %s module: %s", mod.Name(), err.Error())
+			return err
+		}
+	}
+
 	// create http server
 	l.Debug("creating http server")
-	server, err := http.NewServer(ctx, metricsCollector)
+	httpServer, err := http.NewServer(ctx, metricsCollector)
 	if err != nil {
-		l.Errorf("http server: %s", err.Error())
+		l.Errorf("http httpServer: %s", err.Error())
 		return err
 	}
 
@@ -115,9 +143,9 @@ var Start action.Action = func(ctx context.Context) error {
 		webModules = append(webModules, webMod)
 	}
 
-	// add modules to servers
+	// add modules to server
 	for _, mod := range webModules {
-		err := mod.Route(server)
+		err := mod.Route(httpServer)
 		if err != nil {
 			l.Errorf("loading %s module: %s", mod.Name(), err.Error())
 			return err
@@ -138,7 +166,16 @@ var Start action.Action = func(ctx context.Context) error {
 		if err != nil {
 			errChan <- fmt.Errorf("http server: %s", err.Error())
 		}
-	}(server, errChan)
+	}(httpServer, errChan)
+
+	// start grpc server
+	go func(g *grpc.Server, errChan chan error) {
+		l.Debug("starting grpc server")
+		err := g.Start()
+		if err != nil {
+			errChan <- fmt.Errorf("grpc server: %s", err.Error())
+		}
+	}(grpcServer, errChan)
 
 	// wait for event
 	select {

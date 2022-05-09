@@ -40,6 +40,7 @@ type KeyNames struct {
 
 	// server
 	ServerExternalHostname string
+	ServerGRPCBind         string
 	ServerHTTPBind         string
 	ServerMinifyHTML       string
 	ServerRoles            string
@@ -99,6 +100,7 @@ var Keys = KeyNames{
 
 	// server
 	ServerExternalHostname: "external-hostname",
+	ServerGRPCBind:         "grpc-bind",
 	ServerHTTPBind:         "http-bind",
 	ServerMinifyHTML:       "minify-html",
 	ServerRoles:            "server-role",

@@ -42,6 +42,7 @@ type Values struct {
 
 	// server
 	ServerExternalHostname string
+	ServerGRPCBind         string
 	ServerHTTPBind         string
 	ServerMinifyHTML       bool
 	ServerRoles            []string
@@ -92,6 +93,7 @@ var Defaults = Values{
 
 	// server
 	ServerExternalHostname: "localhost",
+	ServerGRPCBind:         ":50051",
 	ServerHTTPBind:         ":5000",
 	ServerMinifyHTML:       true,
 	ServerRoles: []string{
