@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/allegro/bigcache/v3 v3.0.2
 	github.com/cactus/go-statsd-client/v5 v5.0.0
-	github.com/feditools/go-lib v0.9.1-0.20220506205756-3498dca52f6b
+	github.com/feditools/go-lib v0.9.1-0.20220509222443-09db707057e9
 	github.com/go-http-utils/etag v0.0.0-20161124023236-513ea8f21eb1
 	github.com/go-oauth2/oauth2/v4 v4.5.0
 	github.com/go-oauth2/redis/v4 v4.1.1
@@ -34,7 +34,7 @@ require (
 	github.com/uptrace/bun/extra/bundebug v1.1.4
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	golang.org/x/text v0.3.7
-	google.golang.org/grpc v1.45.0
+	google.golang.org/grpc v1.46.0
 	google.golang.org/protobuf v1.28.0
 	modernc.org/sqlite v1.17.1
 	mvdan.cc/xurls/v2 v2.4.0
