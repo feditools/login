@@ -6,7 +6,6 @@ define generate_proto
     protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative $(1)
 endef
 
-
 build: clean
 	goreleaser build
 
@@ -28,7 +27,7 @@ fmt:
 	@echo formatting
 	@go fmt $(shell go list ./... | grep -v /vendor/)
 
-gen-proto: internal/grpc/*/*.proto
+gen-proto: pkg/grpc/*.proto
 	$(call generate_proto,$?)
 
 i18n-extract:

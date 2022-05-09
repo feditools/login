@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/feditools/login/internal/grpc/ping";
+option go_package = "github.com/feditools/login/pkg/grpc";
 
 package feditools.login.ping;
 

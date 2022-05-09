@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.15.8
-// source: internal/grpc/ping/ping.proto
+// source: pkg/grpc/ping.proto
 
-package ping
+package grpc
 
 import (
 	context "context"
@@ -103,5 +103,5 @@ var Ping_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "internal/grpc/ping/ping.proto",
+	Metadata: "pkg/grpc/ping.proto",
 }
