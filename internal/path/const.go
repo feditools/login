@@ -18,6 +18,8 @@ const (
 	PartAdd = "add"
 	// PartAdmin is used in a path for administrative tasks
 	PartAdmin = "admin"
+	// PartApplicationTokens is used in a path for application tokens
+	PartApplicationTokens = "app-tokens"
 	// PartAuthorize is used in a path for authorization
 	PartAuthorize = "authorize"
 	// PartCallback is used in a path for callback
@@ -38,6 +40,8 @@ const (
 	PartOauth = "oauth"
 	// PartStatic is used in a path for static files
 	PartStatic = "static"
+	// PartSystem is used in a path for system things
+	PartSystem = "system"
 	// PartToken is used in a path for static files
 	PartToken = "token"
 
@@ -46,11 +50,11 @@ const (
 	// Admin is the path for the admin page
 	Admin = "/" + PartAdmin
 
-	// AdminFediverse is the sub path for the fediverse admin page
+	// AdminFediverse is the path for the fediverse admin page
 	AdminFediverse = Admin + AdminSubFediverse
-	// AdminFediverseAccounts is the sub path for the fediverse admin page
+	// AdminFediverseAccounts is the path for the fediverse admin page
 	AdminFediverseAccounts = Admin + AdminSubFediverseAccounts
-	// AdminFediverseInstances is the sub path for the fediverse instances page
+	// AdminFediverseInstances is the path for the fediverse instances page
 	AdminFediverseInstances = Admin + AdminSubFediverseInstances
 
 	// AdminSubFediverse is the sub path for the fediverse admin page
@@ -60,12 +64,12 @@ const (
 	// AdminSubFediverseInstances is the sub path for the fediverse admin instances page
 	AdminSubFediverseInstances = AdminSubFediverse + "/" + PartInstances
 
-	// AdminOauth is the sub path for the oauth admin page
+	// AdminOauth is the path for the oauth admin page
 	AdminOauth = Admin + AdminSubOauth
-	// AdminOauthClients is the sub path for the oauth clients admin page
+	// AdminOauthClients is the path for the oauth clients admin page
 	AdminOauthClients = Admin + AdminSubOauthClients
-	// AdminOauthClientAdd is the sub path for the oauth clients add admin page
-	AdminOauthClientAdd = Admin + "/" + AdminSubOauthClientAdd
+	// AdminOauthClientAdd is the path for the oauth clients add admin page
+	AdminOauthClientAdd = Admin + AdminSubOauthClientAdd
 
 	// AdminSubOauth is the sub path for the oauth admin page
 	AdminSubOauth = "/" + PartOauth
@@ -75,6 +79,20 @@ const (
 	AdminSubOauthClients = AdminSubOauth + "/" + PartClients
 	// AdminSubOauthClientAdd is the sub path for the oauth clients add admin page
 	AdminSubOauthClientAdd = AdminSubOauthClients + "/" + PartAdd
+
+	// AdminSystem is the path for the system admin page
+	AdminSystem = Admin + AdminSubSystem
+	// AdminSystemApplicationTokens is the path for the application tokens page
+	AdminSystemApplicationTokens = Admin + AdminSubSystemApplicationTokens
+	// AdminSystemApplicationTokenAdd is the path for the add application tokens page
+	AdminSystemApplicationTokenAdd = Admin + AdminSubSystemApplicationTokenAdd
+
+	// AdminSubSystem is the sub path for the system admin page
+	AdminSubSystem = "/" + PartSystem
+	// AdminSubSystemApplicationTokens is the sub path for the application tokens page
+	AdminSubSystemApplicationTokens = AdminSubSystem + "/" + PartApplicationTokens
+	// AdminSubSystemApplicationTokenAdd is the sub path for the add application tokens page
+	AdminSubSystemApplicationTokenAdd = AdminSubSystemApplicationTokens + "/" + PartAdd
 
 	// CallbackOauth is the path for an oauth callback
 	CallbackOauth = "/" + PartCallback + "/" + PartOauth + "/" + VarInstance

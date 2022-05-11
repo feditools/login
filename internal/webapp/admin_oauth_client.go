@@ -318,27 +318,3 @@ func (m *Module) displayOauthClientAdd(w nethttp.ResponseWriter, r *nethttp.Requ
 		l.Errorf("could not render %s template: %s", template.AdminOauthClientAddName, err.Error())
 	}
 }
-
-func makeAdminOauthSidebar(r *nethttp.Request) libtemplate.Sidebar {
-	// get localizer
-	localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
-
-	// create sidebar
-	newSidebar := libtemplate.Sidebar{
-		{
-			Text: localizer.TextOauth20Settings().String(),
-			Children: []libtemplate.SidebarNode{
-				{
-					Text:    localizer.TextClient(2).String(),
-					Matcher: path.ReAdminOauthClientsPre,
-					Icon:    "desktop",
-					URI:     path.AdminOauthClients,
-				},
-			},
-		},
-	}
-
-	newSidebar.ActivateFromPath(r.URL.Path)
-
-	return newSidebar
-}

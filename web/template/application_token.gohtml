@@ -1,50 +1,40 @@
-{{ define "admin_oauth" -}}
+{{ define "admin_system_applicationtokens" -}}
 {{- template "admin_header" . }}
 <div class="row">
   <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-      {{ $textOauth := .Localizer.TextOauth }}<h1 lang="{{ $textOauth.Language }}"><i class="fa-solid fa-globe"></i> {{ $textOauth }}</h1>
-  </div>
-</div>
-{{ template "admin_footer" . }}
-{{ end }}
-
-{{ define "admin_oauth_clients" -}}
-{{- template "admin_header" . }}
-<div class="row">
-  <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    {{ $textOauth := .Localizer.TextOauth }}<h1 lang="{{ $textOauth.Language }}"><i class="fa-solid fa-globe"></i> {{ $textOauth }}</h1>
+    {{ $textSystem := .Localizer.TextSystem 1 }}<h1 lang="{{ $textSystem.Language }}"><i class="fa-solid fa-globe"></i> {{ $textSystem }}</h1>
   </div>
 </div>
 <div class="row">
   <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    {{ $textClients := .Localizer.TextOauth20Client 2 }}<h2 lang="{{ $textClients.Language }}"><i class="fa-solid fa-person-digging"></i> {{ $textClients }}</h2>
+    {{ $textApplicationToken := .Localizer.TextApplicationToken 2 }}<h2 lang="{{ $textApplicationToken.Language }}"><i class="fa-solid fa-person-digging"></i> {{ $textApplicationToken }}</h2>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group">
-        <a href="{{ .HRefAddClient }}" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-plus"></i></a>
+        <a href="{{ .HRefAddApplicationToken }}" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-plus"></i></a>
       </div>
     </div>
   </div>
 </div>
 <div class="row">
   <div class="col">
-  {{- $HRefViewClient := .HRefViewClient -}}
+  {{- $HRefViewApplicationToken := .HRefViewApplicationToken -}}
   {{- $HRefViewFediAccount := .HRefViewFediAccount -}}
-  {{- if .OauthClients }}
+  {{- if .ApplicationTokens }}
     <table class="table">
       <thead>
       <tr>
         <th scope="col">ID</th>
         <th scope="col">Description</th>
-        <th scope="col">Owner</th>
+        <th scope="col">Created By</th>
         <th></th>
       </tr>
       </thead>
       <tbody>
-      {{- range .OauthClients }}
+      {{- range .ApplicationTokens }}
         <tr>
-          <th scope="row"><a href="{{ $HRefViewClient }}/{{ token . }}">{{ token . }}</a></th>
-          <td><a href="{{ $HRefViewClient }}/{{ token . }}">{{ .Description }}</a></td>
-          <td><a href="{{ $HRefViewFediAccount }}/{{ token .Owner }}">{{ .Owner.Username }}@{{ .Owner.Instance.Domain }}</a></td>
+          <th scope="row"><a href="{{ $HRefViewApplicationToken }}/{{ token . }}">{{ token . }}</a></th>
+          <td><a href="{{ $HRefViewApplicationToken }}/{{ token . }}">{{ .Description }}</a></td>
+          <td><a href="{{ $HRefViewFediAccount }}/{{ token .CreatedBy }}">{{ .CreatedBy.Username }}@{{ .CreatedBy.Instance.Domain }}</a></td>
           <td></td>
         </tr>
       {{- end }}
@@ -65,7 +55,7 @@
 {{ template "admin_footer" . }}
 {{ end }}
 
-{{ define "admin_oauth_client_add" -}}
+{{ define "admin_system_applicationtoken_add" -}}
 {{- template "admin_header" . }}
 <div class="row">
   <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -97,7 +87,7 @@
 {{ template "admin_footer" . }}
 {{ end }}
 
-{{ define "admin_oauth_client_added" -}}
+{{ define "admin_system_applicationtoken_added" -}}
 {{- template "admin_header" . }}
 <div class="row">
   <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
