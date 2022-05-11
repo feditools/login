@@ -46,6 +46,8 @@ func (m *Module) Route(s *http.Server) error {
 
 	admin.HandleFunc(path.AdminSubSystem, m.AdminSystemGetHandler).Methods("GET")
 	admin.HandleFunc(path.AdminSubSystemApplicationTokens, m.AdminSystemApplicationTokensGetHandler).Methods("GET")
+	admin.HandleFunc(path.AdminSubSystemApplicationTokenAdd, m.AdminSystemApplicationTokenAddGetHandler).Methods("GET")
+	admin.HandleFunc(path.AdminSubSystemApplicationTokenAdd, m.AdminSystemApplicationTokenAddPostHandler).Methods("POST")
 
 	return nil
 }

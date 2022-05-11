@@ -29,11 +29,11 @@ type AdminSystemApplicationTokens struct {
 	Pagination               libtemplate.Pagination
 }
 
-// AdminApplicationTokenAddName is the name of the admin system application add token template
-const AdminApplicationTokenAddName = "admin_system_applicationtoken_add"
+// AdminSystemApplicationTokenAddName is the name of the admin system application add token template
+const AdminSystemApplicationTokenAddName = "admin_system_applicationtoken_add"
 
-// AdminApplicationTokenAdd contains the variables for the admin system application add token template.
-type AdminApplicationTokenAdd struct {
+// AdminSystemApplicationTokenAdd contains the variables for the admin system application add token template.
+type AdminSystemApplicationTokenAdd struct {
 	Common
 	Admin
 
@@ -41,11 +41,11 @@ type AdminApplicationTokenAdd struct {
 	FormButtonSubmitText string
 }
 
-// AdminApplicationTokenAddedName is the name of the admin system application token added template
-const AdminApplicationTokenAddedName = "admin_system_applicationtoken_added"
+// AdminSystemApplicationTokenAddedName is the name of the admin system application token added template
+const AdminSystemApplicationTokenAddedName = "admin_system_applicationtoken_added"
 
-// AdminApplicationTokenAdded contains the variables for the admin system application token added template.
-type AdminApplicationTokenAdded struct {
+// AdminSystemApplicationTokenAdded contains the variables for the admin system application token added template.
+type AdminSystemApplicationTokenAdded struct {
 	Common
 	Admin
 
