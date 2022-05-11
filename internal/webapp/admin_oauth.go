@@ -11,7 +11,7 @@ import (
 
 // AdminOauthGetHandler serves the admin oauth page
 func (m *Module) AdminOauthGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
-	l := logger.WithField("func", "AdminOauthClientsGetHandler")
+	l := logger.WithField("func", "AdminOauthGetHandler")
 
 	// get localizer
 	localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)

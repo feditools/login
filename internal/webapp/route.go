@@ -35,6 +35,7 @@ func (m *Module) Route(s *http.Server) error {
 	admin.NotFoundHandler = m.notFoundHandler()
 	admin.MethodNotAllowedHandler = m.methodNotAllowedHandler()
 
+	admin.HandleFunc(path.AdminSubFediverse, m.AdminFediGetHandler).Methods("GET")
 	admin.HandleFunc(path.AdminSubFediverseAccounts, m.AdminFediAccountsGetHandler).Methods("GET")
 	admin.HandleFunc(path.AdminSubFediverseInstances, m.AdminFediInstancesGetHandler).Methods("GET")
 
@@ -43,6 +44,7 @@ func (m *Module) Route(s *http.Server) error {
 	admin.HandleFunc(path.AdminSubOauthClientAdd, m.AdminOauthClientAddPostHandler).Methods("POST")
 	admin.HandleFunc(path.AdminSubOauthClients, m.AdminOauthClientsGetHandler).Methods("GET")
 
+	admin.HandleFunc(path.AdminSubSystem, m.AdminSystemGetHandler).Methods("GET")
 	admin.HandleFunc(path.AdminSubSystemApplicationTokens, m.AdminSystemApplicationTokensGetHandler).Methods("GET")
 
 	return nil

@@ -5,6 +5,15 @@ import (
 	"github.com/feditools/login/internal/models"
 )
 
+// AdminSystemName is the name of the admin oauth template
+const AdminSystemName = "admin_system"
+
+// AdminSystem contains the variables for the admin oauth template.
+type AdminSystem struct {
+	Common
+	Admin
+}
+
 // AdminSystemApplicationTokensName is the name of the admin system application tokens template.
 const AdminSystemApplicationTokensName = "admin_system_applicationtokens"
 
