@@ -44,6 +44,7 @@ func (c *Client) ReadOauthClient(ctx context.Context, id int64) (*models.OauthCl
 	oauthClient := new(models.OauthClient)
 	err := c.newOauthClientQ(oauthClient).Where("id = ?", id).Scan(ctx)
 	if err == sql.ErrNoRows {
+		go metric.Done(false)
 		return nil, nil
 	}
 	if err != nil {

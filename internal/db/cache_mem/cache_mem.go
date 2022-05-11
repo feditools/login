@@ -10,12 +10,29 @@ import (
 	"time"
 )
 
+const (
+	applicationTokenLifeWindow         = 10 * time.Minute
+	applicationTokenCleanWindow        = 5 * time.Minute
+	applicationTokenMaxEntriesInWindow = 1000
+
+	fediAccountLifeWindow         = 10 * time.Minute
+	fediAccountCleanWindow        = 5 * time.Minute
+	fediAccountMaxEntriesInWindow = 10000
+
+	fediInstanceLifeWindow         = 10 * time.Minute
+	fediInstanceCleanWindow        = 5 * time.Minute
+	fediInstanceMaxEntriesInWindow = 10000
+)
+
 // CacheMem is an in memory caching middleware for our db interface
 type CacheMem struct {
 	db      db.DB
 	metrics metrics.Collector
 
 	count *bigcache.BigCache
+
+	applicationToken          *bigcache.BigCache
+	applicationTokenTokenToID *bigcache.BigCache
 
 	fediAccount             *bigcache.BigCache
 	fediAccountUsernameToID *bigcache.BigCache
@@ -28,6 +45,7 @@ type CacheMem struct {
 
 // New creates a new in memory cache
 func New(_ context.Context, d db.DB, m metrics.Collector) (db.DB, error) {
+	gob.Register(models.ApplicationToken{})
 	gob.Register(models.FediAccount{})
 	gob.Register(models.FediInstance{})
 
@@ -44,11 +62,37 @@ func New(_ context.Context, d db.DB, m metrics.Collector) (db.DB, error) {
 		return nil, err
 	}
 
+	applicationToken, err := bigcache.NewBigCache(bigcache.Config{
+		Shards:             32,
+		LifeWindow:         applicationTokenLifeWindow,
+		CleanWindow:        applicationTokenCleanWindow,
+		MaxEntriesInWindow: applicationTokenMaxEntriesInWindow,
+		MaxEntrySize:       500,
+		Verbose:            true,
+		HardMaxCacheSize:   8192,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	applicationTokenTokenToID, err := bigcache.NewBigCache(bigcache.Config{
+		Shards:             32,
+		LifeWindow:         applicationTokenLifeWindow,
+		CleanWindow:        applicationTokenCleanWindow,
+		MaxEntriesInWindow: applicationTokenMaxEntriesInWindow,
+		MaxEntrySize:       8,
+		Verbose:            true,
+		HardMaxCacheSize:   8192,
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	fediAccount, err := bigcache.NewBigCache(bigcache.Config{
 		Shards:             32,
-		LifeWindow:         10 * time.Minute,
-		CleanWindow:        5 * time.Minute,
-		MaxEntriesInWindow: 10000,
+		LifeWindow:         fediAccountLifeWindow,
+		CleanWindow:        fediAccountCleanWindow,
+		MaxEntriesInWindow: fediAccountMaxEntriesInWindow,
 		MaxEntrySize:       500,
 		Verbose:            true,
 		HardMaxCacheSize:   8192,
@@ -59,9 +103,9 @@ func New(_ context.Context, d db.DB, m metrics.Collector) (db.DB, error) {
 
 	fediAccountUsernameToID, err := bigcache.NewBigCache(bigcache.Config{
 		Shards:             32,
-		LifeWindow:         10 * time.Minute,
-		CleanWindow:        5 * time.Minute,
-		MaxEntriesInWindow: 10000,
+		LifeWindow:         fediAccountLifeWindow,
+		CleanWindow:        fediAccountCleanWindow,
+		MaxEntriesInWindow: fediAccountMaxEntriesInWindow,
 		MaxEntrySize:       8,
 		Verbose:            true,
 		HardMaxCacheSize:   8192,
@@ -72,9 +116,9 @@ func New(_ context.Context, d db.DB, m metrics.Collector) (db.DB, error) {
 
 	fediInstance, err := bigcache.NewBigCache(bigcache.Config{
 		Shards:             32,
-		LifeWindow:         10 * time.Minute,
-		CleanWindow:        5 * time.Minute,
-		MaxEntriesInWindow: 10000,
+		LifeWindow:         fediInstanceLifeWindow,
+		CleanWindow:        fediInstanceCleanWindow,
+		MaxEntriesInWindow: fediInstanceMaxEntriesInWindow,
 		MaxEntrySize:       500,
 		Verbose:            true,
 		HardMaxCacheSize:   8192,
@@ -85,9 +129,9 @@ func New(_ context.Context, d db.DB, m metrics.Collector) (db.DB, error) {
 
 	fediInstanceDomainToID, err := bigcache.NewBigCache(bigcache.Config{
 		Shards:             32,
-		LifeWindow:         10 * time.Minute,
-		CleanWindow:        5 * time.Minute,
-		MaxEntriesInWindow: 10000,
+		LifeWindow:         fediInstanceLifeWindow,
+		CleanWindow:        fediInstanceCleanWindow,
+		MaxEntriesInWindow: fediInstanceMaxEntriesInWindow,
 		MaxEntrySize:       8,
 		Verbose:            true,
 		HardMaxCacheSize:   8192,
@@ -102,6 +146,9 @@ func New(_ context.Context, d db.DB, m metrics.Collector) (db.DB, error) {
 
 		count: count,
 
+		applicationToken:          applicationToken,
+		applicationTokenTokenToID: applicationTokenTokenToID,
+
 		fediAccount:             fediAccount,
 		fediAccountUsernameToID: fediAccountUsernameToID,
 
@@ -110,6 +157,8 @@ func New(_ context.Context, d db.DB, m metrics.Collector) (db.DB, error) {
 
 		allCaches: []*bigcache.BigCache{
 			count,
+			applicationToken,
+			applicationTokenTokenToID,
 			fediAccount,
 			fediAccountUsernameToID,
 			fediInstance,

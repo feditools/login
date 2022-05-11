@@ -1,10 +1,6 @@
 package models
 
-import (
-	"context"
-	"github.com/uptrace/bun"
-	"time"
-)
+import "time"
 
 // ApplicationToken contains application authentication tokens
 type ApplicationToken struct {
@@ -15,29 +11,4 @@ type ApplicationToken struct {
 	Description string       `validate:"-" bun:",nullzero,notnull"`
 	CreatedByID int64        `validate:"-" bun:",nullzero,notnull"`
 	CreatedBy   *FediAccount `validate:"-" bun:"rel:belongs-to"`
-}
-
-var _ bun.BeforeAppendModelHook = (*ApplicationToken)(nil)
-
-// BeforeAppendModel runs before a bun append operation
-func (f *ApplicationToken) BeforeAppendModel(_ context.Context, query bun.Query) error {
-	switch query.(type) {
-	case *bun.InsertQuery:
-		now := time.Now()
-		f.CreatedAt = now
-		f.UpdatedAt = now
-
-		err := validate.Struct(f)
-		if err != nil {
-			return err
-		}
-	case *bun.UpdateQuery:
-		f.UpdatedAt = time.Now()
-
-		err := validate.Struct(f)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }

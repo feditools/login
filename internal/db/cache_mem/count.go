@@ -8,13 +8,14 @@ import (
 )
 
 const (
-	tableNameFediAccounts  = "fedi_accounts"
-	tableNameFediInstances = "fedi_instances"
-	tableNameOauthClients  = "oauth_clients"
+	tableNameApplicationTokens = "application_tokens"
+	tableNameFediAccounts      = "fedi_accounts"
+	tableNameFediInstances     = "fedi_instances"
+	tableNameOauthClients      = "oauth_clients"
 )
 
-func keyCountOauthClients() string {
-	return tableNameOauthClients
+func keyCountApplicationTokens() string {
+	return tableNameApplicationTokens
 }
 func keyCountFediAccounts() string {
 	return tableNameFediAccounts
@@ -24,6 +25,9 @@ func keyCountFediAccountsForInstance(instanceID int64) string {
 }
 func keyCountFediInstances() string {
 	return tableNameFediInstances
+}
+func keyCountOauthClients() string {
+	return tableNameOauthClients
 }
 
 func (c *CacheMem) getCount(_ context.Context, k string) (int64, bool) {

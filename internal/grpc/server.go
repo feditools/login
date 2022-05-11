@@ -29,7 +29,7 @@ func NewServer(_ context.Context, m metrics.Collector) (*Server, error) {
 	}
 
 	opts := []grpc.ServerOption{
-		grpc.UnaryInterceptor(ensureValidToken),
+		grpc.UnaryInterceptor(unaryInterceptor),
 	}
 	server.srv = grpc.NewServer(opts...)
 

@@ -22,6 +22,21 @@ type DB interface {
 	// Update updates stored data
 	Update(ctx context.Context, i any) Error
 
+	// ApplicationToken
+
+	// CountApplicationTokens returns the number of application tokens
+	CountApplicationTokens(ctx context.Context) (count int64, err Error)
+	// CreateApplicationToken stores the application token
+	CreateApplicationToken(ctx context.Context, applicationToken *models.ApplicationToken) (err Error)
+	// ReadApplicationToken returns one application token
+	ReadApplicationToken(ctx context.Context, id int64) (applicationToken *models.ApplicationToken, err Error)
+	// ReadApplicationTokenByToken returns one application token
+	ReadApplicationTokenByToken(ctx context.Context, token string) (applicationToken *models.ApplicationToken, err Error)
+	// ReadApplicationTokensPage returns a page of application tokens
+	ReadApplicationTokensPage(ctx context.Context, index, count int) (applicationToken []*models.ApplicationToken, err Error)
+	// UpdateApplicationToken updates the stored application token
+	UpdateApplicationToken(ctx context.Context, applicationToken *models.ApplicationToken) (err Error)
+
 	// FediAccount
 
 	// CountFediAccounts returns the number of federated social account
