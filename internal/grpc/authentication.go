@@ -4,25 +4,32 @@ import (
 	"context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
-	"strings"
 )
 
-func authValid(authorization []string) bool {
+func (s *Server) authValid(ctx context.Context, authorization []string) bool {
 	if len(authorization) < 1 {
 		return false
 	}
-	token := strings.TrimPrefix(authorization[0], "Bearer ")
 
-	return token == "some-secret-token"
+	applicationToken, err := s.db.ReadApplicationTokenByToken(ctx, authorization[0])
+	if err != nil {
+		logger.WithField("func", "authValid").Errorf("db read: %s", err.Error())
+		return false
+	}
+	if applicationToken == nil {
+		return false
+	}
+
+	return true
 }
 
-func unaryInterceptor(ctx context.Context, req interface{}, _ *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+func (s *Server) unaryInterceptor(ctx context.Context, req interface{}, _ *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return nil, ErrMissingMetadata
 	}
 
-	if !authValid(md["authorization"]) {
+	if !s.authValid(ctx, md["authorization"]) {
 		return nil, ErrInvalidToken
 	}
 
