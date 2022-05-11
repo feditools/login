@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/feditools/go-lib/http"
+	libhttp "github.com/feditools/go-lib/http"
 	"github.com/feditools/login/internal/fedi/models"
 	"github.com/feditools/login/internal/http"
 	"net/url"

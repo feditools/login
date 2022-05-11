@@ -40,4 +40,7 @@ RedirectURI:
   one: Redirect URI
   other: Redirect URIs
 Required: Required
+System:
+  one: System
+  other: Systems
 Unauthorized: Unauthorized

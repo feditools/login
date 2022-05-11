@@ -77,7 +77,7 @@ var Start action.Action = func(ctx context.Context) error {
 		return err
 	}
 
-	languageMod, err := liblanguage.New()
+	languageMod, err := language.New()
 	if err != nil {
 		l.Errorf("language: %s", err.Error())
 		return err
@@ -99,7 +99,7 @@ var Start action.Action = func(ctx context.Context) error {
 
 	// create grpc server
 	l.Debug("creating grpc server")
-	grpcServer, err := grpc.NewServer(ctx, metricsCollector)
+	grpcServer, err := grpc.NewServer(ctx, cachedDBClient, metricsCollector)
 	if err != nil {
 		l.Errorf("http httpServer: %s", err.Error())
 		return err

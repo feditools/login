@@ -1,4 +1,4 @@
-package libtemplate
+package template
 
 // Alert is a page alert.
 type Alert struct {

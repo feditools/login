@@ -3,7 +3,7 @@ package webapp
 import (
 	"github.com/feditools/go-lib"
 	"github.com/feditools/go-lib/language"
-	"github.com/feditools/go-lib/template"
+	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/path"
 	"github.com/feditools/login/internal/template"
@@ -15,7 +15,7 @@ func (m *Module) AdminFediInstancesGetHandler(w nethttp.ResponseWriter, r *netht
 	l := logger.WithField("func", "AdminFediInstancesGetHandler")
 
 	// get localizer
-	localizer := r.Context().Value(http.ContextKeyLocalizer).(*liblanguage.Localizer)
+	localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
 
 	// Init template variables
 	tmplVars := &template.AdminFediInstances{

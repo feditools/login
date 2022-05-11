@@ -20,8 +20,9 @@ type Server struct {
 }
 
 // NewServer creates a new grpc web server
-func NewServer(_ context.Context, m metrics.Collector) (*Server, error) {
+func NewServer(_ context.Context, d db.DB, m metrics.Collector) (*Server, error) {
 	server := &Server{
+		db:      d,
 		metrics: m,
 	}
 

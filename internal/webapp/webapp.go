@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/gob"
 	"github.com/feditools/go-lib/language"
-	"github.com/feditools/go-lib/template"
+	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/fedi"
@@ -36,7 +36,7 @@ type Module struct {
 	fedi      *fedi.Fedi
 	oauth     *server.Server
 	store     sessions.Store
-	language  *liblanguage.Module
+	language  *language.Module
 	metrics   metrics.Collector
 	minify    *minify.M
 	templates *htmltemplate.Template
@@ -52,7 +52,7 @@ type Module struct {
 }
 
 // New returns a new webapp module
-func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *liblanguage.Module, t *token.Tokenizer, mc metrics.Collector) (http.Module, error) {
+func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *language.Module, t *token.Tokenizer, mc metrics.Collector) (http.Module, error) {
 	l := logger.WithField("func", "New")
 
 	// Fetch new store.

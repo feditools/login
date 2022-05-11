@@ -1,4 +1,4 @@
-package liblanguage
+package language
 
 func isEmptyYaml(b []byte) bool {
 	switch string(b) {

@@ -1,4 +1,4 @@
-package liblanguage
+package language
 
 import (
 	"embed"

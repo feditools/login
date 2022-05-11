@@ -2,7 +2,7 @@ package webapp
 
 import (
 	"fmt"
-	"github.com/feditools/go-lib/template"
+	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/path"
 	"github.com/feditools/login/internal/template"
 	"net/http"

@@ -1,4 +1,4 @@
-package libtemplate
+package template
 
 import "html/template"
 

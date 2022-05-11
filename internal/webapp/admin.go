@@ -2,7 +2,7 @@ package webapp
 
 import (
 	"github.com/feditools/go-lib/language"
-	"github.com/feditools/go-lib/template"
+	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/path"
 	nethttp "net/http"
@@ -10,7 +10,7 @@ import (
 
 func makeAdminSidebar(r *nethttp.Request) libtemplate.Sidebar {
 	// get localizer
-	localizer := r.Context().Value(http.ContextKeyLocalizer).(*liblanguage.Localizer)
+	localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
 
 	// create sidebar
 	newSidebar := libtemplate.Sidebar{

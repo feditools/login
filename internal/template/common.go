@@ -2,14 +2,14 @@ package template
 
 import (
 	"github.com/feditools/go-lib/language"
-	"github.com/feditools/go-lib/template"
+	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/models"
 )
 
 // Common contains the variables used in nearly every template
 type Common struct {
 	Language  string
-	Localizer *liblanguage.Localizer
+	Localizer *language.Localizer
 
 	Account *models.FediAccount
 
@@ -47,7 +47,7 @@ func (t *Common) SetLanguage(l string) {
 }
 
 // SetLocalizer sets the localizer the template will use to generate text
-func (t *Common) SetLocalizer(l *liblanguage.Localizer) {
+func (t *Common) SetLocalizer(l *language.Localizer) {
 	t.Localizer = l
 	return
 }

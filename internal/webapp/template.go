@@ -18,7 +18,7 @@ func (m *Module) initTemplate(w nethttp.ResponseWriter, r *nethttp.Request, tmpl
 	l := logger.WithField("func", "initTemplate")
 
 	// set text handler
-	localizer := r.Context().Value(http.ContextKeyLocalizer).(*liblanguage.Localizer)
+	localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
 	tmpl.SetLocalizer(localizer)
 
 	// set language
@@ -94,7 +94,7 @@ func (m *Module) executeTemplate(w nethttp.ResponseWriter, name string, tmplVars
 
 func makeAdminNavbar(r *nethttp.Request) template.Navbar {
 	// get localizer
-	l := r.Context().Value(http.ContextKeyLocalizer).(*liblanguage.Localizer)
+	l := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
 
 	// create navbar
 	newNavbar := template.Navbar{
@@ -112,6 +112,12 @@ func makeAdminNavbar(r *nethttp.Request) template.Navbar {
 		},
 		{
 			Text:     l.TextOauth().String(),
+			MatchStr: path.ReAdminOauthPre,
+			FAIcon:   "desktop",
+			URL:      path.AdminOauth,
+		},
+		{
+			Text:     l.TextSystem(1).String(),
 			MatchStr: path.ReAdminOauthPre,
 			FAIcon:   "desktop",
 			URL:      path.AdminOauth,

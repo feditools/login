@@ -328,6 +328,7 @@ linters:
     - funlen
     - gci
     - gochecknoglobals
+    - gofumpt
     - golint # deprecated
     - gomnd
     - interfacer # deprecated

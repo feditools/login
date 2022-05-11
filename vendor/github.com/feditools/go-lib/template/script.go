@@ -1,4 +1,4 @@
-package libtemplate
+package template
 
 // Script is a javascript script.
 type Script struct {
