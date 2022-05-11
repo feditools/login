@@ -1,4 +1,4 @@
-package language
+package liblanguage
 
 import (
 	"github.com/feditools/go-lib/log"

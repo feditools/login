@@ -1,6 +1,6 @@
-package template
+package libtemplate
 
-import "github.com/feditools/go-lib/language"
+import liblanguage "github.com/feditools/go-lib/language"
 
 // FormInput is a templated form input.
 type FormInput struct {
@@ -8,7 +8,7 @@ type FormInput struct {
 	Type         string
 	Name         string
 	Placeholder  string
-	Label        *language.LocalizedString
+	Label        *liblanguage.LocalizedString
 	LabelClass   string
 	Value        string
 	WrappedClass string

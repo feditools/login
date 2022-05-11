@@ -3,7 +3,7 @@ package bun
 import (
 	"context"
 	"database/sql"
-	libdatabase "github.com/feditools/go-lib/database"
+	"github.com/feditools/go-lib/database"
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/models"
 	"github.com/uptrace/bun"

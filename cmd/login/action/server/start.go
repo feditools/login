@@ -77,7 +77,7 @@ var Start action.Action = func(ctx context.Context) error {
 		return err
 	}
 
-	languageMod, err := language.New()
+	languageMod, err := liblanguage.New()
 	if err != nil {
 		l.Errorf("language: %s", err.Error())
 		return err

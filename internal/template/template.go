@@ -2,7 +2,7 @@ package template
 
 import (
 	"github.com/feditools/go-lib/language"
-	libtemplate "github.com/feditools/go-lib/template"
+	"github.com/feditools/go-lib/template"
 	lmodels "github.com/feditools/login/internal/models"
 	"github.com/feditools/login/internal/token"
 	"github.com/feditools/login/web"
@@ -19,7 +19,7 @@ type InitTemplate interface {
 	AddFooterScript(s libtemplate.Script)
 	SetAccount(account *lmodels.FediAccount)
 	SetLanguage(l string)
-	SetLocalizer(l *language.Localizer)
+	SetLocalizer(l *liblanguage.Localizer)
 	SetLogoSrc(dark, light string)
 	SetNavbar(nodes Navbar)
 }

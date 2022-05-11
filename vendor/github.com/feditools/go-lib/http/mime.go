@@ -1,4 +1,4 @@
-package http
+package libhttp
 
 const (
 	// MimeAll matches any mime type.

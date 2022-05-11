@@ -3,7 +3,7 @@ package webapp
 import (
 	"github.com/feditools/go-lib"
 	"github.com/feditools/go-lib/language"
-	libtemplate "github.com/feditools/go-lib/template"
+	"github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/models"
 	"github.com/feditools/login/internal/path"
@@ -18,7 +18,7 @@ func (m *Module) AdminOauthClientsGetHandler(w nethttp.ResponseWriter, r *nethtt
 	l := logger.WithField("func", "AdminOauthClientsGetHandler")
 
 	// get localizer
-	localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
+	localizer := r.Context().Value(http.ContextKeyLocalizer).(*liblanguage.Localizer)
 
 	// Init template variables
 	tmplVars := &template.AdminOauthClients{
@@ -107,7 +107,7 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 	l := logger.WithField("func", "AdminOauthClientAddPostHandler")
 
 	// get localizer
-	localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
+	localizer := r.Context().Value(http.ContextKeyLocalizer).(*liblanguage.Localizer)
 
 	// parse form
 	err := r.ParseForm()
@@ -266,7 +266,7 @@ func (m *Module) displayOauthClientAdd(w nethttp.ResponseWriter, r *nethttp.Requ
 	l := logger.WithField("func", "displayOauthClientAdd")
 
 	// get localizer
-	localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
+	localizer := r.Context().Value(http.ContextKeyLocalizer).(*liblanguage.Localizer)
 
 	// Init template variables
 	tmplVars := &template.AdminOauthClientAdd{
@@ -321,7 +321,7 @@ func (m *Module) displayOauthClientAdd(w nethttp.ResponseWriter, r *nethttp.Requ
 
 func makeAdminOauthSidebar(r *nethttp.Request) libtemplate.Sidebar {
 	// get localizer
-	localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
+	localizer := r.Context().Value(http.ContextKeyLocalizer).(*liblanguage.Localizer)
 
 	// create sidebar
 	newSidebar := libtemplate.Sidebar{

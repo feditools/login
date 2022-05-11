@@ -1,4 +1,4 @@
-package template
+package libtemplate
 
 // HeadLink is the data for a header link.
 type HeadLink struct {

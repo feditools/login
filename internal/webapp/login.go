@@ -2,7 +2,7 @@ package webapp
 
 import (
 	"github.com/feditools/go-lib/language"
-	libtemplate "github.com/feditools/go-lib/template"
+	"github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/path"
 	"github.com/feditools/login/internal/template"
@@ -20,7 +20,7 @@ func (m *Module) LoginPostHandler(w nethttp.ResponseWriter, r *nethttp.Request) 
 	l := logger.WithField("func", "LoginPostHandler")
 
 	// get localizer
-	//localizer := r.Context().Value(localizerContextKey).(*language.Localizer)
+	//localizer := r.Context().Value(localizerContextKey).(*liblanguage.Localizer)
 
 	// parse form data
 	err := r.ParseForm()
@@ -46,7 +46,7 @@ func (m *Module) displayLoginPage(w nethttp.ResponseWriter, r *nethttp.Request, 
 	l := logger.WithField("func", "displayLoginPage")
 
 	// get localizer
-	localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
+	localizer := r.Context().Value(http.ContextKeyLocalizer).(*liblanguage.Localizer)
 
 	// Init template variables
 	tmplVars := &template.Login{}
