@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/gob"
 	bigcache "github.com/allegro/bigcache/v3"
+	"github.com/feditools/go-lib/metrics"
 	"github.com/feditools/login/internal/db"
-	"github.com/feditools/login/internal/metrics"
 	"github.com/feditools/login/internal/models"
 	"time"
 )

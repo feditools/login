@@ -11,8 +11,9 @@ func TestKind_String(t *testing.T) {
 		s string
 	}{
 		{Kind(0), "unknown"},
-		{KindFediInstance, "FediInstance"},
+		{KindApplicationToken, "ApplicationToken"},
 		{KindFediAccount, "FediAccount"},
+		{KindFediInstance, "FediInstance"},
 		{KindOauthClient, "OauthClient"},
 		{KindOauthScope, "OauthScope"},
 	}

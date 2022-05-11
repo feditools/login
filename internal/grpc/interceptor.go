@@ -14,14 +14,20 @@ func (s *Server) unaryInterceptor(ctx context.Context, req interface{}, info *gr
 	// get metadata
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
-		go metric.Done(true)
+		go func() {
+			ended := metric.Done(true)
+			l.Debugf("rendering %s took %d ms", info.FullMethod, ended.Milliseconds())
+		}()
 
 		return nil, ErrMissingMetadata
 	}
 
 	// validate login
 	if !s.authValid(ctx, md["authorization"]) {
-		go metric.Done(true)
+		go func() {
+			ended := metric.Done(true)
+			l.Debugf("rendering %s took %d ms", info.FullMethod, ended.Milliseconds())
+		}()
 
 		return nil, ErrInvalidToken
 	}
@@ -32,12 +38,18 @@ func (s *Server) unaryInterceptor(ctx context.Context, req interface{}, info *gr
 		errStatus := status.Convert(err)
 		l.Warnf("grpc err: %s", errStatus.Code().String())
 
-		go metric.Done(true)
+		go func() {
+			ended := metric.Done(true)
+			l.Debugf("rendering %s took %d ms", info.FullMethod, ended.Milliseconds())
+		}()
 
 		return nil, err
 	}
 
-	go metric.Done(false)
+	go func() {
+		ended := metric.Done(false)
+		l.Debugf("rendering %s took %d ms", info.FullMethod, ended.Milliseconds())
+	}()
 
 	return i, err
 }

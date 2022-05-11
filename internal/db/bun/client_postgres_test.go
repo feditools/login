@@ -4,9 +4,9 @@ package bun
 
 import (
 	"context"
+	"github.com/feditools/go-lib/mock"
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/db"
-	"github.com/feditools/login/internal/mock"
 	"github.com/feditools/login/internal/models/testdata"
 	"github.com/spf13/viper"
 	"testing"

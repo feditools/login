@@ -4,6 +4,7 @@ linters-settings:
     allow:
       - error
       - github.com\/feditools\/go-lib\/template\.ActivableSlice
+      - github.com\/feditools\/go-lib\/metrics\..*
   revive:
     rules:
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#add-constant
@@ -12,7 +13,7 @@ linters-settings:
         disabled: false
         arguments:
           - maxLitCount: "3"
-            allowStrs: '"","func"'
+            allowStrs: '"","func","kind"'
             allowInts: "0,1,2,3,4,5,6,7,8,9,10,64"
             allowFloats: ""
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#atomic
@@ -187,7 +188,7 @@ linters-settings:
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#max-public-structs
       - name: max-public-structs
         severity: warning
-        disabled: false
+        disabled: true
         arguments: [3]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#modifies-parameter
       - name: modifies-parameter

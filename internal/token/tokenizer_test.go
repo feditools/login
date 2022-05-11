@@ -13,8 +13,9 @@ var testTables = []struct {
 	i int64
 	t string
 }{
-	{KindFediInstance, 84685, "MeLrPDrcOg5agV8K"},
+	{KindApplicationToken, 22, "42L81QrOF0aorZlq"},
 	{KindFediAccount, 69420, "n4jbQJEimvjP5WZy"},
+	{KindFediInstance, 84685, "MeLrPDrcOg5agV8K"},
 	{KindOauthClient, 184, "p6jKkP6VIlgPqrEl"},
 	{KindOauthScope, 1, "pwM9xPkwuZP7ve0n"},
 }

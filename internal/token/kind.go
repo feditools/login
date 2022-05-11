@@ -13,14 +13,18 @@ const (
 	KindOauthClient
 	// KindOauthScope is a token that represents an oauth scope
 	KindOauthScope
+	// KindApplicationToken is a token that represents an application token
+	KindApplicationToken
 )
 
 func (k Kind) String() string {
 	switch k {
-	case KindFediInstance:
-		return "FediInstance"
+	case KindApplicationToken:
+		return "ApplicationToken"
 	case KindFediAccount:
 		return "FediAccount"
+	case KindFediInstance:
+		return "FediInstance"
 	case KindOauthClient:
 		return "OauthClient"
 	case KindOauthScope:

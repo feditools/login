@@ -2,9 +2,9 @@ package grpc
 
 import (
 	"context"
+	"github.com/feditools/go-lib/metrics"
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/db"
-	"github.com/feditools/login/internal/metrics"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"net"

@@ -2,10 +2,10 @@ package database
 
 import (
 	"context"
+	"github.com/feditools/go-lib/metrics/statsd"
 	"github.com/feditools/login/cmd/login/action"
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/db/bun"
-	"github.com/feditools/login/internal/metrics/statsd"
 	"github.com/spf13/viper"
 )
 
@@ -14,7 +14,10 @@ var Migrate action.Action = func(ctx context.Context) error {
 	l := logger.WithField("func", "Migrate")
 
 	// create metrics collector
-	metricsCollector, err := statsd.New()
+	metricsCollector, err := statsd.New(
+		viper.GetString(config.Keys.MetricsStatsDAddress),
+		viper.GetString(config.Keys.MetricsStatsDPrefix),
+	)
 	if err != nil {
 		l.Errorf("metrics: %s", err.Error())
 		return err

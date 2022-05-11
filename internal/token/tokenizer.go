@@ -56,56 +56,79 @@ func (t *Tokenizer) GetToken(o interface{}) string {
 	l := logger.WithField("func", "GetToken")
 
 	switch o := o.(type) {
-	case models.FediInstance:
-		tok, err := t.EncodeToken(KindFediInstance, o.ID)
+	case models.ApplicationToken:
+		tok, err := t.EncodeToken(KindApplicationToken, o.ID)
 		if err != nil {
-			l.Errorf("couldn't generate token for %s: %s", KindFediInstance, err.Error())
+			l.Errorf("couldn't generate token for %s: %s", KindApplicationToken, err.Error())
 		}
+
 		return tok
-	case *models.FediInstance:
-		tok, err := t.EncodeToken(KindFediInstance, o.ID)
+	case *models.ApplicationToken:
+		tok, err := t.EncodeToken(KindApplicationToken, o.ID)
 		if err != nil {
-			l.Errorf("couldn't generate token for %s: %s", KindFediInstance, err.Error())
+			l.Errorf("couldn't generate token for %s: %s", KindApplicationToken, err.Error())
 		}
+
 		return tok
 	case models.FediAccount:
 		tok, err := t.EncodeToken(KindFediAccount, o.ID)
 		if err != nil {
 			l.Errorf("couldn't generate token for %s: %s", KindFediAccount, err.Error())
 		}
+
 		return tok
 	case *models.FediAccount:
 		tok, err := t.EncodeToken(KindFediAccount, o.ID)
 		if err != nil {
 			l.Errorf("couldn't generate token for %s: %s", KindFediAccount, err.Error())
 		}
+
+		return tok
+	case models.FediInstance:
+		tok, err := t.EncodeToken(KindFediInstance, o.ID)
+		if err != nil {
+			l.Errorf("couldn't generate token for %s: %s", KindFediInstance, err.Error())
+		}
+
+		return tok
+	case *models.FediInstance:
+		tok, err := t.EncodeToken(KindFediInstance, o.ID)
+		if err != nil {
+			l.Errorf("couldn't generate token for %s: %s", KindFediInstance, err.Error())
+		}
+
 		return tok
 	case models.OauthClient:
 		tok, err := t.EncodeToken(KindOauthClient, o.ID)
 		if err != nil {
 			l.Errorf("couldn't generate token for %s: %s", KindOauthClient, err.Error())
 		}
+
 		return tok
 	case *models.OauthClient:
 		tok, err := t.EncodeToken(KindOauthClient, o.ID)
 		if err != nil {
 			l.Errorf("couldn't generate token for %s: %s", KindOauthClient, err.Error())
 		}
+
 		return tok
 	case models.OauthScope:
 		tok, err := t.EncodeToken(KindOauthScope, o.ID)
 		if err != nil {
 			l.Errorf("couldn't generate token for %s: %s", KindOauthScope, err.Error())
 		}
+
 		return tok
 	case *models.OauthScope:
 		tok, err := t.EncodeToken(KindOauthScope, o.ID)
 		if err != nil {
 			l.Errorf("couldn't generate token for %s: %s", KindOauthScope, err.Error())
 		}
+
 		return tok
 	default:
 		l.Errorf("unknown kind: %T", o)
+
 		return ""
 	}
 }
