@@ -17,6 +17,6 @@ func (s *Server) middlewareMetrics(next http.Handler) http.Handler {
 
 		ended := time.Since(start)
 		l.Debugf("rendering %s took %d ms", r.URL.Path, ended.Milliseconds())
-		go s.metrics.HTTPRequestTiming(ended, wx.Status(), r.Method, r.URL.Path)
+		go s.metrics.HTTPRequest(ended, wx.Status(), r.Method, r.URL.Path)
 	})
 }

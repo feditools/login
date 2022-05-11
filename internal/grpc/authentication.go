@@ -2,9 +2,6 @@ package grpc
 
 import (
 	"context"
-	"fmt"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/metadata"
 )
 
 func (s *Server) authValid(ctx context.Context, authorization []string) bool {
@@ -22,18 +19,4 @@ func (s *Server) authValid(ctx context.Context, authorization []string) bool {
 	}
 
 	return true
-}
-
-func (s *Server) unaryInterceptor(ctx context.Context, req interface{}, _ *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return nil, ErrMissingMetadata
-	}
-	fmt.Printf("md: %+v\n", md)
-
-	if !s.authValid(ctx, md["authorization"]) {
-		return nil, ErrInvalidToken
-	}
-
-	return handler(ctx, req)
 }

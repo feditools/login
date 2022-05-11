@@ -15,9 +15,18 @@ const (
 	// StatDBCacheQuery is the timing for a db query
 	StatDBCacheQuery = StatBaseDBCache + ".query"
 	// StatDBCacheQueryTiming is the timing for a db query
-	StatDBCacheQueryTiming = StatBaseDBCache + ".timing"
+	StatDBCacheQueryTiming = StatDBCacheQuery + ".timing"
 	// StatDBCacheQueryCount is the counts for db queries
-	StatDBCacheQueryCount = StatBaseDBCache + ".count"
+	StatDBCacheQueryCount = StatDBCacheQuery + ".count"
+
+	// StatBaseGRPC is the base state name for grpc metrics
+	StatBaseGRPC = "grpc"
+	// StatGRPCRequest is the timing for a grpc request
+	StatGRPCRequest = StatBaseGRPC + ".request"
+	// StatGRPCRequestTiming is the timing for a db query
+	StatGRPCRequestTiming = StatGRPCRequest + ".timing"
+	// StatGRPCRequestCount is the counts for db queries
+	StatGRPCRequestCount = StatGRPCRequest + ".count"
 
 	// StatBaseHTTP is the base state name for http metrics
 	StatBaseHTTP = "http"

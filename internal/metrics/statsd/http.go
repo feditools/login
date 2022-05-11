@@ -7,8 +7,8 @@ import (
 	"time"
 )
 
-// HTTPRequestTiming send a metrics relating to a http request
-func (m *Module) HTTPRequestTiming(t time.Duration, status int, method, path string) {
+// HTTPRequest send a metrics relating to a http request
+func (m *Module) HTTPRequest(t time.Duration, status int, method, path string) {
 	err := m.s.TimingDuration(
 		metrics.StatHTTPRequest,
 		t,
@@ -18,6 +18,6 @@ func (m *Module) HTTPRequestTiming(t time.Duration, status int, method, path str
 		statsd.Tag{"path", path},
 	)
 	if err != nil {
-		logger.WithField("func", "HTTPRequestTiming").Warn(err.Error())
+		logger.WithField("func", "HTTPRequest").Warn(err.Error())
 	}
 }

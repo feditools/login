@@ -5,6 +5,14 @@ import (
 	"time"
 )
 
+// GRPCRequest is a new database query metric measurer
+type GRPCRequest struct{}
+
+// Done is called when the grpc request is complete
+func (GRPCRequest) Done(isError bool) {
+	return
+}
+
 // DBQuery is a new database query metric measurer
 type DBQuery struct{}
 
@@ -23,6 +31,11 @@ func (DBCacheQuery) Done(hit, isError bool) {
 
 // MetricsCollector is a mock metrics collection
 type MetricsCollector struct{}
+
+// NewGRPCRequest creates a new grpc metrics collector
+func (c MetricsCollector) NewGRPCRequest(method string) metrics.GRPCRequest {
+	return &GRPCRequest{}
+}
 
 // Close does nothing
 func (MetricsCollector) Close() error {
@@ -44,8 +57,8 @@ func (c MetricsCollector) NewDBCacheQuery(name string) metrics.DBCacheQuery {
 	return &DBCacheQuery{}
 }
 
-// HTTPRequestTiming does nothing
-func (MetricsCollector) HTTPRequestTiming(t time.Duration, status int, method, path string) {
+// HTTPRequest does nothing
+func (MetricsCollector) HTTPRequest(t time.Duration, status int, method, path string) {
 	return
 }
 
