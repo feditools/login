@@ -4,25 +4,25 @@ import (
 	"github.com/feditools/go-lib/language"
 	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/http"
+	"github.com/feditools/login/internal/http/template"
 	"github.com/feditools/login/internal/path"
-	"github.com/feditools/login/internal/template"
 	nethttp "net/http"
 )
 
-// AdminSystemGetHandler serves the admin system page
-func (m *Module) AdminSystemGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
-	l := logger.WithField("func", "AdminSystemGetHandler")
+// AdminOauthGetHandler serves the admin oauth page
+func (m *Module) AdminOauthGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
+	l := logger.WithField("func", "AdminOauthGetHandler")
 
 	// get localizer
 	localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
 
 	// Init template variables
-	tmplVars := &template.AdminSystem{
+	tmplVars := &template.AdminOauth{
 		Common: template.Common{
-			PageTitle: localizer.TextSystem(1).String(),
+			PageTitle: localizer.TextOauth().String(),
 		},
 		Admin: template.Admin{
-			Sidebar: makeAdminSystemSidebar(r),
+			Sidebar: makeAdminOauthSidebar(r),
 		},
 	}
 
@@ -32,25 +32,26 @@ func (m *Module) AdminSystemGetHandler(w nethttp.ResponseWriter, r *nethttp.Requ
 		return
 	}
 
-	err = m.executeTemplate(w, template.AdminSystemName, tmplVars)
+	err = m.executeTemplate(w, template.AdminOauthName, tmplVars)
 	if err != nil {
-		l.Errorf("could not render %s template: %s", template.AdminSystemName, err.Error())
+		l.Errorf("could not render %s template: %s", template.AdminOauthName, err.Error())
 	}
 }
 
-func makeAdminSystemSidebar(r *nethttp.Request) libtemplate.Sidebar {
+func makeAdminOauthSidebar(r *nethttp.Request) libtemplate.Sidebar {
 	// get localizer
 	localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
 
 	// create sidebar
 	newSidebar := libtemplate.Sidebar{
 		{
+			Text: localizer.TextOauth20Settings().String(),
 			Children: []libtemplate.SidebarNode{
 				{
-					Text:    localizer.TextApplicationToken(2).String(),
-					Matcher: path.ReAdminSystemApplicationTokensPre,
+					Text:    localizer.TextClient(2).String(),
+					Matcher: path.ReAdminOauthClientsPre,
 					Icon:    "desktop",
-					URI:     path.AdminSystemApplicationTokens,
+					URI:     path.AdminOauthClients,
 				},
 			},
 		},

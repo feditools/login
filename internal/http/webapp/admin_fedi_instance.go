@@ -5,27 +5,26 @@ import (
 	"github.com/feditools/go-lib/language"
 	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/http"
+	"github.com/feditools/login/internal/http/template"
 	"github.com/feditools/login/internal/path"
-	"github.com/feditools/login/internal/template"
 	nethttp "net/http"
 )
 
-// AdminFediAccountsGetHandler serves the admin client page
-func (m *Module) AdminFediAccountsGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
-	l := logger.WithField("func", "AdminFediAccountsGetHandler")
+// AdminFediInstancesGetHandler serves the admin client page
+func (m *Module) AdminFediInstancesGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
+	l := logger.WithField("func", "AdminFediInstancesGetHandler")
 
 	// get localizer
 	localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
 
 	// Init template variables
-	tmplVars := &template.AdminFediAccounts{
+	tmplVars := &template.AdminFediInstances{
 		Common: template.Common{
 			PageTitle: localizer.TextOauth20Client(2).String(),
 		},
 		Admin: template.Admin{
 			Sidebar: makeAdminFediverseSidebar(r),
 		},
-		HRefViewFediAccount:  path.AdminFediverseAccounts,
 		HRefViewFediInstance: path.AdminFediverseInstances,
 	}
 
@@ -38,27 +37,27 @@ func (m *Module) AdminFediAccountsGetHandler(w nethttp.ResponseWriter, r *nethtt
 	page, count, countFound := lib.GetPaginationFromURL(r.URL, defaultCount)
 
 	// get oauth clients
-	accounts, err := m.db.ReadFediAccountsPage(r.Context(), page-1, count)
+	instances, err := m.db.ReadFediInstancesPage(r.Context(), page-1, count)
 	if err != nil {
 		l.Errorf("db read: %s", err.Error())
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
 		return
 	}
-	for _, a := range accounts {
-		if a.Instance == nil {
-			instance, err := m.db.ReadFediInstance(r.Context(), a.InstanceID)
-			if err != nil {
-				l.Errorf("db read fedi instance %d: %s", a.InstanceID, err.Error())
-				m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
-				return
-			}
-			a.Instance = instance
+	instanceAccountCounts := make([]int64, len(instances))
+	for i, c := range instances {
+		accountCount, err := m.db.CountFediAccountsForInstance(r.Context(), c.ID)
+		if err != nil {
+			l.Errorf("db count: %s", err.Error())
+			m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+			return
 		}
+		instanceAccountCounts[i] = accountCount
 	}
-	tmplVars.FediAccounts = &accounts
+	tmplVars.FediInstances = &instances
+	tmplVars.FediInstanceAccountCounts = instanceAccountCounts
 
 	// count oauth clients
-	accountCount, err := m.db.CountFediAccounts(r.Context())
+	instanceCount, err := m.db.CountFediInstances(r.Context())
 	if err != nil {
 		l.Errorf("db count: %s", err.Error())
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
@@ -67,9 +66,9 @@ func (m *Module) AdminFediAccountsGetHandler(w nethttp.ResponseWriter, r *nethtt
 
 	// make pagination
 	pageConf := &libtemplate.PaginationConfig{
-		Count:         int(accountCount),
+		Count:         int(instanceCount),
 		DisplayCount:  count,
-		HRef:          path.AdminFediverseAccounts,
+		HRef:          path.AdminFediverseInstances,
 		MaxPagination: 5,
 		Page:          page,
 	}
@@ -78,8 +77,8 @@ func (m *Module) AdminFediAccountsGetHandler(w nethttp.ResponseWriter, r *nethtt
 	}
 	tmplVars.Pagination = libtemplate.MakePagination(pageConf)
 
-	err = m.executeTemplate(w, template.AdminFediAccountsName, tmplVars)
+	err = m.executeTemplate(w, template.AdminFediInstancesName, tmplVars)
 	if err != nil {
-		l.Errorf("could not render %s template: %s", template.AdminFediAccountsName, err.Error())
+		l.Errorf("could not render %s template: %s", template.AdminFediInstancesName, err.Error())
 	}
 }
