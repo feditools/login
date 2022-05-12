@@ -13,9 +13,10 @@ type FediAccount struct {
 	Instance             *FediInstance `validate:"-" bun:"rel:belongs-to,join:instance_id=id"`
 	DisplayName          string        `validate:"-" bun:",notnull"`
 	DisplayNameUpdatedAt time.Time     `validate:"-" bun:",notnull"`
-	SignInCount          int           `validate:"-" bun:",default:0"`
+	LogInCount           int64         `validate:"-" bun:",nullzero,notnull,default:0"`
+	LogInLast            time.Time     `validate:"-" bun:",nullzero"`
 	AccessToken          []byte        `validate:"-" bun:",nullzero"`
 
 	// login stuff
-	Admin bool `validate:"-" bun:",notnull,default:false"`
+	Admin bool `validate:"-" bun:",notnull"`
 }

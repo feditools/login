@@ -64,6 +64,16 @@ func (c *CacheMem) CreateFediAccount(ctx context.Context, account *models.FediAc
 	return nil
 }
 
+// IncFediAccountLoginCount updates the login count of a stored federated instance
+func (c *CacheMem) IncFediAccountLoginCount(ctx context.Context, account *models.FediAccount) db.Error {
+	err := c.db.IncFediAccountLoginCount(ctx, account)
+	if err != nil {
+		return err
+	}
+	c.setFediAccount(ctx, account)
+	return nil
+}
+
 // ReadFediAccount returns one federated social account
 func (c *CacheMem) ReadFediAccount(ctx context.Context, id int64) (*models.FediAccount, db.Error) {
 	metric := c.metrics.NewDBCacheQuery("ReadFediAccount")
