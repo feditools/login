@@ -16,6 +16,7 @@ import (
 // Helper is a mastodon helper
 type Helper struct {
 	db   db.DB
+	fedi *fedi.Fedi
 	kv   kv.KV
 	tokz *token.Tokenizer
 
@@ -64,4 +65,9 @@ func newClient(instance *models.FediInstance, accessToken string) (*mastodon.Cli
 }
 
 // GetSoftware returns the software type of this module
-func (Helper) GetSoftware() fedi.Software { return fedi.SoftwareMastodon }
+func (*Helper) GetSoftware() fedi.Software { return fedi.SoftwareMastodon }
+
+// SetFedi adds the fedi module to a helper
+func (h *Helper) SetFedi(f *fedi.Fedi) {
+	h.fedi = f
+}

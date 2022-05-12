@@ -72,8 +72,8 @@ func (f *Fedi) GetWellknownWebFinger(ctx context.Context, username, domain strin
 	return webfinger, nil
 }
 
-// findActorURI parses a webfinger document for an actor uri
-func findActorURI(webfinger *models.WebFinger) (*url.URL, error) {
+// FindActorURI parses a webfinger document for an actor uri
+func FindActorURI(webfinger *models.WebFinger) (*url.URL, error) {
 	var actorURIstr string
 	for _, link := range webfinger.Links {
 		if link.Rel == "self" || link.Type == libhttp.MimeAppActivityJSON {
