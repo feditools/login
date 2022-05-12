@@ -6,19 +6,13 @@ import (
 	pkg "github.com/feditools/login/pkg/grpc"
 )
 
-// Ping represents a grpc ping server module
-type Ping interface {
-	grpc.Module
-	pkg.PingServer
-}
-
 // Module is a grpc ping server module
 type Module struct {
 	pkg.UnimplementedPingServer
 }
 
 // New creates a new grpc ping server modules
-func New() (Ping, error) {
+func New() (*Module, error) {
 	return &Module{}, nil
 }
 

@@ -12,6 +12,8 @@ import (
 	"github.com/feditools/login/internal/fedi"
 	"github.com/feditools/login/internal/fedi/mastodon"
 	"github.com/feditools/login/internal/grpc"
+	"github.com/feditools/login/internal/grpc/fediaccount"
+	"github.com/feditools/login/internal/grpc/fediinstance"
 	"github.com/feditools/login/internal/grpc/ping"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/http/webapp"
@@ -112,10 +114,22 @@ var Start action.Action = func(ctx context.Context) error {
 	var grpcModules []grpc.Module
 	pingGRPC, err := ping.New()
 	if err != nil {
-		logrus.Errorf("grpc module: %s", err.Error())
+		logrus.Errorf("ping grpc module: %s", err.Error())
 		return err
 	}
 	grpcModules = append(grpcModules, pingGRPC)
+	fediaccountGRPC, err := fediaccount.New(cachedDBClient)
+	if err != nil {
+		logrus.Errorf("fediaccount grpc module: %s", err.Error())
+		return err
+	}
+	grpcModules = append(grpcModules, fediaccountGRPC)
+	fedinstanceGRPC, err := fediinstance.New(cachedDBClient)
+	if err != nil {
+		logrus.Errorf("fediinstance grpc module: %s", err.Error())
+		return err
+	}
+	grpcModules = append(grpcModules, fedinstanceGRPC)
 
 	// add modules to server
 	for _, mod := range grpcModules {
