@@ -3,10 +3,12 @@ package bun
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	libdatabase "github.com/feditools/go-lib/database"
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/models"
 	"github.com/uptrace/bun"
+	"time"
 )
 
 // CountFediAccounts returns the number of federated social account
@@ -48,6 +50,39 @@ func (c *Client) CreateFediAccount(ctx context.Context, account *models.FediAcco
 	}
 
 	go metric.Done(false)
+	return nil
+}
+
+// IncFediAccountLoginCount updates the login count of a stored federated instance
+func (c *Client) IncFediAccountLoginCount(ctx context.Context, account *models.FediAccount) db.Error {
+	metric := c.metrics.NewDBQuery("IncFediAccountLoginCount")
+
+	err := c.bun.RunInTx(ctx, &sql.TxOptions{}, func(ctx context.Context, tx bun.Tx) error {
+		err := tx.NewSelect().Model(account).Where("id = ?", account.ID).Scan(ctx)
+		if err != nil {
+			return err
+		}
+
+		account.LogInCount = account.LogInCount + 1
+		account.LogInLast = time.Now()
+
+		fmt.Printf("asdf: %+v\n", account)
+
+		_, err = tx.NewUpdate().Model(account).Where("id = ?", account.ID).Exec(ctx)
+		if err != nil {
+			return err
+		}
+
+		return err
+	})
+	if err != nil {
+		go metric.Done(true)
+
+		return c.bun.errProc(err)
+	}
+
+	go metric.Done(false)
+
 	return nil
 }
 
@@ -98,7 +133,6 @@ func (c *Client) ReadFediAccountsPage(ctx context.Context, index, count int) ([]
 	metric := c.metrics.NewDBQuery("ReadFediAccountsPage")
 
 	var accounts []*models.FediAccount
-
 	err := c.newFediAccountsQ(&accounts).
 		Limit(count).
 		Offset(libdatabase.Offset(index, count)).

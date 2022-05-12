@@ -45,6 +45,8 @@ type DB interface {
 	CountFediAccountsForInstance(ctx context.Context, instanceID int64) (count int64, err Error)
 	// CreateFediAccount stores the federated social account
 	CreateFediAccount(ctx context.Context, account *models.FediAccount) (err Error)
+	// IncFediAccountLoginCount updates the login count of a stored federated instance
+	IncFediAccountLoginCount(ctx context.Context, account *models.FediAccount) (err Error)
 	// ReadFediAccount returns one federated social account
 	ReadFediAccount(ctx context.Context, id int64) (account *models.FediAccount, err Error)
 	// ReadFediAccountByUsername returns one federated social account

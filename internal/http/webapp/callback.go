@@ -31,7 +31,7 @@ func (m *Module) CallbackOauthGetHandler(w nethttp.ResponseWriter, r *nethttp.Re
 	}
 	instance, err := m.db.ReadFediInstance(r.Context(), id)
 	if err != nil {
-		l.Errorf("db read: %s", err.Error())
+		l.Errorf("db read instance: %s", err.Error())
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
 		return
 	}
@@ -66,6 +66,14 @@ func (m *Module) CallbackOauthGetHandler(w nethttp.ResponseWriter, r *nethttp.Re
 		account, err = m.fedi.Helper(fedi.SoftwareMastodon).GetCurrentAccount(r.Context(), instance, accessToken)
 		if err != nil {
 			l.Errorf("get access token error: %s", err.Error())
+			m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+			return
+		}
+
+		// increment login
+		err = m.db.IncFediAccountLoginCount(r.Context(), account)
+		if err != nil {
+			l.Errorf("db inc login: %s", err.Error())
 			m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
 			return
 		}
