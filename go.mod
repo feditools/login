@@ -27,10 +27,10 @@ require (
 	github.com/tdewolff/minify/v2 v2.11.2
 	github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc
 	github.com/tyrm/go-util v0.4.2
-	github.com/uptrace/bun v1.1.4
+	github.com/uptrace/bun v1.1.5
 	github.com/uptrace/bun/dialect/pgdialect v1.1.4
 	github.com/uptrace/bun/dialect/sqlitedialect v1.1.4
-	github.com/uptrace/bun/extra/bundebug v1.1.4
+	github.com/uptrace/bun/extra/bundebug v1.1.5
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	golang.org/x/text v0.3.7
 	google.golang.org/grpc v1.46.0
