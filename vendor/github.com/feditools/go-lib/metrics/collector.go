@@ -24,7 +24,7 @@ type DBCacheQuery interface {
 
 // GRPCRequest is a new grpc request metric measurer.
 type GRPCRequest interface {
-	Done(isError bool) time.Duration
+	Done(code int) time.Duration
 }
 
 // HTTPRequest is a new http request metric measurer.
