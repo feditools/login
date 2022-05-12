@@ -3,10 +3,10 @@ package account
 import (
 	"context"
 	"github.com/feditools/go-lib"
+	"github.com/feditools/go-lib/metrics/statsd"
 	"github.com/feditools/login/cmd/login/action"
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/db/bun"
-	"github.com/feditools/login/internal/metrics/statsd"
 	"github.com/spf13/viper"
 )
 
@@ -15,7 +15,10 @@ var Modify action.Action = func(ctx context.Context) error {
 	l := logger.WithField("func", "Modify")
 
 	// create metrics collector
-	metricsCollector, err := statsd.New()
+	metricsCollector, err := statsd.New(
+		viper.GetString(config.Keys.MetricsStatsDAddress),
+		viper.GetString(config.Keys.MetricsStatsDPrefix),
+	)
 	if err != nil {
 		l.Errorf("metrics: %s", err.Error())
 		return err

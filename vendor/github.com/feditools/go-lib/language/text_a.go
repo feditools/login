@@ -45,3 +45,25 @@ func (l *Localizer) TextAddOauth20Client(count int) *LocalizedString {
 		string:   text,
 	}
 }
+
+// TextApplicationToken returns a translated phrase.
+func (l *Localizer) TextApplicationToken(count int) *LocalizedString {
+	lg := logger.WithField("func", "TextApplicationToken")
+
+	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "ApplicationToken",
+			One:   "Application Token",
+			Other: "Application Tokens",
+		},
+		PluralCount: count,
+	})
+	if err != nil {
+		lg.Warningf(missingTranslationWarning, err.Error())
+	}
+
+	return &LocalizedString{
+		language: tag,
+		string:   text,
+	}
+}

@@ -25,4 +25,9 @@ var (
 	ReAdminOauthPre = regexp.MustCompile(fmt.Sprintf(`^?/%s/%s`, PartAdmin, PartOauth))
 	// ReAdminOauthClientsPre matches the admin oauth clients page prefix
 	ReAdminOauthClientsPre = regexp.MustCompile(fmt.Sprintf(`^?/%s/%s/%s`, PartAdmin, PartOauth, PartClients))
+
+	// ReAdminSystemPre matches the admin system page prefix
+	ReAdminSystemPre = regexp.MustCompile(fmt.Sprintf(`^?/%s/%s`, PartAdmin, PartSystem))
+	// ReAdminSystemApplicationTokensPre matches the admin system application tokens page prefix
+	ReAdminSystemApplicationTokensPre = regexp.MustCompile(fmt.Sprintf(`^?/%s/%s/%s`, PartAdmin, PartSystem, PartApplicationTokens))
 )

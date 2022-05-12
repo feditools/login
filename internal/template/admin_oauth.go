@@ -5,10 +5,19 @@ import (
 	"github.com/feditools/login/internal/models"
 )
 
+// AdminOauthName is the name of the admin oauth template
+const AdminOauthName = "admin_oauth"
+
+// AdminOauth contains the variables for the admin oauth template.
+type AdminOauth struct {
+	Common
+	Admin
+}
+
 // AdminOauthClientsName is the name of the admin oauth clients template
 const AdminOauthClientsName = "admin_oauth_clients"
 
-// AdminOauthClients contains the variables for the "admin_oauth_client" template.
+// AdminOauthClients contains the variables for the admin oauth clients template.
 type AdminOauthClients struct {
 	Common
 	Admin

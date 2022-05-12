@@ -163,7 +163,7 @@ func (c *CacheMem) getFediAccountByUsername(ctx context.Context, instanceID int6
 }
 
 func (c *CacheMem) setFediAccount(_ context.Context, account *models.FediAccount) {
-	l := logger.WithField("func", "cacheSetFediAccount")
+	l := logger.WithField("func", "setFediAccount")
 
 	// encode object
 	var buf bytes.Buffer

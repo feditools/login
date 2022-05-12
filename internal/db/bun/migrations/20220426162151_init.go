@@ -16,6 +16,7 @@ func init() {
 				&models.FediAccount{},
 				&models.OauthScope{},
 				&models.OauthClient{},
+				&models.ApplicationToken{},
 			}
 			for _, i := range modelList {
 				l.Infof("creating table %T", i)

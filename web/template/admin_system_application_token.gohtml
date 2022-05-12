@@ -1,0 +1,113 @@
+{{ define "admin_system_applicationtokens" -}}
+{{- template "admin_header" . }}
+<div class="row">
+  <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    {{ $textSystem := .Localizer.TextSystem 1 }}<h1 lang="{{ $textSystem.Language }}"><i class="fa-solid fa-globe"></i> {{ $textSystem }}</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    {{ $textApplicationToken := .Localizer.TextApplicationToken 2 }}<h2 lang="{{ $textApplicationToken.Language }}"><i class="fa-solid fa-person-digging"></i> {{ $textApplicationToken }}</h2>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group">
+        <a href="{{ .HRefAddApplicationToken }}" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-plus"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+  {{- $HRefViewApplicationToken := .HRefViewApplicationToken -}}
+  {{- $HRefViewFediAccount := .HRefViewFediAccount -}}
+  {{- if .ApplicationTokens }}
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Description</th>
+        <th scope="col">Created By</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      {{- range .ApplicationTokens }}
+        <tr>
+          <th scope="row"><a href="{{ $HRefViewApplicationToken }}/{{ token . }}">{{ token . }}</a></th>
+          <td><a href="{{ $HRefViewApplicationToken }}/{{ token . }}">{{ .Description }}</a></td>
+          <td><a href="{{ $HRefViewFediAccount }}/{{ token .CreatedBy }}">{{ .CreatedBy.Username }}@{{ .CreatedBy.Instance.Domain }}</a></td>
+          <td></td>
+        </tr>
+      {{- end }}
+      </tbody>
+    </table>
+  {{- else }}
+    No Data
+  {{- end }}
+  </div>
+</div>
+{{- if .Pagination }}
+<div class="row">
+  <div class="col text-center">
+    {{ template "pagination" .Pagination }}
+  </div>
+</div>
+{{- end }}
+{{ template "admin_footer" . }}
+{{ end }}
+
+{{ define "admin_system_applicationtoken_add" -}}
+{{- template "admin_header" . }}
+<div class="row">
+  <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    {{ $textSystem := .Localizer.TextSystem 1 }}<h1 lang="{{ $textSystem.Language }}"><i class="fa-solid fa-globe"></i> {{ $textSystem }}</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    {{ $extApplicationToken := .Localizer.TextApplicationToken 1 }}<h2 lang="{{ $extApplicationToken.Language }}"><i class="fa-solid fa-person-digging"></i> {{ $extApplicationToken }}</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <form method="post">
+      <div class="form-group row mb-1">
+        {{ template "form_input" .FormInputDescription }}
+      </div>
+      <div class="form-group row mb-1">
+      <div class="form-group row">
+        <div class="col-sm-10">
+          <button type="submit" class="btn btn-success">{{.FormButtonSubmitText}}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{{ template "admin_footer" . }}
+{{ end }}
+
+{{ define "admin_system_applicationtoken_added" -}}
+{{- template "admin_header" . }}
+<div class="row">
+  <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    {{ $textSystem := .Localizer.TextSystem 1 }}<h1 lang="{{ $textSystem.Language }}"><i class="fa-solid fa-globe"></i> {{ $textSystem }}</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    {{ $extApplicationToken := .Localizer.TextApplicationToken 1 }}<h2 lang="{{ $extApplicationToken.Language }}"><i class="fa-solid fa-person-digging"></i> {{ $extApplicationToken }}</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <form method="post">
+      <div class="form-group row mb-1">
+          {{ template "form_input" .FormInputDescription }}
+      </div>
+      <div class="form-group row mb-1">
+          {{ template "form_input" .FormInputToken }}
+      </div>
+    </form>
+  </div>
+</div>
+{{ template "admin_footer" . }}
+{{ end }}

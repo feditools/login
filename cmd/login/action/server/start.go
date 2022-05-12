@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/feditools/go-lib/language"
+	"github.com/feditools/go-lib/metrics/statsd"
 	"github.com/feditools/login/cmd/login/action"
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/db/bun"
@@ -14,7 +15,6 @@ import (
 	"github.com/feditools/login/internal/grpc/ping"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/kv/redis"
-	"github.com/feditools/login/internal/metrics/statsd"
 	"github.com/feditools/login/internal/token"
 	"github.com/feditools/login/internal/webapp"
 	"github.com/sirupsen/logrus"
@@ -30,7 +30,10 @@ var Start action.Action = func(ctx context.Context) error {
 	l := logger.WithField("func", "Start")
 
 	l.Infof("starting")
-	metricsCollector, err := statsd.New()
+	metricsCollector, err := statsd.New(
+		viper.GetString(config.Keys.MetricsStatsDAddress),
+		viper.GetString(config.Keys.MetricsStatsDPrefix),
+	)
 	if err != nil {
 		l.Errorf("metrics: %s", err.Error())
 		return err
@@ -99,7 +102,7 @@ var Start action.Action = func(ctx context.Context) error {
 
 	// create grpc server
 	l.Debug("creating grpc server")
-	grpcServer, err := grpc.NewServer(ctx, metricsCollector)
+	grpcServer, err := grpc.NewServer(ctx, cachedDBClient, metricsCollector)
 	if err != nil {
 		l.Errorf("http httpServer: %s", err.Error())
 		return err

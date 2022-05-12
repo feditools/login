@@ -5,6 +5,9 @@ Account:
 AddOauth20Client:
   one: Add OAuth 2.0 Client
   other: Add OAuth 2.0 Clients
+ApplicationToken:
+  one: Application Token
+  other: Application Tokens
 Client:
   one: Client
   other: Clients
@@ -40,4 +43,7 @@ RedirectURI:
   one: Redirect URI
   other: Redirect URIs
 Required: Required
+System:
+  one: System
+  other: Systems
 Unauthorized: Unauthorized

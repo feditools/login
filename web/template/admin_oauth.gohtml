@@ -1,3 +1,13 @@
+{{ define "admin_oauth" -}}
+{{- template "admin_header" . }}
+<div class="row">
+  <div class="col d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      {{ $textOauth := .Localizer.TextOauth }}<h1 lang="{{ $textOauth.Language }}"><i class="fa-solid fa-globe"></i> {{ $textOauth }}</h1>
+  </div>
+</div>
+{{ template "admin_footer" . }}
+{{ end }}
+
 {{ define "admin_oauth_clients" -}}
 {{- template "admin_header" . }}
 <div class="row">

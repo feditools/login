@@ -2,8 +2,9 @@ package grpc
 
 import (
 	"context"
+	"github.com/feditools/go-lib/metrics"
 	"github.com/feditools/login/internal/config"
-	"github.com/feditools/login/internal/metrics"
+	"github.com/feditools/login/internal/db"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"net"
@@ -11,14 +12,17 @@ import (
 
 // Server is a http 2 web server
 type Server struct {
+	db      db.DB
 	metrics metrics.Collector
-	tcp     net.Listener
-	srv     *grpc.Server
+
+	tcp net.Listener
+	srv *grpc.Server
 }
 
 // NewServer creates a new grpc web server
-func NewServer(_ context.Context, m metrics.Collector) (*Server, error) {
+func NewServer(_ context.Context, d db.DB, m metrics.Collector) (*Server, error) {
 	server := &Server{
+		db:      d,
 		metrics: m,
 	}
 
@@ -29,7 +33,7 @@ func NewServer(_ context.Context, m metrics.Collector) (*Server, error) {
 	}
 
 	opts := []grpc.ServerOption{
-		grpc.UnaryInterceptor(ensureValidToken),
+		grpc.UnaryInterceptor(server.unaryInterceptor),
 	}
 	server.srv = grpc.NewServer(opts...)
 

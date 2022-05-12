@@ -1,7 +1,7 @@
 package statsd
 
 import (
-	"github.com/feditools/login/internal/log"
+	"github.com/feditools/go-lib/log"
 )
 
 type empty struct{}

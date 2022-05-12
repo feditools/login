@@ -1,9 +1,10 @@
 package statsd
 
 import (
-	"github.com/feditools/login/internal/metrics"
 	"runtime"
 	"time"
+
+	"github.com/feditools/go-lib/metrics"
 )
 
 func (m *Module) systemCollector() {
@@ -25,6 +26,7 @@ func (m *Module) systemCollector() {
 				}
 			case <-m.done:
 				l.Infof("Stopping system metrics collector")
+
 				return
 			}
 		}
@@ -39,14 +41,14 @@ func (m *Module) emitMemStats(memStats *runtime.MemStats) {
 	}
 	err = m.s.Gauge(metrics.StatSysMemAllocTotal, int64(memStats.TotalAlloc), m.rate)
 	if err != nil {
-		l.Warnf("alloc: %s", err.Error())
+		l.Warnf("alloc total: %s", err.Error())
 	}
 	err = m.s.Gauge(metrics.StatSysMemSys, int64(memStats.Sys), m.rate)
 	if err != nil {
-		l.Warnf("alloc: %s", err.Error())
+		l.Warnf("sys: %s", err.Error())
 	}
 	err = m.s.SetInt(metrics.StatSysMemNumGC, int64(memStats.NumGC), m.rate)
 	if err != nil {
-		l.Warnf("alloc: %s", err.Error())
+		l.Warnf("num gc: %s", err.Error())
 	}
 }

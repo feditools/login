@@ -14,13 +14,16 @@ github.com/dgryski/go-rendezvous
 # github.com/fatih/color v1.13.0
 ## explicit; go 1.13
 github.com/fatih/color
-# github.com/feditools/go-lib v0.10.0
+# github.com/feditools/go-lib v0.10.1-0.20220511221143-d82d5e4910b9
 ## explicit; go 1.17
 github.com/feditools/go-lib
 github.com/feditools/go-lib/database
 github.com/feditools/go-lib/http
 github.com/feditools/go-lib/language
 github.com/feditools/go-lib/log
+github.com/feditools/go-lib/metrics
+github.com/feditools/go-lib/metrics/statsd
+github.com/feditools/go-lib/mock
 github.com/feditools/go-lib/template
 # github.com/felixge/httpsnoop v1.0.2
 ## explicit; go 1.13

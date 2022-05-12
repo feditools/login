@@ -41,7 +41,7 @@ func (h *Helper) GetCurrentAccount(ctx context.Context, instance *models.FediIns
 	}
 
 	// try to retrieve federated account
-	fediAccount, err := h.db.ReadFediAccountByUsername(ctx, instance.ID, string(account.ID))
+	fediAccount, err := h.db.ReadFediAccountByUsername(ctx, instance.ID, account.Username)
 	if err != nil {
 		l.Errorf("db read: %s", err.Error())
 		return nil, err

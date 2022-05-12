@@ -116,6 +116,12 @@ func makeAdminNavbar(r *nethttp.Request) template.Navbar {
 			FAIcon:   "desktop",
 			URL:      path.AdminOauth,
 		},
+		{
+			Text:     l.TextSystem(1).String(),
+			MatchStr: path.ReAdminSystemPre,
+			FAIcon:   "desktop",
+			URL:      path.AdminSystem,
+		},
 	}
 
 	newNavbar.ActivateFromPath(r.URL.Path)
