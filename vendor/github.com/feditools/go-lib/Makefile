@@ -27,7 +27,4 @@ test: tidy fmt lint
 tidy:
 	go mod tidy
 
-vendor: tidy
-	go mod vendor
-
-.PHONY: check check-fix fmt i18n-extract i18n-merge i18n-translations lint test tidy vendor
+.PHONY: check check-fix fmt i18n-extract i18n-merge i18n-translations lint test tidy
