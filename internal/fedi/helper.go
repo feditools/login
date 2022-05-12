@@ -12,6 +12,7 @@ type Helper interface {
 	GetCurrentAccount(ctx context.Context, instance *models.FediInstance, accessToken string) (user *models.FediAccount, err error)
 	GetSoftware() Software
 	RegisterApp(ctx context.Context, instance *models.FediInstance) (clientID string, clientSecret string, err error)
+	SetFedi(f *Fedi)
 	MakeLoginURL(ctx context.Context, instance *models.FediInstance) (url *url.URL, err error)
 }
 

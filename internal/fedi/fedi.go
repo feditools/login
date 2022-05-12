@@ -43,6 +43,7 @@ func New(d db.DB, k kv.KV, t *token.Tokenizer, helpers []Helper) (*Fedi, error) 
 
 	// add helpers
 	for _, h := range helpers {
+		h.SetFedi(newFedi)
 		newFedi.helpers[h.GetSoftware()] = h
 	}
 

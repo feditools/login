@@ -38,7 +38,7 @@ func (f *Fedi) GenerateFediInstanceFromDomain(ctx context.Context, domain string
 	if err != nil {
 		return nil, err
 	}
-	actorURI, err := findActorURI(webfinger)
+	actorURI, err := FindActorURI(webfinger)
 	if err != nil {
 		return nil, err
 	}

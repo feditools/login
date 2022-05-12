@@ -2,7 +2,9 @@ package mastodon
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"github.com/feditools/login/internal/fedi"
 	"github.com/feditools/login/internal/models"
 	"time"
 )
@@ -50,14 +52,31 @@ func (h *Helper) GetCurrentAccount(ctx context.Context, instance *models.FediIns
 		return fediAccount, nil
 	}
 
+	// do webfinger
+	webFinger, err := h.fedi.GetWellknownWebFinger(ctx, account.Username, instance.Domain)
+	if err != nil {
+		l.Debugf("webfinger %s@%s: %s", account.Username, instance.Domain, err.Error())
+		return nil, err
+	}
+	actorURI, err := fedi.FindActorURI(webFinger)
+	if err != nil {
+		l.Debugf("webfinger %s@%s: %s", account.Username, instance.Domain, err.Error())
+		return nil, err
+	}
+	if actorURI == nil {
+		msg := fmt.Sprintf("can't find actor uri for %s@%s", account.Username, instance.Domain)
+		l.Debug(msg)
+		return nil, errors.New(msg)
+	}
+
 	// create new federated account
 	newFediAccount := &models.FediAccount{
-		InstanceID:           instance.ID,
-		Instance:             instance,
-		ActorURI:             account.URL,
-		Username:             account.Username,
-		DisplayName:          account.DisplayName,
-		DisplayNameUpdatedAt: time.Now(),
+		InstanceID:  instance.ID,
+		Instance:    instance,
+		ActorURI:    actorURI.String(),
+		Username:    account.Username,
+		DisplayName: account.DisplayName,
+		LastFinger:  time.Now(),
 	}
 	err = newFediAccount.SetAccessToken(accessToken)
 	if err != nil {
