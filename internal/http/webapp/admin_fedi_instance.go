@@ -5,8 +5,8 @@ import (
 	"github.com/feditools/go-lib/language"
 	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/http"
+	"github.com/feditools/login/internal/http/template"
 	"github.com/feditools/login/internal/path"
-	"github.com/feditools/login/internal/template"
 	nethttp "net/http"
 )
 

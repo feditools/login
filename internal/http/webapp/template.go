@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"github.com/feditools/go-lib/language"
 	"github.com/feditools/login/internal/http"
+	"github.com/feditools/login/internal/http/template"
 	"github.com/feditools/login/internal/models"
 	"github.com/feditools/login/internal/path"
-	"github.com/feditools/login/internal/template"
 	"github.com/gorilla/sessions"
 	nethttp "net/http"
 )
