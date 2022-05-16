@@ -12,7 +12,7 @@ type GRPCRequest struct {
 }
 
 // Done is called when the grpc request is complete.
-func (g *GRPCRequest) Done(_ bool) time.Duration {
+func (g *GRPCRequest) Done(_ int) time.Duration {
 	return time.Since(g.start)
 }
 

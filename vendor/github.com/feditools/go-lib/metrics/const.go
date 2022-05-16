@@ -52,6 +52,8 @@ const (
 	// StatSysRoutines is the gauge for the number of active go routines.
 	StatSysRoutines = StatBaseSys + ".goroutines"
 
+	// TagCode is an code tag.
+	TagCode = "code"
 	// TagError is an error tag.
 	TagError = "error"
 	// TagHit is a hit tag (caching).

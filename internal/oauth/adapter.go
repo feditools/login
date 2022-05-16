@@ -1,4 +1,4 @@
-package webapp
+package oauth
 
 import (
 	"context"
@@ -25,7 +25,9 @@ func NewAdapterClientStore(d db.DB, t *token.Tokenizer) *AdapterClientStore {
 
 // GetByID returns a client based on an ID
 func (c *AdapterClientStore) GetByID(ctx context.Context, tok string) (oauth2.ClientInfo, error) {
+
 	l := logger.WithField("func", "GetByID")
+	l.Debugf("looking for client %s", tok)
 
 	if tok == "" {
 		l.Debug("token empty")
@@ -64,10 +66,14 @@ func (c *AdapterClientStore) GetByID(ctx context.Context, tok string) (oauth2.Cl
 		return nil, err
 	}
 
-	return &models.Client{
+	newClient := &models.Client{
 		ID:     tok,
 		Secret: clientSecret,
 		Domain: dbClient.RedirectURI,
 		UserID: accountToken,
-	}, nil
+	}
+
+	l.Debugf("new client: %s", newClient)
+
+	return newClient, nil
 }

@@ -3,6 +3,7 @@ package grpc
 import (
 	"context"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 )
@@ -15,31 +16,32 @@ func (s *Server) unaryInterceptor(ctx context.Context, req interface{}, info *gr
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		go func() {
-			ended := metric.Done(true)
+			ended := metric.Done(int(codes.Internal))
 			l.Debugf("rendering %s took %d ms", info.FullMethod, ended.Milliseconds())
 		}()
 
-		return nil, ErrMissingMetadata
+		st := status.New(codes.Internal, "Missing metadata.")
+		return nil, st.Err()
 	}
 
 	// validate login
 	if !s.authValid(ctx, md["authorization"]) {
 		go func() {
-			ended := metric.Done(true)
+			ended := metric.Done(int(codes.Unauthenticated))
 			l.Debugf("rendering %s took %d ms", info.FullMethod, ended.Milliseconds())
 		}()
 
-		return nil, ErrInvalidToken
+		st := status.New(codes.Unauthenticated, "Invalid token.")
+		return nil, st.Err()
 	}
 
 	// do request
 	i, err := handler(ctx, req)
 	if err != nil {
-		errStatus := status.Convert(err)
-		l.Warnf("grpc err: %s", errStatus.Code().String())
+		respStatuc := status.Convert(err)
 
 		go func() {
-			ended := metric.Done(true)
+			ended := metric.Done(int(respStatuc.Code()))
 			l.Debugf("rendering %s took %d ms", info.FullMethod, ended.Milliseconds())
 		}()
 
@@ -47,7 +49,7 @@ func (s *Server) unaryInterceptor(ctx context.Context, req interface{}, info *gr
 	}
 
 	go func() {
-		ended := metric.Done(false)
+		ended := metric.Done(int(codes.OK))
 		l.Debugf("rendering %s took %d ms", info.FullMethod, ended.Milliseconds())
 	}()
 

@@ -1,7 +1,7 @@
 package webapp
 
 import (
-	"github.com/feditools/go-lib"
+	libhttp "github.com/feditools/go-lib/http"
 	"github.com/feditools/go-lib/language"
 	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/http"
@@ -34,7 +34,7 @@ func (m *Module) AdminFediInstancesGetHandler(w nethttp.ResponseWriter, r *netht
 		return
 	}
 
-	page, count, countFound := lib.GetPaginationFromURL(r.URL, defaultCount)
+	page, count, countFound := libhttp.GetPaginationFromURL(r.URL, defaultCount)
 
 	// get oauth clients
 	instances, err := m.db.ReadFediInstancesPage(r.Context(), page-1, count)

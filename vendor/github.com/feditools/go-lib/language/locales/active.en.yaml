@@ -5,9 +5,12 @@ Account:
 AddOauth20Client:
   one: Add OAuth 2.0 Client
   other: Add OAuth 2.0 Clients
+Allow: Allow
 ApplicationToken:
   one: Application Token
   other: Application Tokens
+Authorize: Authorize
+AuthorizeApplicationDescription: Authorize {{.Description}}
 Client:
   one: Client
   other: Clients
@@ -21,6 +24,7 @@ Create: Create
 Dashboard:
   one: Dashboard
   other: Dashboards
+Democrablock: Democrablock
 Description:
   one: Description
   other: Descriptions
@@ -32,6 +36,9 @@ Instance:
 InvalidURI:
   one: Invalid URI
   other: Invalid URIs
+List:
+  one: List
+  other: Lists
 Login: Login
 LooksGood: Looks Good!
 Oauth: OAuth
@@ -46,4 +53,7 @@ Required: Required
 System:
   one: System
   other: Systems
+Token:
+  one: Token
+  other: Tokens
 Unauthorized: Unauthorized

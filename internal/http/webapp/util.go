@@ -9,9 +9,11 @@ import (
 	"github.com/feditools/login/internal/path"
 	"github.com/feditools/login/web"
 	"github.com/gorilla/sessions"
+	"github.com/sirupsen/logrus"
 	"golang.org/x/text/language"
 	"io/ioutil"
 	nethttp "net/http"
+	"net/http/httputil"
 )
 
 // auth helpers
@@ -127,4 +129,15 @@ func (m *Module) writeCachedSignature(path string, sig string) {
 
 	m.sigCache[path] = sig
 	return
+}
+
+// debug
+func dumpRequest(l *logrus.Entry, header string, r *nethttp.Request) {
+	data, err := httputil.DumpRequest(r, true)
+	if err != nil {
+		l.Warnf("dump request: %s", err.Error())
+		return
+	}
+
+	l.Debugf("%s: %s", header, string(data))
 }

@@ -22,4 +22,6 @@ const (
 	SessionKeyAccountID SessionKey = iota
 	// SessionKeyLoginRedirect contains the url to be redirected too after logging in
 	SessionKeyLoginRedirect
+	// SessionKeyReturnURI contains the url to be redirected too after logging in
+	SessionKeyReturnURI
 )

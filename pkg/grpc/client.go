@@ -5,13 +5,18 @@ import (
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 	"log"
+	"time"
 )
+
+const defaultTimeout = 10 * time.Second
 
 // Client is a feditools login grpc client
 type Client struct {
 	conn *grpc.ClientConn
 
-	ping PingClient
+	fediAccount  FediAccountClient
+	fediInstance FediInstanceClient
+	ping         PingClient
 }
 
 // NewClient creates a new feditools login grpc client
@@ -27,12 +32,16 @@ func NewClient(address string, cred credentials.PerRPCCredentials) (*Client, err
 	}
 
 	// services
+	fediAccountC := NewFediAccountClient(conn)
+	fediInstanceC := NewFediInstanceClient(conn)
 	pingC := NewPingClient(conn)
 
 	return &Client{
 		conn: conn,
 
-		ping: pingC,
+		fediAccount:  fediAccountC,
+		fediInstance: fediInstanceC,
+		ping:         pingC,
 	}, nil
 }
 

@@ -24,6 +24,26 @@ func (l *Localizer) TextDashboard(count int) *LocalizedString {
 	}
 }
 
+// TextDemocrablock returns a translated phrase.
+func (l *Localizer) TextDemocrablock() *LocalizedString {
+	lg := logger.WithField("func", "TextDemocrablock")
+
+	text, tag, err := l.localizer.LocalizeWithTag(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Democrablock",
+			Other: "Democrablock",
+		},
+	})
+	if err != nil {
+		lg.Warningf(missingTranslationWarning, err.Error())
+	}
+
+	return &LocalizedString{
+		language: tag,
+		string:   text,
+	}
+}
+
 // TextDescription returns a translated phrase.
 func (l *Localizer) TextDescription(count int) *LocalizedString {
 	lg := logger.WithField("func", "TextDescription")

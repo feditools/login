@@ -29,7 +29,7 @@ func (m *Module) NewGRPCRequest(method string) metrics.GRPCRequest {
 }
 
 // Done is called when the grpc request is complete.
-func (g *GRPCRequest) Done(isError bool) time.Duration {
+func (g *GRPCRequest) Done(code int) time.Duration {
 	l := logger.WithField("type", "GRPCRequest").WithField("func", "Done")
 
 	t := time.Since(g.start)
@@ -39,7 +39,7 @@ func (g *GRPCRequest) Done(isError bool) time.Duration {
 		t,
 		g.rate,
 		statsd.Tag{metrics.TagMethod, g.method},
-		statsd.Tag{metrics.TagError, strconv.FormatBool(isError)},
+		statsd.Tag{metrics.TagCode, strconv.Itoa(code)},
 	)
 	if err != nil {
 		l.WithField("kind", "timing").Warn(err.Error())
@@ -50,7 +50,7 @@ func (g *GRPCRequest) Done(isError bool) time.Duration {
 		1,
 		g.rate,
 		statsd.Tag{metrics.TagMethod, g.method},
-		statsd.Tag{metrics.TagError, strconv.FormatBool(isError)},
+		statsd.Tag{metrics.TagCode, strconv.Itoa(code)},
 	)
 	if err != nil {
 		l.WithField("kind", "count").Warn(err.Error())
