@@ -18,6 +18,7 @@ import (
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/http/webapp"
 	"github.com/feditools/login/internal/kv/redis"
+	"github.com/feditools/login/internal/oauth"
 	"github.com/feditools/login/internal/token"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -88,6 +89,12 @@ var Start action.Action = func(ctx context.Context) error {
 		return err
 	}
 
+	oauthServer, err := oauth.New(ctx, cachedDBClient, redisClient, tokz)
+	if err != nil {
+		l.Errorf("oauth server: %s", err.Error())
+		return err
+	}
+
 	// prep fedi helpers and fedi module
 	var fediHelpers []fedi.Helper
 	mastoHelper, err := mastodon.New(cachedDBClient, redisClient, tokz)
@@ -152,7 +159,7 @@ var Start action.Action = func(ctx context.Context) error {
 	var webModules []http.Module
 	if util.ContainsString(viper.GetStringSlice(config.Keys.ServerRoles), config.ServerRoleWebapp) {
 		l.Infof("adding webapp module")
-		webMod, err := webapp.New(ctx, cachedDBClient, redisClient, fediMod, languageMod, tokz, metricsCollector)
+		webMod, err := webapp.New(ctx, cachedDBClient, redisClient, fediMod, languageMod, oauthServer, tokz, metricsCollector)
 		if err != nil {
 			logrus.Errorf("webapp module: %s", err.Error())
 			return err

@@ -49,7 +49,7 @@ type Module struct {
 }
 
 // New returns a new webapp module
-func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *language.Module, t *token.Tokenizer, mc metrics.Collector) (http.Module, error) {
+func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *language.Module, oauthServer *server.Server, t *token.Tokenizer, mc metrics.Collector) (http.Module, error) {
 	l := logger.WithField("func", "New")
 
 	// Fetch new store.
@@ -78,11 +78,7 @@ func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *lang
 	}
 
 	// oauth
-	oauthServer, err := createOAuth(ctx, d, r, t)
-	if err != nil {
-		l.Errorf("create oauth server: %s", err.Error())
-		return nil, err
-	}
+	oauthServer.UserAuthorizationHandler = oauthUserAuthorizeHandler
 
 	// get templates
 	tmpl, err := template.New(t)
