@@ -33,7 +33,7 @@ require (
 	github.com/uptrace/bun/extra/bundebug v1.1.5
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	golang.org/x/text v0.3.7
-	google.golang.org/grpc v1.46.0
+	google.golang.org/grpc v1.46.2
 	google.golang.org/protobuf v1.28.0
 	modernc.org/sqlite v1.17.1
 	mvdan.cc/xurls/v2 v2.4.0
