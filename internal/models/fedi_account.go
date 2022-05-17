@@ -2,11 +2,12 @@ package models
 
 import (
 	"context"
-	"github.com/uptrace/bun"
 	"time"
+
+	"github.com/uptrace/bun"
 )
 
-// FediAccount represents a federated social account
+// FediAccount represents a federated social account.
 type FediAccount struct {
 	ID          int64         `validate:"-" bun:"id,pk,autoincrement"`
 	CreatedAt   time.Time     `validate:"-" bun:",nullzero,notnull,default:current_timestamp"`
@@ -27,7 +28,7 @@ type FediAccount struct {
 
 var _ bun.BeforeAppendModelHook = (*FediAccount)(nil)
 
-// BeforeAppendModel runs before a bun append operation
+// BeforeAppendModel runs before a bun append operation.
 func (f *FediAccount) BeforeAppendModel(_ context.Context, query bun.Query) error {
 	switch query.(type) {
 	case *bun.InsertQuery:
@@ -50,13 +51,13 @@ func (f *FediAccount) BeforeAppendModel(_ context.Context, query bun.Query) erro
 	return nil
 }
 
-// GetAccessToken returns unencrypted access token
+// GetAccessToken returns unencrypted access token.
 func (f *FediAccount) GetAccessToken() (string, error) {
 	data, err := decrypt(f.AccessToken)
 	return string(data), err
 }
 
-// SetAccessToken sets encrypted access token
+// SetAccessToken sets encrypted access token.
 func (f *FediAccount) SetAccessToken(a string) error {
 	data, err := encrypt([]byte(a))
 	if err != nil {

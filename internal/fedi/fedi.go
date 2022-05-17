@@ -1,16 +1,19 @@
 package fedi
 
 import (
+	"time"
+
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/kv"
 	"github.com/feditools/login/internal/token"
 	"github.com/spf13/viper"
 	"golang.org/x/sync/singleflight"
-	"time"
 )
 
-// Fedi is a module for working with federated social instances
+const nodeInfoCacheExp = 60 * time.Minute
+
+// Fedi is a module for working with federated social instances.
 type Fedi struct {
 	db   db.DB
 	kv   kv.KV
@@ -26,7 +29,7 @@ type Fedi struct {
 	requestGroup singleflight.Group
 }
 
-// New creates a new fedi module
+// New creates a new fedi module.
 func New(d db.DB, k kv.KV, t *token.Tokenizer, helpers []Helper) (*Fedi, error) {
 	newFedi := &Fedi{
 		db:   d,
@@ -38,7 +41,7 @@ func New(d db.DB, k kv.KV, t *token.Tokenizer, helpers []Helper) (*Fedi, error) 
 		appClientName:    viper.GetString(config.Keys.ApplicationName),
 		externalHostname: viper.GetString(config.Keys.ServerExternalHostname),
 
-		nodeinfoCacheExp: 60 * time.Minute,
+		nodeinfoCacheExp: nodeInfoCacheExp,
 	}
 
 	// add helpers

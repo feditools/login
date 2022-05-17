@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-// FediAccount represents a federated social account
+// FediAccount represents a federated social account.
 type FediAccount struct {
 	ID          int64         `validate:"-" bun:"id,pk,autoincrement"`
 	CreatedAt   time.Time     `validate:"-" bun:",nullzero,notnull,default:current_timestamp"`

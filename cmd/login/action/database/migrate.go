@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+
 	"github.com/feditools/go-lib/metrics/statsd"
 	"github.com/feditools/login/cmd/login/action"
 	"github.com/feditools/login/internal/config"
@@ -9,7 +10,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Migrate runs database migrations
+// Migrate runs database migrations.
 var Migrate action.Action = func(ctx context.Context) error {
 	l := logger.WithField("func", "Migrate")
 
@@ -49,7 +50,7 @@ var Migrate action.Action = func(ctx context.Context) error {
 		return err
 	}
 
-	if viper.GetBool(config.Keys.DbLoadTestData) {
+	if viper.GetBool(config.Keys.DBLoadTestData) {
 		err = dbClient.LoadTestData(ctx)
 		if err != nil {
 			l.Errorf("migration: %s", err.Error())

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/db/bun/migrations"
 	"github.com/feditools/login/internal/models"
@@ -12,15 +13,15 @@ import (
 	"github.com/uptrace/bun/migrate"
 )
 
-// Close closes the bun db connection
-func (c *Client) Close(ctx context.Context) db.Error {
+// Close closes the bun db connection.
+func (c *Client) Close(_ context.Context) db.Error {
 	l := logger.WithField("func", "Close")
 	l.Info("closing db connection")
 	return c.bun.Close()
 }
 
-// Create inserts an object into the database
-func (c *Client) Create(ctx context.Context, i any) db.Error {
+// Create inserts an object into the database.
+func (c *Client) Create(ctx context.Context, i interface{}) db.Error {
 	_, err := c.bun.NewInsert().Model(i).Exec(ctx)
 	if err != nil {
 		logger.WithField("func", "Create").Errorf("db: %s", err.Error())
@@ -28,7 +29,7 @@ func (c *Client) Create(ctx context.Context, i any) db.Error {
 	return c.bun.ProcessError(err)
 }
 
-// DoMigration runs schema migrations on the database
+// DoMigration runs schema migrations on the database.
 func (c *Client) DoMigration(ctx context.Context) db.Error {
 	l := logger.WithField("func", "DoMigration")
 
@@ -55,7 +56,7 @@ func (c *Client) DoMigration(ctx context.Context) db.Error {
 	return nil
 }
 
-// LoadTestData adds test data to the database
+// LoadTestData adds test data to the database.
 func (c *Client) LoadTestData(ctx context.Context) db.Error {
 	l := logger.WithField("func", "LoadTestData")
 	l.Debugf("adding test data")
@@ -113,21 +114,21 @@ func (c *Client) LoadTestData(ctx context.Context) db.Error {
 	return nil
 }
 
-// ReadByID returns a model by its ID
-func (c *Client) ReadByID(ctx context.Context, id int64, i any) db.Error {
+// ReadByID returns a model by its ID.
+func (c *Client) ReadByID(ctx context.Context, id int64, i interface{}) db.Error {
 	q := c.bun.NewSelect().Model(i).Where("id = ?", id)
 
 	err := q.Scan(ctx)
 	return c.bun.ProcessError(err)
 }
 
-// ResetCache does nothing. This module contains no cache
-func (c *Client) ResetCache(_ context.Context) db.Error {
+// ResetCache does nothing. This module contains no cache.
+func (*Client) ResetCache(_ context.Context) db.Error {
 	return nil
 }
 
-// Update updates stored data
-func (c *Client) Update(ctx context.Context, i any) db.Error {
+// Update updates stored data.
+func (c *Client) Update(ctx context.Context, i interface{}) db.Error {
 	q := c.bun.NewUpdate().Model(i).WherePK()
 
 	_, err := q.Exec(ctx)

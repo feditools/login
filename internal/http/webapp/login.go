@@ -1,31 +1,32 @@
 package webapp
 
 import (
+	nethttp "net/http"
+	"strings"
+
 	"github.com/feditools/go-lib/language"
 	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/http/template"
 	"github.com/feditools/login/internal/path"
-	nethttp "net/http"
-	"strings"
 )
 
-// LoginGetHandler serves the login page
+// LoginGetHandler serves the login page.
 func (m *Module) LoginGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
 	m.displayLoginPage(w, r, "", "")
 }
 
-// LoginPostHandler attempts a login
+// LoginPostHandler attempts a login.
 func (m *Module) LoginPostHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
 	l := logger.WithField("func", "LoginPostHandler")
 
 	// get localizer
-	//localizer := r.Context().Value(localizerContextKey).(*language.Localizer)
+	// localizer := r.Context().Value(localizerContextKey).(*language.Localizer)
 
 	// parse form data
-	err := r.ParseForm()
-	if err != nil {
+	if err := r.ParseForm(); err != nil {
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 
@@ -35,11 +36,11 @@ func (m *Module) LoginPostHandler(w nethttp.ResponseWriter, r *nethttp.Request) 
 	if err != nil {
 		l.Errorf("get login url: %s", err.Error())
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 
 	nethttp.Redirect(w, r, loginURL.String(), nethttp.StatusFound)
-	return
 }
 
 func (m *Module) displayLoginPage(w nethttp.ResponseWriter, r *nethttp.Request, account, formError string) {
@@ -53,11 +54,12 @@ func (m *Module) displayLoginPage(w nethttp.ResponseWriter, r *nethttp.Request, 
 	err := m.initTemplate(w, r, tmplVars)
 	if err != nil {
 		nethttp.Error(w, err.Error(), nethttp.StatusInternalServerError)
+
 		return
 	}
 
 	// add error css file
-	signature, err := getSignature(strings.TrimPrefix(path.FileLoginCSS, "/"))
+	signature, err := m.getSignatureCached(strings.TrimPrefix(path.FileLoginCSS, "/"))
 	if err != nil {
 		l.Errorf("getting signature for %s: %s", path.FileLoginCSS, err.Error())
 	}

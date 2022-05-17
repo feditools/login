@@ -5,7 +5,7 @@ import (
 	"github.com/feditools/login/internal/models"
 )
 
-// AdminSystemName is the name of the admin oauth template
+// AdminSystemName is the name of the admin oauth template.
 const AdminSystemName = "admin_system"
 
 // AdminSystem contains the variables for the admin oauth template.
@@ -29,7 +29,7 @@ type AdminSystemApplicationTokens struct {
 	Pagination               libtemplate.Pagination
 }
 
-// AdminSystemApplicationTokenAddName is the name of the admin system application add token template
+// AdminSystemApplicationTokenAddName is the name of the admin system application add token template.
 const AdminSystemApplicationTokenAddName = "admin_system_applicationtoken_add"
 
 // AdminSystemApplicationTokenAdd contains the variables for the admin system application add token template.
@@ -41,7 +41,7 @@ type AdminSystemApplicationTokenAdd struct {
 	FormButtonSubmitText string
 }
 
-// AdminSystemApplicationTokenAddedName is the name of the admin system application token added template
+// AdminSystemApplicationTokenAddedName is the name of the admin system application token added template.
 const AdminSystemApplicationTokenAddedName = "admin_system_applicationtoken_added"
 
 // AdminSystemApplicationTokenAdded contains the variables for the admin system application token added template.

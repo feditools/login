@@ -4,18 +4,21 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
+	nethttp "net/http"
+	"net/url"
+
 	"github.com/feditools/login/internal/fedi/models"
 	"github.com/feditools/login/internal/http"
-	"io"
-	"net/url"
 )
 
-// findNodeInfo20URI parses a nodeinfo document for a nodeinfo 2.0 uri
+// findNodeInfo20URI parses a nodeinfo document for a nodeinfo 2.0 uri.
 func findNodeInfo20URI(nodeinfo *models.NodeInfo) (*url.URL, error) {
 	var nodeinfoURIstr string
 	for _, link := range nodeinfo.Links {
 		if link.Rel == NodeInfo20Schema {
 			nodeinfoURIstr = link.HRef
+
 			break
 		}
 	}
@@ -31,10 +34,10 @@ func findNodeInfo20URI(nodeinfo *models.NodeInfo) (*url.URL, error) {
 	return nodeinfoURI, err
 }
 
-// GetNodeInfo20 retrieves wellknown nodeinfo from a federated instance
-func (f *Fedi) GetNodeInfo20(ctx context.Context, domain string, url *url.URL) (*models.NodeInfo20, error) {
+// GetNodeInfo20 retrieves wellknown nodeinfo from a federated instance.
+func (f *Fedi) GetNodeInfo20(ctx context.Context, domain string, infoURI *url.URL) (*models.NodeInfo2, error) {
 	l := logger.WithField("func", "GetNodeInfo20")
-	v, err, _ := f.requestGroup.Do(url.String(), func() (interface{}, error) {
+	v, err, _ := f.requestGroup.Do(infoURI.String(), func() (interface{}, error) {
 		// check cache
 		cache, err := f.kv.GetFediNodeInfo(ctx, domain)
 		if err != nil && err.Error() != "redis: nil" {
@@ -46,13 +49,13 @@ func (f *Fedi) GetNodeInfo20(ctx context.Context, domain string, url *url.URL) (
 		}
 
 		// get nodeinfo
-		resp, err := http.Get(ctx, url.String())
+		resp, err := http.Get(ctx, infoURI.String())
 		if err != nil {
 			l.Errorf("http get: %s", err.Error())
 			return nil, err
 		}
-		if resp.StatusCode != 200 {
-			return nil, fmt.Errorf("http status %s %d", url, resp.StatusCode)
+		if resp.StatusCode != nethttp.StatusOK {
+			return nil, fmt.Errorf("http status %s %d", infoURI, resp.StatusCode)
 		}
 		defer resp.Body.Close()
 		bodyBytes, err := io.ReadAll(resp.Body)
@@ -84,12 +87,12 @@ func (f *Fedi) GetNodeInfo20(ctx context.Context, domain string, url *url.URL) (
 		return nil, err
 	}
 
-	nodeinfo := v.(*models.NodeInfo20)
+	nodeinfo := v.(*models.NodeInfo2)
 	return nodeinfo, nil
 }
 
-func unmarshalNodeInfo20(body string) (*models.NodeInfo20, error) {
-	var nodeinfo *models.NodeInfo20
+func unmarshalNodeInfo20(body string) (*models.NodeInfo2, error) {
+	var nodeinfo *models.NodeInfo2
 	if err := json.Unmarshal([]byte(body), &nodeinfo); err != nil {
 		return nil, err
 	}

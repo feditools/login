@@ -1,11 +1,12 @@
 package webapp
 
 import (
+	nethttp "net/http"
+
 	"github.com/feditools/go-lib/language"
 	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/path"
-	nethttp "net/http"
 )
 
 func makeAdminSidebar(r *nethttp.Request) libtemplate.Sidebar {

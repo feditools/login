@@ -1,12 +1,16 @@
 package token
 
 import (
+	"errors"
 	"fmt"
+	"testing"
+
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/models"
 	"github.com/spf13/viper"
-	"testing"
 )
+
+//revive:disable:add-constant
 
 var testTables = []struct {
 	k Kind
@@ -41,7 +45,7 @@ func TestNew_SaltEmpty(t *testing.T) {
 	viper.Reset()
 
 	tokenizer, err := New()
-	if err != ErrSaltEmpty {
+	if !errors.Is(err, ErrSaltEmpty) {
 		t.Errorf("unexpected error, got: '%s', want: '%s'", err, ErrSaltEmpty)
 		return
 	}
@@ -91,7 +95,7 @@ func TestTokenizer_DecodeToken_InvalidLength(t *testing.T) {
 
 	_, _, err = tokenizer.DecodeToken("1vxqadgcYibQ2pOj")
 	errText := "negative number not supported"
-	if err != ErrInvalidLength {
+	if !errors.Is(err, ErrInvalidLength) {
 		t.Errorf("unexpected error, got: '%s', want: '%s'", err, errText)
 		return
 	}
@@ -151,7 +155,7 @@ func TestTokenizer_GetToken(t *testing.T) {
 	}
 
 	tables := []struct {
-		o any
+		o interface{}
 		t string
 	}{
 		{models.FediAccount{ID: 1}, "RNrm2XxAiGPGpyD4"},
@@ -216,3 +220,5 @@ func BenchmarkTokenizer_EncodeToken(b *testing.B) {
 		}
 	})
 }
+
+//revive:enable:add-constant

@@ -5,6 +5,6 @@ import (
 )
 
 var (
-	// Migrations provides migrations for bun
+	// Migrations provides migrations for bun.
 	Migrations = migrate.NewMigrations()
 )

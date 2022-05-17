@@ -3,16 +3,19 @@ package bun
 import (
 	"errors"
 	"fmt"
-	"github.com/jackc/pgconn"
 	"testing"
+
+	"github.com/jackc/pgconn"
 )
+
+//revive:disable:add-constant
 
 func TestProcessPostgresError(t *testing.T) {
 	tables := []struct {
 		x error
 		n string
 	}{
-		{errors.New("test"), "test"},
+		{errors.New("test"), "test"}, //nolint
 		{&pgconn.PgError{Severity: "ERROR", Message: "random", Code: "12345"}, "ERROR: random (SQLSTATE 12345)"},
 		{&pgconn.PgError{Severity: "ERROR", Message: "unique_violation", Code: "23505"}, "unique_violation"},
 	}
@@ -38,7 +41,7 @@ func TestProcessSQLiteError(t *testing.T) {
 		x error
 		n string
 	}{
-		{errors.New("test"), "test"},
+		{errors.New("test"), "test"}, //nolint
 	}
 
 	for i, table := range tables {
@@ -56,3 +59,5 @@ func TestProcessSQLiteError(t *testing.T) {
 		})
 	}
 }
+
+//revive:enable:add-constant

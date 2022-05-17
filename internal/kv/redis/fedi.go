@@ -2,8 +2,9 @@ package redis
 
 import (
 	"context"
-	"github.com/feditools/login/internal/kv"
 	"time"
+
+	"github.com/feditools/login/internal/kv"
 )
 
 // fedi actor

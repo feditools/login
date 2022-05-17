@@ -2,7 +2,7 @@ package db
 
 import "fmt"
 
-// Error represents a database specific error
+// Error represents a database specific error.
 type Error error
 
 var (
@@ -16,17 +16,17 @@ var (
 	ErrUnknown Error = fmt.Errorf("unknown error")
 )
 
-// ErrAlreadyExists is returned when a caller tries to insert a database entry that already exists in the db.
-type ErrAlreadyExists struct {
+// AlreadyExistsError is returned when a caller tries to insert a database entry that already exists in the db.
+type AlreadyExistsError struct {
 	message string
 }
 
 // Error returns the error message as a string.
-func (e *ErrAlreadyExists) Error() string {
+func (e *AlreadyExistsError) Error() string {
 	return e.message
 }
 
-// NewErrAlreadyExists wraps a message in an ErrAlreadyExists object.
+// NewErrAlreadyExists wraps a message in an AlreadyExistsError object.
 func NewErrAlreadyExists(msg string) error {
-	return &ErrAlreadyExists{message: msg}
+	return &AlreadyExistsError{message: msg}
 }

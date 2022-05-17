@@ -22,14 +22,14 @@ func TestNew_Postgres(t *testing.T) {
 
 	viper.Reset()
 
-	viper.Set(config.Keys.DbType, "postgres")
+	viper.Set(config.Keys.DBType, "postgres")
 
-	viper.Set(config.Keys.DbAddress, dbAddress)
-	viper.Set(config.Keys.DbDatabase, dbDatabase)
-	viper.Set(config.Keys.DbPassword, dbPassword)
-	viper.Set(config.Keys.DbPort, dbPort)
-	viper.Set(config.Keys.DbTLSMode, dbTLSMode)
-	viper.Set(config.Keys.DbUser, dbUser)
+	viper.Set(config.Keys.DBAddress, dbAddress)
+	viper.Set(config.Keys.DBDatabase, dbDatabase)
+	viper.Set(config.Keys.DBPassword, dbPassword)
+	viper.Set(config.Keys.DBPort, dbPort)
+	viper.Set(config.Keys.DBTLSMode, dbTLSMode)
+	viper.Set(config.Keys.DBUser, dbUser)
 
 	metricsCollector, _ := mock.NewMetricsCollector()
 
@@ -54,14 +54,14 @@ func TestPgConn(t *testing.T) {
 
 	viper.Reset()
 
-	viper.Set(config.Keys.DbType, "postgres")
+	viper.Set(config.Keys.DBType, "postgres")
 
-	viper.Set(config.Keys.DbAddress, dbAddress)
-	viper.Set(config.Keys.DbDatabase, dbDatabase)
-	viper.Set(config.Keys.DbPassword, dbPassword)
-	viper.Set(config.Keys.DbPort, dbPort)
-	viper.Set(config.Keys.DbTLSMode, dbTLSMode)
-	viper.Set(config.Keys.DbUser, dbUser)
+	viper.Set(config.Keys.DBAddress, dbAddress)
+	viper.Set(config.Keys.DBDatabase, dbDatabase)
+	viper.Set(config.Keys.DBPassword, dbPassword)
+	viper.Set(config.Keys.DBPort, dbPort)
+	viper.Set(config.Keys.DBTLSMode, dbTLSMode)
+	viper.Set(config.Keys.DBUser, dbUser)
 
 	bun, err := pgConn(context.Background())
 	if err != nil {
@@ -77,14 +77,14 @@ func TestPgConn(t *testing.T) {
 func testNewPostresClient() (db.DB, error) {
 	viper.Reset()
 
-	viper.Set(config.Keys.DbType, "postgres")
+	viper.Set(config.Keys.DBType, "postgres")
 
-	viper.Set(config.Keys.DbAddress, "postgres")
-	viper.Set(config.Keys.DbDatabase, "test")
-	viper.Set(config.Keys.DbPassword, "test")
-	viper.Set(config.Keys.DbPort, 5432)
-	viper.Set(config.Keys.DbUser, "test")
-	viper.Set(config.Keys.DbEncryptionKey, testdata.TestEncryptionKey)
+	viper.Set(config.Keys.DBAddress, "postgres")
+	viper.Set(config.Keys.DBDatabase, "test")
+	viper.Set(config.Keys.DBPassword, "test")
+	viper.Set(config.Keys.DBPort, 5432)
+	viper.Set(config.Keys.DBUser, "test")
+	viper.Set(config.Keys.DBEncryptionKey, testdata.TestEncryptionKey)
 
 	metricsCollector, _ := mock.NewMetricsCollector()
 

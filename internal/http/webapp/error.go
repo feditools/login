@@ -2,11 +2,12 @@ package webapp
 
 import (
 	"fmt"
+	"net/http"
+	"strings"
+
 	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/http/template"
 	"github.com/feditools/login/internal/path"
-	"net/http"
-	"strings"
 )
 
 // ErrorPageTemplate contains the variables for the "error" template.

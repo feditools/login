@@ -14,15 +14,15 @@ func Global(cmd *cobra.Command, values config.Values) {
 	cmd.PersistentFlags().String(config.Keys.ApplicationName, values.ApplicationName, usage.ApplicationName)
 
 	// database
-	cmd.PersistentFlags().String(config.Keys.DbType, values.DbType, usage.DbType)
-	cmd.PersistentFlags().String(config.Keys.DbAddress, values.DbAddress, usage.DbAddress)
-	cmd.PersistentFlags().Int(config.Keys.DbPort, values.DbPort, usage.DbPort)
-	cmd.PersistentFlags().String(config.Keys.DbUser, values.DbUser, usage.DbUser)
-	cmd.PersistentFlags().String(config.Keys.DbPassword, values.DbPassword, usage.DbPassword)
-	cmd.PersistentFlags().String(config.Keys.DbDatabase, values.DbDatabase, usage.DbDatabase)
-	cmd.PersistentFlags().String(config.Keys.DbTLSMode, values.DbTLSMode, usage.DbTLSMode)
-	cmd.PersistentFlags().String(config.Keys.DbTLSCACert, values.DbTLSCACert, usage.DbTLSCACert)
-	cmd.PersistentFlags().String(config.Keys.DbEncryptionKey, values.DbEncryptionKey, usage.DbEncryptionKey)
+	cmd.PersistentFlags().String(config.Keys.DBType, values.DBType, usage.DBType)
+	cmd.PersistentFlags().String(config.Keys.DBAddress, values.DBAddress, usage.DBAddress)
+	cmd.PersistentFlags().Int(config.Keys.DBPort, values.DBPort, usage.DBPort)
+	cmd.PersistentFlags().String(config.Keys.DBUser, values.DBUser, usage.DBUser)
+	cmd.PersistentFlags().String(config.Keys.DBPassword, values.DBPassword, usage.DBPassword)
+	cmd.PersistentFlags().String(config.Keys.DBDatabase, values.DBDatabase, usage.DBDatabase)
+	cmd.PersistentFlags().String(config.Keys.DBTLSMode, values.DBTLSMode, usage.DBTLSMode)
+	cmd.PersistentFlags().String(config.Keys.DBTLSCACert, values.DBTLSCACert, usage.DBTLSCACert)
+	cmd.PersistentFlags().String(config.Keys.DBEncryptionKey, values.DBEncryptionKey, usage.DBEncryptionKey)
 
 	// metrics
 	cmd.PersistentFlags().String(config.Keys.MetricsStatsDAddress, values.MetricsStatsDAddress, usage.MetricsStatsDAddress)

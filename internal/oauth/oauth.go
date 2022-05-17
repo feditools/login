@@ -2,6 +2,7 @@ package oauth
 
 import (
 	"context"
+
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/kv"
 	"github.com/feditools/login/internal/kv/redis"
@@ -12,11 +13,7 @@ import (
 	oredis "github.com/go-oauth2/redis/v4"
 )
 
-type Module struct {
-	db  db.DB
-	srv *server.Server
-}
-
+// New returns a new oauth server.Server object.
 func New(_ context.Context, d db.DB, r *redis.Client, t *token.Tokenizer) (*server.Server, error) {
 	l := logger.WithField("func", "New")
 

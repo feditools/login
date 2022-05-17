@@ -3,12 +3,13 @@ package fedi
 import (
 	"context"
 	"fmt"
+	"net/url"
+
 	"github.com/feditools/go-lib"
 	"github.com/feditools/login/internal/models"
-	"net/url"
 )
 
-// GetLoginURL retrieves an oauth url for a federated instance
+// GetLoginURL retrieves an oauth url for a federated instance.
 func (f *Fedi) GetLoginURL(ctx context.Context, act string) (*url.URL, error) {
 	l := logger.WithField("func", "GetLoginURL")
 	_, domain, err := lib.SplitAccount(act)
@@ -80,5 +81,5 @@ func (f *Fedi) loginURLForInstance(ctx context.Context, instance *models.FediIns
 		}
 	}
 
-	return f.helpers[SoftwareMastodon].MakeLoginURL(ctx, instance)
+	return f.helpers[SoftwareMastodon].MakeLoginURI(ctx, instance)
 }

@@ -1,6 +1,8 @@
 package webapp
 
 import (
+	nethttp "net/http"
+
 	libhttp "github.com/feditools/go-lib/http"
 	"github.com/feditools/go-lib/language"
 	libtemplate "github.com/feditools/go-lib/template"
@@ -10,10 +12,9 @@ import (
 	"github.com/feditools/login/internal/path"
 	"github.com/google/uuid"
 	"mvdan.cc/xurls/v2"
-	nethttp "net/http"
 )
 
-// AdminOauthClientsGetHandler serves the admin client page
+// AdminOauthClientsGetHandler serves the admin client page.
 func (m *Module) AdminOauthClientsGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
 	l := logger.WithField("func", "AdminOauthClientsGetHandler")
 
@@ -97,12 +98,12 @@ func (m *Module) AdminOauthClientsGetHandler(w nethttp.ResponseWriter, r *nethtt
 	}
 }
 
-// AdminOauthClientAddGetHandler serves the admin add client page
+// AdminOauthClientAddGetHandler serves the admin add client page.
 func (m *Module) AdminOauthClientAddGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
 	m.displayOauthClientAdd(w, r, "", "", nil, nil)
 }
 
-// AdminOauthClientAddPostHandler handles the admin add client form
+// AdminOauthClientAddPostHandler handles the admin add client form.
 func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
 	l := logger.WithField("func", "AdminOauthClientAddPostHandler")
 
@@ -202,7 +203,7 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 
 		FormInputDescription: &libtemplate.FormInput{
 			ID:           "inputDescription",
-			Type:         "text",
+			Type:         libtemplate.FormInputTypeText,
 			Name:         FormDescription,
 			Placeholder:  localizer.TextDescription(1).String(),
 			Label:        localizer.TextDescription(1),
@@ -214,7 +215,7 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 		},
 		FormInputClientID: &libtemplate.FormInput{
 			ID:           "inputClientID",
-			Type:         "text",
+			Type:         libtemplate.FormInputTypeText,
 			Name:         "client-id",
 			Placeholder:  localizer.TextClientID(1).String(),
 			Label:        localizer.TextClientID(1),
@@ -226,7 +227,7 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 		},
 		FormInputClientSecret: &libtemplate.FormInput{
 			ID:           "inputClientSecret",
-			Type:         "text",
+			Type:         libtemplate.FormInputTypeText,
 			Name:         "client-secret",
 			Placeholder:  localizer.TextClientSecret(1).String(),
 			Label:        localizer.TextClientSecret(1),
@@ -238,7 +239,7 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 		},
 		FormInputRedirectURI: &libtemplate.FormInput{
 			ID:           "inputRedirectURI",
-			Type:         "text",
+			Type:         libtemplate.FormInputTypeText,
 			Name:         FormRedirectURI,
 			Placeholder:  localizer.TextRedirectURI(1).String(),
 			Label:        localizer.TextRedirectURI(1),

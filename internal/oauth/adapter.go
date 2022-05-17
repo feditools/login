@@ -2,20 +2,20 @@ package oauth
 
 import (
 	"context"
-	"errors"
+
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/token"
 	"github.com/go-oauth2/oauth2/v4"
 	"github.com/go-oauth2/oauth2/v4/models"
 )
 
-// AdapterClientStore adapts our database interface to the client store interface
+// AdapterClientStore adapts our database interface to the client store interface.
 type AdapterClientStore struct {
 	db   db.DB
 	tokz *token.Tokenizer
 }
 
-// NewAdapterClientStore creates a new client store adapter
+// NewAdapterClientStore creates a new client store adapter.
 func NewAdapterClientStore(d db.DB, t *token.Tokenizer) *AdapterClientStore {
 	return &AdapterClientStore{
 		db:   d,
@@ -23,9 +23,8 @@ func NewAdapterClientStore(d db.DB, t *token.Tokenizer) *AdapterClientStore {
 	}
 }
 
-// GetByID returns a client based on an ID
+// GetByID returns a client based on an ID.
 func (c *AdapterClientStore) GetByID(ctx context.Context, tok string) (oauth2.ClientInfo, error) {
-
 	l := logger.WithField("func", "GetByID")
 	l.Debugf("looking for client %s", tok)
 
@@ -41,7 +40,7 @@ func (c *AdapterClientStore) GetByID(ctx context.Context, tok string) (oauth2.Cl
 	}
 	if kind != token.KindOauthClient {
 		l.Debugf("invalid token kind: %s", kind.String())
-		return nil, errors.New("invalid token kind")
+		return nil, token.ErrInvalidTokenKind
 	}
 
 	dbClient, err := c.db.ReadOauthClient(ctx, id)

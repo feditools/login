@@ -5,7 +5,7 @@ import (
 	"github.com/feditools/login/internal/models"
 )
 
-// AdminFediName is the name of the admin fedi template
+// AdminFediName is the name of the admin fedi template.
 const AdminFediName = "admin_fedi"
 
 // AdminFedi contains the variables for the admin fedi template.

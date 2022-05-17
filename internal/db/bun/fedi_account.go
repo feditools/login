@@ -3,15 +3,16 @@ package bun
 import (
 	"context"
 	"database/sql"
-	"fmt"
+	"errors"
+	"time"
+
 	libdatabase "github.com/feditools/go-lib/database"
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/models"
 	"github.com/uptrace/bun"
-	"time"
 )
 
-// CountFediAccounts returns the number of federated social account
+// CountFediAccounts returns the number of federated social account.
 func (c *Client) CountFediAccounts(ctx context.Context) (int64, db.Error) {
 	metric := c.metrics.NewDBQuery("CountFediAccounts")
 
@@ -25,7 +26,7 @@ func (c *Client) CountFediAccounts(ctx context.Context) (int64, db.Error) {
 	return int64(count), nil
 }
 
-// CountFediAccountsForInstance returns the number of federated social account for an instance
+// CountFediAccountsForInstance returns the number of federated social account for an instance.
 func (c *Client) CountFediAccountsForInstance(ctx context.Context, instanceID int64) (int64, db.Error) {
 	metric := c.metrics.NewDBQuery("CountFediAccountsForInstance")
 
@@ -39,12 +40,11 @@ func (c *Client) CountFediAccountsForInstance(ctx context.Context, instanceID in
 	return int64(count), nil
 }
 
-// CreateFediAccount stores the federated social account
+// CreateFediAccount stores the federated social account.
 func (c *Client) CreateFediAccount(ctx context.Context, account *models.FediAccount) db.Error {
 	metric := c.metrics.NewDBQuery("CreateFediAccount")
 
-	err := c.Create(ctx, account)
-	if err != nil {
+	if err := c.Create(ctx, account); err != nil {
 		go metric.Done(true)
 		return c.bun.errProc(err)
 	}
@@ -53,7 +53,7 @@ func (c *Client) CreateFediAccount(ctx context.Context, account *models.FediAcco
 	return nil
 }
 
-// IncFediAccountLoginCount updates the login count of a stored federated instance
+// IncFediAccountLoginCount updates the login count of a stored federated instance.
 func (c *Client) IncFediAccountLoginCount(ctx context.Context, account *models.FediAccount) db.Error {
 	metric := c.metrics.NewDBQuery("IncFediAccountLoginCount")
 
@@ -63,10 +63,8 @@ func (c *Client) IncFediAccountLoginCount(ctx context.Context, account *models.F
 			return err
 		}
 
-		account.LogInCount = account.LogInCount + 1
+		account.LogInCount++
 		account.LogInLast = time.Now()
-
-		fmt.Printf("asdf: %+v\n", account)
 
 		_, err = tx.NewUpdate().Model(account).Where("id = ?", account.ID).Exec(ctx)
 		if err != nil {
@@ -86,13 +84,13 @@ func (c *Client) IncFediAccountLoginCount(ctx context.Context, account *models.F
 	return nil
 }
 
-// ReadFediAccount returns one federated social account
+// ReadFediAccount returns one federated social account.
 func (c *Client) ReadFediAccount(ctx context.Context, id int64) (*models.FediAccount, db.Error) {
 	metric := c.metrics.NewDBQuery("ReadFediAccount")
 
 	fediAccount := new(models.FediAccount)
 	err := c.newFediAccountQ(fediAccount).Where("id = ?", id).Scan(ctx)
-	if err == sql.ErrNoRows {
+	if errors.Is(err, sql.ErrNoRows) {
 		return nil, nil
 	}
 	if err != nil {
@@ -104,7 +102,7 @@ func (c *Client) ReadFediAccount(ctx context.Context, id int64) (*models.FediAcc
 	return fediAccount, nil
 }
 
-// ReadFediAccountByUsername returns one federated social account
+// ReadFediAccountByUsername returns one federated social account.
 func (c *Client) ReadFediAccountByUsername(ctx context.Context, instanceID int64, username string) (*models.FediAccount, db.Error) {
 	metric := c.metrics.NewDBQuery("ReadFediAccountByUsername")
 
@@ -116,7 +114,7 @@ func (c *Client) ReadFediAccountByUsername(ctx context.Context, instanceID int64
 		Where("fedi_instances.id = ?", instanceID).
 		Where("lower(fedi_account.username) = lower(?)", username).
 		Scan(ctx)
-	if err == sql.ErrNoRows {
+	if errors.Is(err, sql.ErrNoRows) {
 		return nil, nil
 	}
 	if err != nil {
@@ -128,7 +126,7 @@ func (c *Client) ReadFediAccountByUsername(ctx context.Context, instanceID int64
 	return fediAccount, nil
 }
 
-// ReadFediAccountsPage returns a page of federated social accounts
+// ReadFediAccountsPage returns a page of federated social accounts.
 func (c *Client) ReadFediAccountsPage(ctx context.Context, index, count int) ([]*models.FediAccount, db.Error) {
 	metric := c.metrics.NewDBQuery("ReadFediAccountsPage")
 
@@ -146,7 +144,7 @@ func (c *Client) ReadFediAccountsPage(ctx context.Context, index, count int) ([]
 	return accounts, nil
 }
 
-// UpdateFediAccount updates the stored federated social account
+// UpdateFediAccount updates the stored federated social account.
 func (c *Client) UpdateFediAccount(ctx context.Context, account *models.FediAccount) db.Error {
 	metric := c.metrics.NewDBQuery("UpdateFediAccount")
 

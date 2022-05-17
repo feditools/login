@@ -3,7 +3,9 @@ package cachemem
 import (
 	"context"
 	"encoding/binary"
+	"errors"
 	"fmt"
+
 	"github.com/allegro/bigcache/v3"
 )
 
@@ -35,11 +37,12 @@ func (c *CacheMem) getCount(_ context.Context, k string) (int64, bool) {
 
 	// check domain cache
 	entry, err := c.fediInstanceDomainToID.Get(k)
-	if err == bigcache.ErrEntryNotFound {
+	if errors.Is(err, bigcache.ErrEntryNotFound) {
 		return 0, false
 	}
 	if err != nil {
 		l.Warnf("cache get: %s", err.Error())
+
 		return 0, false
 	}
 	i := int64(binary.LittleEndian.Uint64(entry))
@@ -56,6 +59,7 @@ func (c *CacheMem) setCount(_ context.Context, k string, count int64) {
 	err := c.fediInstanceDomainToID.Set(k, b)
 	if err != nil {
 		l.Warnf("cache domain: %s", err.Error())
+
 		return
 	}
 }

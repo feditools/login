@@ -4,13 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/url"
+
 	libhttp "github.com/feditools/go-lib/http"
 	"github.com/feditools/login/internal/fedi/models"
 	"github.com/feditools/login/internal/http"
-	"net/url"
 )
 
-// GetWellknownNodeInfo retrieves wellknown nodeinfo from a federated instance
+// GetWellknownNodeInfo retrieves wellknown nodeinfo from a federated instance.
 func (f *Fedi) GetWellknownNodeInfo(ctx context.Context, domain string) (*models.NodeInfo, error) {
 	l := logger.WithField("func", "GetWellknownNodeInfo")
 	nodinfoURI := fmt.Sprintf("https://%s/.well-known/nodeinfo", domain)
@@ -23,6 +24,7 @@ func (f *Fedi) GetWellknownNodeInfo(ctx context.Context, domain string) (*models
 		}
 
 		nodeinfo := new(models.NodeInfo)
+		defer resp.Body.Close()
 		err = json.NewDecoder(resp.Body).Decode(nodeinfo)
 		if err != nil {
 			l.Errorf("decode json: %s", err.Error())
@@ -41,7 +43,7 @@ func (f *Fedi) GetWellknownNodeInfo(ctx context.Context, domain string) (*models
 	return nodeinfo, nil
 }
 
-// GetWellknownWebFinger retrieves wellknown web finger resource from a federated instance
+// GetWellknownWebFinger retrieves wellknown web finger resource from a federated instance.
 func (f *Fedi) GetWellknownWebFinger(ctx context.Context, username, domain string) (*models.WebFinger, error) {
 	l := logger.WithField("func", "GetWellknownWebFinger")
 	webfingerURI := fmt.Sprintf("https://%s/.well-known/webfinger?resource=acct:%s@%s", domain, username, domain)
@@ -54,6 +56,7 @@ func (f *Fedi) GetWellknownWebFinger(ctx context.Context, username, domain strin
 		}
 
 		webfinger := new(models.WebFinger)
+		defer resp.Body.Close()
 		err = json.NewDecoder(resp.Body).Decode(webfinger)
 		if err != nil {
 			l.Errorf("decode json: %s", err.Error())
@@ -72,12 +75,13 @@ func (f *Fedi) GetWellknownWebFinger(ctx context.Context, username, domain strin
 	return webfinger, nil
 }
 
-// FindActorURI parses a webfinger document for an actor uri
+// FindActorURI parses a webfinger document for an actor uri.
 func FindActorURI(webfinger *models.WebFinger) (*url.URL, error) {
 	var actorURIstr string
 	for _, link := range webfinger.Links {
 		if link.Rel == "self" || link.Type == libhttp.MimeAppActivityJSON {
 			actorURIstr = link.HRef
+
 			break
 		}
 	}

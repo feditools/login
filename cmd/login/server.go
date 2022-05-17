@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// serverCommands returns the 'server' subcommand
+// serverCommands returns the 'server' subcommand.
 func serverCommands() *cobra.Command {
 	serverCmd := &cobra.Command{
 		Use:   "server",

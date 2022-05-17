@@ -2,9 +2,9 @@ package models
 
 import (
 	"context"
-	"github.com/uptrace/bun"
 	"testing"
-	"time"
+
+	"github.com/uptrace/bun"
 )
 
 func TestApplicationToken_BeforeAppendModel_Insert(t *testing.T) {
@@ -16,11 +16,10 @@ func TestApplicationToken_BeforeAppendModel_Insert(t *testing.T) {
 		return
 	}
 
-	emptyTime := time.Time{}
-	if obj.CreatedAt == emptyTime {
+	if obj.CreatedAt.Equal(testEmptyTime) {
 		t.Errorf("invalid created at time: %s", obj.CreatedAt.String())
 	}
-	if obj.UpdatedAt == emptyTime {
+	if obj.UpdatedAt.Equal(testEmptyTime) {
 		t.Errorf("invalid updated at time: %s", obj.UpdatedAt.String())
 	}
 }
@@ -34,8 +33,7 @@ func TestApplicationToken_BeforeAppendModel_Update(t *testing.T) {
 		return
 	}
 
-	emptyTime := time.Time{}
-	if obj.UpdatedAt == emptyTime {
+	if obj.UpdatedAt.Equal(testEmptyTime) {
 		t.Errorf("invalid updated at time: %s", obj.UpdatedAt.String())
 	}
 }

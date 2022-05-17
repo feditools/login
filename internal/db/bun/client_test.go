@@ -5,14 +5,17 @@ import (
 	"crypto/tls"
 	"database/sql"
 	"fmt"
+	"testing"
+
 	"github.com/feditools/go-lib/mock"
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/models/testdata"
 	"github.com/jackc/pgconn"
 	"github.com/spf13/viper"
-	"testing"
 )
+
+//revive:disable:add-constant
 
 func TestDeriveBunDBPGOptions(t *testing.T) {
 	dbDatabase := "database"
@@ -22,12 +25,12 @@ func TestDeriveBunDBPGOptions(t *testing.T) {
 
 	viper.Reset()
 
-	viper.Set(config.Keys.DbType, "postgres")
+	viper.Set(config.Keys.DBType, "postgres")
 
-	viper.Set(config.Keys.DbDatabase, dbDatabase)
-	viper.Set(config.Keys.DbPassword, dbPassword)
-	viper.Set(config.Keys.DbPort, dbPort)
-	viper.Set(config.Keys.DbUser, dbUser)
+	viper.Set(config.Keys.DBDatabase, dbDatabase)
+	viper.Set(config.Keys.DBPassword, dbPassword)
+	viper.Set(config.Keys.DBPort, dbPort)
+	viper.Set(config.Keys.DBUser, dbUser)
 
 	opts, err := deriveBunDBPGOptions()
 	if err != nil {
@@ -68,14 +71,14 @@ func TestDeriveBunDBPGOptions_TLSDisable(t *testing.T) {
 
 	viper.Reset()
 
-	viper.Set(config.Keys.DbType, "postgres")
+	viper.Set(config.Keys.DBType, "postgres")
 
-	viper.Set(config.Keys.DbAddress, dbAddress)
-	viper.Set(config.Keys.DbDatabase, dbDatabase)
-	viper.Set(config.Keys.DbPassword, dbPassword)
-	viper.Set(config.Keys.DbPort, dbPort)
-	viper.Set(config.Keys.DbTLSMode, dbTLSMode)
-	viper.Set(config.Keys.DbUser, dbUser)
+	viper.Set(config.Keys.DBAddress, dbAddress)
+	viper.Set(config.Keys.DBDatabase, dbDatabase)
+	viper.Set(config.Keys.DBPassword, dbPassword)
+	viper.Set(config.Keys.DBPort, dbPort)
+	viper.Set(config.Keys.DBTLSMode, dbTLSMode)
+	viper.Set(config.Keys.DBUser, dbUser)
 
 	opts, err := deriveBunDBPGOptions()
 	if err != nil {
@@ -119,14 +122,14 @@ func TestDeriveBunDBPGOptions_TLSEnable(t *testing.T) {
 
 	viper.Reset()
 
-	viper.Set(config.Keys.DbType, "postgres")
+	viper.Set(config.Keys.DBType, "postgres")
 
-	viper.Set(config.Keys.DbAddress, dbAddress)
-	viper.Set(config.Keys.DbDatabase, dbDatabase)
-	viper.Set(config.Keys.DbPassword, dbPassword)
-	viper.Set(config.Keys.DbPort, dbPort)
-	viper.Set(config.Keys.DbTLSMode, dbTLSMode)
-	viper.Set(config.Keys.DbUser, dbUser)
+	viper.Set(config.Keys.DBAddress, dbAddress)
+	viper.Set(config.Keys.DBDatabase, dbDatabase)
+	viper.Set(config.Keys.DBPassword, dbPassword)
+	viper.Set(config.Keys.DBPort, dbPort)
+	viper.Set(config.Keys.DBTLSMode, dbTLSMode)
+	viper.Set(config.Keys.DBUser, dbUser)
 
 	opts, err := deriveBunDBPGOptions()
 	if err != nil {
@@ -159,7 +162,7 @@ func TestDeriveBunDBPGOptions_TLSEnable(t *testing.T) {
 		t.Errorf("unexpected value for tls config, got: 'nil', want: '*tls.Config'")
 		return
 	}
-	if opts.TLSConfig.InsecureSkipVerify != true {
+	if !opts.TLSConfig.InsecureSkipVerify {
 		t.Errorf("unexpected value for tls inscure skip verfy, got: '%v', want: '%v'", opts.TLSConfig.InsecureSkipVerify, true)
 	}
 }
@@ -174,16 +177,16 @@ func TestDeriveBunDBPGOptions_TLSRequire(t *testing.T) {
 
 	viper.Reset()
 
-	viper.Set(config.Keys.DbType, "postgres")
+	viper.Set(config.Keys.DBType, "postgres")
 
-	viper.Set(config.Keys.DbAddress, dbAddress)
-	viper.Set(config.Keys.DbDatabase, dbDatabase)
-	viper.Set(config.Keys.DbPassword, dbPassword)
-	viper.Set(config.Keys.DbPort, dbPort)
-	viper.Set(config.Keys.DbTLSMode, dbTLSMode)
-	viper.Set(config.Keys.DbUser, dbUser)
+	viper.Set(config.Keys.DBAddress, dbAddress)
+	viper.Set(config.Keys.DBDatabase, dbDatabase)
+	viper.Set(config.Keys.DBPassword, dbPassword)
+	viper.Set(config.Keys.DBPort, dbPort)
+	viper.Set(config.Keys.DBTLSMode, dbTLSMode)
+	viper.Set(config.Keys.DBUser, dbUser)
 
-	viper.Set(config.Keys.DbTLSCACert, "../../../test/certificate.pem")
+	viper.Set(config.Keys.DBTLSCACert, "../../../test/certificate.pem")
 
 	opts, err := deriveBunDBPGOptions()
 	if err != nil {
@@ -216,7 +219,7 @@ func TestDeriveBunDBPGOptions_TLSRequire(t *testing.T) {
 		t.Errorf("unexpected value for tls config, got: 'nil', want: '*tls.Config'")
 		return
 	}
-	if opts.TLSConfig.InsecureSkipVerify != false {
+	if opts.TLSConfig.InsecureSkipVerify {
 		t.Errorf("unexpected value for tls inscure skip verfy, got: '%v', want: '%v'", opts.TLSConfig.InsecureSkipVerify, false)
 	}
 	if opts.TLSConfig.ServerName != dbAddress {
@@ -230,10 +233,10 @@ func TestDeriveBunDBPGOptions_TLSRequire(t *testing.T) {
 func TestDeriveBunDBPGOptions_NoDatabase(t *testing.T) {
 	viper.Reset()
 
-	viper.Set(config.Keys.DbType, "postgres")
+	viper.Set(config.Keys.DBType, "postgres")
 
 	_, err := deriveBunDBPGOptions()
-	errText := "no database set"
+	errText := "no database set" //nolint
 	if err.Error() != errText {
 		t.Errorf("unexpected error initializing sqlite connection, got: '%s', want: '%s'", err.Error(), errText)
 		return
@@ -254,7 +257,7 @@ func TestDeriveBunDBPGOptions_NoType(t *testing.T) {
 func TestNew_Invalid(t *testing.T) {
 	viper.Reset()
 
-	viper.Set(config.Keys.DbType, "invalid")
+	viper.Set(config.Keys.DBType, "invalid")
 
 	metricsCollector, _ := mock.NewMetricsCollector()
 
@@ -269,8 +272,8 @@ func TestNew_Invalid(t *testing.T) {
 func TestNew_Sqlite(t *testing.T) {
 	viper.Reset()
 
-	viper.Set(config.Keys.DbType, "sqlite")
-	viper.Set(config.Keys.DbAddress, ":memory:")
+	viper.Set(config.Keys.DBType, "sqlite")
+	viper.Set(config.Keys.DBAddress, ":memory:")
 
 	metricsCollector, _ := mock.NewMetricsCollector()
 
@@ -299,7 +302,7 @@ func TestPgConn_NoConfig(t *testing.T) {
 func TestSqliteConn(t *testing.T) {
 	viper.Reset()
 
-	viper.Set(config.Keys.DbAddress, ":memory:")
+	viper.Set(config.Keys.DBAddress, ":memory:")
 
 	bun, err := sqliteConn(context.Background())
 	if err != nil {
@@ -316,7 +319,7 @@ func TestSqliteConn_NoConfig(t *testing.T) {
 	viper.Reset()
 
 	_, err := sqliteConn(context.Background())
-	errText := fmt.Sprintf("'%s' was not set when attempting to start sqlite", config.Keys.DbAddress)
+	errText := fmt.Sprintf("'%s' was not set when attempting to start sqlite", config.Keys.DBAddress)
 	if err.Error() != errText {
 		t.Errorf("unexpected error initializing sqlite connection, got: '%s', want: '%s'", err.Error(), errText)
 		return
@@ -326,7 +329,7 @@ func TestSqliteConn_NoConfig(t *testing.T) {
 func TestSqliteConn_BadPath(t *testing.T) {
 	viper.Reset()
 
-	viper.Set(config.Keys.DbAddress, "invalidir/db.sqlite")
+	viper.Set(config.Keys.DBAddress, "invalidir/db.sqlite")
 
 	_, err := sqliteConn(context.Background())
 	errText := "sqlite ping: Unable to open the database file (SQLITE_CANTOPEN)"
@@ -375,9 +378,9 @@ func TestProcessError(t *testing.T) {
 func testNewSqliteClient() (db.DB, error) {
 	viper.Reset()
 
-	viper.Set(config.Keys.DbType, "sqlite")
-	viper.Set(config.Keys.DbAddress, ":memory:")
-	viper.Set(config.Keys.DbEncryptionKey, testdata.TestEncryptionKey)
+	viper.Set(config.Keys.DBType, "sqlite")
+	viper.Set(config.Keys.DBAddress, ":memory:")
+	viper.Set(config.Keys.DBEncryptionKey, testdata.TestEncryptionKey)
 
 	metricsCollector, _ := mock.NewMetricsCollector()
 
@@ -398,3 +401,5 @@ func testNewSqliteClient() (db.DB, error) {
 
 	return client, nil
 }
+
+//revive:enable:add-constant

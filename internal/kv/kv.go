@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// KV represents a key value store
+// KV represents a key value store.
 type KV interface {
 	Close(ctx context.Context) error
 

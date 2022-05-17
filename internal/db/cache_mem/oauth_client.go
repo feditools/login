@@ -2,11 +2,12 @@ package cachemem
 
 import (
 	"context"
+
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/models"
 )
 
-// CountOauthClients returns the number of oauth clients
+// CountOauthClients returns the number of oauth clients.
 func (c *CacheMem) CountOauthClients(ctx context.Context) (int64, db.Error) {
 	metric := c.metrics.NewDBCacheQuery("CountOauthClients")
 
@@ -27,22 +28,22 @@ func (c *CacheMem) CountOauthClients(ctx context.Context) (int64, db.Error) {
 	return count, nil
 }
 
-// CreateOauthClient stores the oauth client
+// CreateOauthClient stores the oauth client.
 func (c *CacheMem) CreateOauthClient(ctx context.Context, client *models.OauthClient) (err db.Error) {
 	return c.db.CreateOauthClient(ctx, client)
 }
 
-// ReadOauthClient returns one oauth client
+// ReadOauthClient returns one oauth client.
 func (c *CacheMem) ReadOauthClient(ctx context.Context, id int64) (*models.OauthClient, db.Error) {
 	return c.db.ReadOauthClient(ctx, id)
 }
 
-// ReadOauthClientsPage returns a page of oauth clients
+// ReadOauthClientsPage returns a page of oauth clients.
 func (c *CacheMem) ReadOauthClientsPage(ctx context.Context, index, count int) (clients []*models.OauthClient, err db.Error) {
 	return c.db.ReadOauthClientsPage(ctx, index, count)
 }
 
-// UpdateOauthClient updates the stored oauth client
+// UpdateOauthClient updates the stored oauth client.
 func (c *CacheMem) UpdateOauthClient(ctx context.Context, client *models.OauthClient) (err db.Error) {
 	return c.db.UpdateOauthClient(ctx, client)
 }

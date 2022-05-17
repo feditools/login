@@ -3,11 +3,12 @@ package cachemem
 import (
 	"context"
 	"encoding/gob"
+	"time"
+
 	bigcache "github.com/allegro/bigcache/v3"
 	"github.com/feditools/go-lib/metrics"
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/models"
-	"time"
 )
 
 const (
@@ -24,7 +25,7 @@ const (
 	fediInstanceMaxEntriesInWindow = 10000
 )
 
-// CacheMem is an in memory caching middleware for our db interface
+// CacheMem is an in memory caching middleware for our db interface.
 type CacheMem struct {
 	db      db.DB
 	metrics metrics.Collector
@@ -43,7 +44,7 @@ type CacheMem struct {
 	allCaches []*bigcache.BigCache
 }
 
-// New creates a new in memory cache
+// New creates a new in memory cache.
 func New(_ context.Context, d db.DB, m metrics.Collector) (db.DB, error) {
 	gob.Register(models.ApplicationToken{})
 	gob.Register(models.FediAccount{})
@@ -167,43 +168,45 @@ func New(_ context.Context, d db.DB, m metrics.Collector) (db.DB, error) {
 	}, nil
 }
 
-// Close is a pass through
+// Close is a pass through.
 func (c *CacheMem) Close(ctx context.Context) db.Error {
 	for _, cache := range c.allCaches {
 		_ = cache.Close()
 	}
+
 	return c.db.Close(ctx)
 }
 
-// Create is a pass through
-func (c *CacheMem) Create(ctx context.Context, i any) db.Error {
+// Create is a pass through.
+func (c *CacheMem) Create(ctx context.Context, i interface{}) db.Error {
 	return c.db.Create(ctx, i)
 }
 
-// DoMigration is a pass through
+// DoMigration is a pass through.
 func (c *CacheMem) DoMigration(ctx context.Context) db.Error {
 	return c.db.DoMigration(ctx)
 }
 
-// LoadTestData is a pass through
+// LoadTestData is a pass through.
 func (c *CacheMem) LoadTestData(ctx context.Context) db.Error {
 	return c.db.LoadTestData(ctx)
 }
 
-// ReadByID is a pass through
-func (c *CacheMem) ReadByID(ctx context.Context, id int64, i any) db.Error {
+// ReadByID is a pass through.
+func (c *CacheMem) ReadByID(ctx context.Context, id int64, i interface{}) db.Error {
 	return c.db.ReadByID(ctx, id, i)
 }
 
-// ResetCache clears all the caches
+// ResetCache clears all the caches.
 func (c *CacheMem) ResetCache(ctx context.Context) db.Error {
 	for _, cache := range c.allCaches {
 		_ = cache.Reset()
 	}
+
 	return c.db.ResetCache(ctx)
 }
 
-// Update is a pass through
-func (c *CacheMem) Update(ctx context.Context, i any) db.Error {
+// Update is a pass through.
+func (c *CacheMem) Update(ctx context.Context, i interface{}) db.Error {
 	return c.db.Update(ctx, i)
 }

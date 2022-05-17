@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"
+
 	"github.com/feditools/login/cmd/login/action"
 	"github.com/feditools/login/cmd/login/flag"
 	"github.com/feditools/login/internal/config"
@@ -11,10 +11,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Version is the software version
+// Version is the software version.
 var Version string
 
-// Commit is the git commit
+// Commit is the git commit.
 var Commit string
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 	rootCmd := &cobra.Command{
 		Use:   "login",
 		Short: "login - fediverse login server",
-		//TODO Long:          "",
+		// TODO Long:          "",
 		Version:       v,
 		SilenceErrors: true,
 		SilenceUsage:  true,
@@ -60,20 +60,20 @@ func main() {
 
 func preRun(cmd *cobra.Command) error {
 	if err := config.Init(cmd.Flags()); err != nil {
-		return fmt.Errorf("error initializing config: %s", err)
+		return NewApplicationError("error initializing config: %s", err.Error())
 	}
 
 	if err := config.ReadConfigFile(); err != nil {
-		return fmt.Errorf("error reading config: %s", err)
+		return NewApplicationError("error reading config", err.Error())
 	}
 
 	return nil
 }
 
-func run(ctx context.Context, action action.Action) error {
+func run(ctx context.Context, run action.Action) error {
 	if err := log.Init(); err != nil {
-		return fmt.Errorf("error initializing log: %s", err)
+		return NewApplicationError("error initializing log", err.Error())
 	}
 
-	return action(ctx)
+	return run(ctx)
 }

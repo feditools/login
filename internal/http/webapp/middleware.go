@@ -2,13 +2,14 @@ package webapp
 
 import (
 	"context"
+	nethttp "net/http"
+
 	"github.com/feditools/go-lib/language"
 	"github.com/feditools/login/internal/http"
 	"github.com/go-http-utils/etag"
-	nethttp "net/http"
 )
 
-// Middleware runs on every http request
+// Middleware runs on every http request.
 func (m *Module) Middleware(next nethttp.Handler) nethttp.Handler {
 	return etag.Handler(nethttp.HandlerFunc(func(w nethttp.ResponseWriter, r *nethttp.Request) {
 		l := logger.WithField("func", "Middleware")

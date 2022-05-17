@@ -10,15 +10,15 @@ var usage = config.KeyNames{
 	ApplicationName: "Name of the application, used in various places internally",
 
 	// database
-	DbType:         "Database type: eg., postgres",
-	DbAddress:      "Database ipv4 address, hostname, or filename",
-	DbPort:         "Database port",
-	DbUser:         "Database username",
-	DbPassword:     "Database password",
-	DbDatabase:     "Database name",
-	DbTLSMode:      "Database tls mode",
-	DbTLSCACert:    "Path to CA cert for db tls connection",
-	DbLoadTestData: "Should test data be loaded into the database",
+	DBType:         "Database type: eg., postgres",
+	DBAddress:      "Database ipv4 address, hostname, or filename",
+	DBPort:         "Database port",
+	DBUser:         "Database username",
+	DBPassword:     "Database password",
+	DBDatabase:     "Database name",
+	DBTLSMode:      "Database tls mode",
+	DBTLSCACert:    "Path to CA cert for db tls connection",
+	DBLoadTestData: "Should test data be loaded into the database",
 
 	// server
 	ServerExternalHostname: "The external hostname used by the server",

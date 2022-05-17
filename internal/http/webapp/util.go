@@ -4,6 +4,10 @@ import (
 	"crypto/sha512"
 	"encoding/base64"
 	"fmt"
+	"io/ioutil"
+	nethttp "net/http"
+	"net/http/httputil"
+
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/models"
 	"github.com/feditools/login/internal/path"
@@ -11,9 +15,6 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/text/language"
-	"io/ioutil"
-	nethttp "net/http"
-	"net/http/httputil"
 )
 
 // auth helpers
@@ -80,10 +81,10 @@ func getPageLang(query, header, defaultLang string) string {
 
 // signature caching
 
-func getSignature(path string) (string, error) {
+func getSignature(filePath string) (string, error) {
 	l := logger.WithField("func", "getSignature")
 
-	file, err := web.Files.Open(path)
+	file, err := web.Files.Open(filePath)
 	if err != nil {
 		l.Errorf("opening file: %s", err.Error())
 		return "", err
@@ -97,41 +98,43 @@ func getSignature(path string) (string, error) {
 
 	// hash it
 	h := sha512.New384()
-	h.Write(data)
+	_, err = h.Write(data)
+	if err != nil {
+		return "", err
+	}
 	signature := base64.StdEncoding.EncodeToString(h.Sum(nil))
 
 	return fmt.Sprintf("sha384-%s", signature), nil
 }
 
-func (m *Module) getSignatureCached(path string) (string, error) {
-	if sig, ok := m.readCachedSignature(path); ok {
+func (m *Module) getSignatureCached(filePath string) (string, error) {
+	if sig, ok := m.readCachedSignature(filePath); ok {
 		return sig, nil
 	}
-	sig, err := getSignature(path)
+	sig, err := getSignature(filePath)
 	if err != nil {
 		return "", err
 	}
-	m.writeCachedSignature(path, sig)
+	m.writeCachedSignature(filePath, sig)
 	return sig, nil
 }
 
-func (m *Module) readCachedSignature(path string) (string, bool) {
+func (m *Module) readCachedSignature(filePath string) (string, bool) {
 	m.sigCacheLock.RLock()
 	defer m.sigCacheLock.RUnlock()
 
-	val, ok := m.sigCache[path]
+	val, ok := m.sigCache[filePath]
 	return val, ok
 }
 
-func (m *Module) writeCachedSignature(path string, sig string) {
+func (m *Module) writeCachedSignature(filePath string, sig string) {
 	m.sigCacheLock.Lock()
 	defer m.sigCacheLock.Unlock()
 
-	m.sigCache[path] = sig
-	return
+	m.sigCache[filePath] = sig
 }
 
-// debug
+// debug.
 func dumpRequest(l *logrus.Entry, header string, r *nethttp.Request) {
 	data, err := httputil.DumpRequest(r, true)
 	if err != nil {

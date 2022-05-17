@@ -14,16 +14,16 @@ type Values struct {
 	TokenSalt          string
 
 	// database
-	DbType          string
-	DbAddress       string
-	DbPort          int
-	DbUser          string
-	DbPassword      string
-	DbDatabase      string
-	DbTLSMode       string
-	DbTLSCACert     string
-	DbLoadTestData  bool
-	DbEncryptionKey string
+	DBType          string
+	DBAddress       string
+	DBPort          int
+	DBUser          string
+	DBPassword      string
+	DBDatabase      string
+	DBTLSMode       string
+	DBTLSCACert     string
+	DBLoadTestData  bool
+	DBEncryptionKey string
 
 	// redis
 	RedisAddress  string
@@ -62,7 +62,7 @@ type Values struct {
 	MetricsStatsDPrefix  string
 }
 
-// Defaults contains the default values
+// Defaults contains the default values.
 var Defaults = Values{
 	ConfigPath: "",
 	LogLevel:   "info",
@@ -72,15 +72,15 @@ var Defaults = Values{
 	ApplicationWebsite: "https://github.com/feditools/login",
 
 	// database
-	DbType:         "postgres",
-	DbAddress:      "",
-	DbPort:         5432,
-	DbUser:         "",
-	DbPassword:     "",
-	DbDatabase:     "ft_login",
-	DbTLSMode:      "disable",
-	DbTLSCACert:    "",
-	DbLoadTestData: false,
+	DBType:         "postgres",
+	DBAddress:      "",
+	DBPort:         5432,
+	DBUser:         "",
+	DBPassword:     "",
+	DBDatabase:     "ft_login",
+	DBTLSMode:      "disable",
+	DBTLSCACert:    "",
+	DBLoadTestData: false,
 
 	// redis
 	RedisAddress:  "localhost:6379",
@@ -102,7 +102,7 @@ var Defaults = Values{
 
 	// webapp
 	WebappBootstrapCSSURI:         "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
-	WebappBootstrapCSSIntegrity:   "sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3",
+	WebappBootstrapCSSIntegrity:   "sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDBrCEXSU1oBoqyl2QvZ6jIW3",
 	WebappBootstrapJSURI:          "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
 	WebappBootstrapJSIntegrity:    "sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p",
 	WebappFontAwesomeCSSURI:       "https://cdn.fedi.tools/vendor/fontawesome-free-6.1.1/css/all.min.css",

@@ -2,11 +2,12 @@ package mastodon
 
 import (
 	"context"
-	"github.com/feditools/login/internal/models"
 	"net/url"
+
+	"github.com/feditools/login/internal/models"
 )
 
-// GetAccessToken gets an access token for a account from a returned code
+// GetAccessToken gets an access token for a account from a returned code.
 func (h *Helper) GetAccessToken(ctx context.Context, instance *models.FediInstance, code string) (accessToken string, err error) {
 	// decrypt secret
 	c, err := newClient(instance, "")
@@ -17,11 +18,14 @@ func (h *Helper) GetAccessToken(ctx context.Context, instance *models.FediInstan
 	// authenticate
 	instanceToken := h.tokz.GetToken(instance)
 	err = c.AuthenticateToken(ctx, code, "https://"+h.externalHostname+"/callback/oauth/"+instanceToken)
+	if err != nil {
+		return "", err
+	}
 	return c.Config.AccessToken, nil
 }
 
-// MakeLoginURL creates a login redirect url for mastodon
-func (h *Helper) MakeLoginURL(_ context.Context, instance *models.FediInstance) (*url.URL, error) {
+// MakeLoginURI creates a login redirect url for mastodon.
+func (h *Helper) MakeLoginURI(_ context.Context, instance *models.FediInstance) (*url.URL, error) {
 	instanceToken := h.tokz.GetToken(instance)
 	u := &url.URL{
 		Scheme: "https",
