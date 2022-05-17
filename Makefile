@@ -17,6 +17,12 @@ bun-new-migration:
 	touch internal/db/bun/migrations/${BUN_TIMESTAMP}_new.go
 	cat internal/db/bun/migrations/migration.go.tmpl > internal/db/bun/migrations/${BUN_TIMESTAMP}_new.go
 
+check:
+	golangci-lint run
+
+check-fix:
+	golangci-lint run --fix
+
 clean:
 	@echo cleaning up workspace
 	@rm -Rvf coverage.txt dist relay
@@ -71,4 +77,4 @@ tidy:
 vendor: tidy
 	go mod vendor
 
-.PHONY: build-snapshot bun-new-migration clean fmt lint stage-static npm-scss npm-upgrade test-docker-restart test-docker-start test-docker-stop test test-ext test-race test-race-ext test-verbose tidy vendor
+.PHONY: build-snapshot bun-new-migration check check-fix clean fmt lint stage-static npm-scss npm-upgrade test-docker-restart test-docker-start test-docker-stop test test-ext test-race test-race-ext test-verbose tidy vendor

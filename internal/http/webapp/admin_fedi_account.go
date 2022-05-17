@@ -1,16 +1,17 @@
 package webapp
 
 import (
+	nethttp "net/http"
+
 	libhttp "github.com/feditools/go-lib/http"
 	"github.com/feditools/go-lib/language"
 	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/http/template"
 	"github.com/feditools/login/internal/path"
-	nethttp "net/http"
 )
 
-// AdminFediAccountsGetHandler serves the admin client page
+// AdminFediAccountsGetHandler serves the admin client page.
 func (m *Module) AdminFediAccountsGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
 	l := logger.WithField("func", "AdminFediAccountsGetHandler")
 

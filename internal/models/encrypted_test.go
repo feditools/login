@@ -2,16 +2,19 @@ package models
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/feditools/login/internal/config"
 	"github.com/spf13/viper"
 	"github.com/tmthrgd/go-hex"
-	"testing"
 )
+
+//revive:disable:add-constant
 
 func TestDecrypt(t *testing.T) {
 	viper.Reset()
 
-	viper.Set(config.Keys.DbEncryptionKey, "0123456789012345")
+	viper.Set(config.Keys.DBEncryptionKey, "0123456789012345")
 
 	byts := hex.MustDecodeString("43dc49ab017fbde685011bc75e7aeecf46e2e6ca2d960681ebca6b7d9b5a74ad0348cfcadbdb71bebb")
 
@@ -28,7 +31,7 @@ func TestDecrypt(t *testing.T) {
 func TestDecrypt_NoData(t *testing.T) {
 	viper.Reset()
 
-	viper.Set(config.Keys.DbEncryptionKey, "0123456789012345")
+	viper.Set(config.Keys.DBEncryptionKey, "0123456789012345")
 
 	var byts []byte
 
@@ -47,7 +50,7 @@ func TestDecrypt_NoData(t *testing.T) {
 func TestEncrypt(t *testing.T) {
 	viper.Reset()
 
-	viper.Set(config.Keys.DbEncryptionKey, "0123456789012345")
+	viper.Set(config.Keys.DBEncryptionKey, "0123456789012345")
 
 	tables := []struct {
 		n string
@@ -97,7 +100,7 @@ func TestEncrypt(t *testing.T) {
 func BenchmarkDecrypt(b *testing.B) {
 	viper.Reset()
 
-	viper.Set(config.Keys.DbEncryptionKey, "0123456789012345")
+	viper.Set(config.Keys.DBEncryptionKey, "0123456789012345")
 
 	byts := hex.MustDecodeString("43dc49ab017fbde685011bc75e7aeecf46e2e6ca2d960681ebca6b7d9b5a74ad0348cfcadbdb71bebb")
 
@@ -112,7 +115,7 @@ func BenchmarkDecrypt(b *testing.B) {
 func BenchmarkEncrypt(b *testing.B) {
 	viper.Reset()
 
-	viper.Set(config.Keys.DbEncryptionKey, "0123456789012345")
+	viper.Set(config.Keys.DBEncryptionKey, "0123456789012345")
 
 	byts := []byte("test string")
 
@@ -123,3 +126,5 @@ func BenchmarkEncrypt(b *testing.B) {
 		}
 	})
 }
+
+//revive:enable:add-constant

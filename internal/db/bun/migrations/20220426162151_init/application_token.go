@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-// ApplicationToken contains application authentication tokens
+// ApplicationToken contains application authentication tokens.
 type ApplicationToken struct {
 	ID          int64        `validate:"-" bun:"id,pk,autoincrement"`
 	CreatedAt   time.Time    `validate:"-" bun:",nullzero,notnull,default:current_timestamp"`

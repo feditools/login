@@ -1,6 +1,8 @@
 package webapp
 
 import (
+	nethttp "net/http"
+
 	libhttp "github.com/feditools/go-lib/http"
 	"github.com/feditools/go-lib/language"
 	libtemplate "github.com/feditools/go-lib/template"
@@ -9,10 +11,9 @@ import (
 	"github.com/feditools/login/internal/models"
 	"github.com/feditools/login/internal/path"
 	"github.com/google/uuid"
-	nethttp "net/http"
 )
 
-// AdminSystemApplicationTokensGetHandler serves the admin client page
+// AdminSystemApplicationTokensGetHandler serves the admin client page.
 func (m *Module) AdminSystemApplicationTokensGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
 	l := logger.WithField("func", "AdminSystemApplicationTokensGetHandler")
 
@@ -96,12 +97,12 @@ func (m *Module) AdminSystemApplicationTokensGetHandler(w nethttp.ResponseWriter
 	}
 }
 
-// AdminSystemApplicationTokenAddGetHandler serves the admin add application token page
+// AdminSystemApplicationTokenAddGetHandler serves the admin add application token page.
 func (m *Module) AdminSystemApplicationTokenAddGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
 	m.displayApplicationTokenAdd(w, r, "", nil)
 }
 
-// AdminSystemApplicationTokenAddPostHandler handles the admin add client form
+// AdminSystemApplicationTokenAddPostHandler handles the admin add client form.
 func (m *Module) AdminSystemApplicationTokenAddPostHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
 	l := logger.WithField("func", "AdminSystemApplicationTokenAddPostHandler")
 

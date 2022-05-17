@@ -3,10 +3,11 @@ package fedi
 import (
 	"context"
 	"errors"
+
 	"github.com/feditools/login/internal/models"
 )
 
-// GenerateFediInstanceFromDomain created a FediInstance object by querying the apis of the federated instance
+// GenerateFediInstanceFromDomain created a FediInstance object by querying the apis of the federated instance.
 func (f *Fedi) GenerateFediInstanceFromDomain(ctx context.Context, domain string) (*models.FediInstance, error) {
 	l := logger.WithField("func", "GenerateFediInstanceFromDomain")
 

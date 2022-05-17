@@ -7,16 +7,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Init starts config collection
+// Init starts config collection.
 func Init(flags *pflag.FlagSet) error {
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 	viper.AutomaticEnv()
 
-	err := viper.BindPFlags(flags)
-	if err != nil {
-		return err
-	}
-	return nil
+	return viper.BindPFlags(flags)
 }
 
 // ReadConfigFile reads the config file from disk if config path is sent.
@@ -30,5 +26,6 @@ func ReadConfigFile() error {
 			return err
 		}
 	}
+
 	return nil
 }

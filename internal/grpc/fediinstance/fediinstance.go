@@ -2,6 +2,7 @@ package fediinstance
 
 import (
 	"context"
+
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/grpc"
 	pkg "github.com/feditools/login/pkg/grpc"
@@ -9,21 +10,21 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// Module is a grpc ping server module
+// Module is a grpc ping server module.
 type Module struct {
 	pkg.UnimplementedFediInstanceServer
 
 	db db.DB
 }
 
-// New creates a new grpc ping server modules
+// New creates a new grpc ping server modules.
 func New(d db.DB) (*Module, error) {
 	return &Module{
 		db: d,
 	}, nil
 }
 
-// GetFediInstance returns a federated social instance
+// GetFediInstance returns a federated social instance.
 func (m Module) GetFediInstance(ctx context.Context, request *pkg.GetFediInstanceRequest) (*pkg.GetFediInstanceReply, error) {
 	l := logger.WithField("func", "GetFediInstance")
 

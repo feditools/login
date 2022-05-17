@@ -2,10 +2,11 @@ package mastodon
 
 import (
 	"context"
+	"net/http"
+
 	fthttp "github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/models"
 	mastodon "github.com/mattn/go-mastodon"
-	"net/http"
 )
 
 // RegisterApp registers feditools with mastodon and returns the client id and client secret.

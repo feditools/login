@@ -2,15 +2,16 @@ package webapp
 
 import (
 	"errors"
+	nethttp "net/http"
+	"strconv"
+
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/path"
 	oerrors "github.com/go-oauth2/oauth2/v4/errors"
 	"github.com/gorilla/sessions"
-	nethttp "net/http"
-	"strconv"
 )
 
-// OauthAuthorizeGetHandler handles oauth authorization
+// OauthAuthorizeGetHandler handles oauth authorization.
 func (m *Module) OauthAuthorizeGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
 	l := logger.WithField("func", "OauthAuthorizeGetHandler")
 
@@ -35,7 +36,7 @@ func (m *Module) OauthAuthorizeGetHandler(w nethttp.ResponseWriter, r *nethttp.R
 	}
 }
 
-// OauthTokenHandler handles oauth tokens
+// OauthTokenHandler handles oauth tokens.
 func (m *Module) OauthTokenHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
 	l := logger.WithField("func", "OauthTokenHandler")
 	dumpRequest(l, "token", r)
@@ -55,7 +56,11 @@ func oauthUserAuthorizeHandler(w nethttp.ResponseWriter, r *nethttp.Request) (st
 	uid, ok := us.Values[SessionKeyAccountID].(int64)
 	if !ok {
 		if r.Form == nil {
-			r.ParseForm()
+			err := r.ParseForm()
+			if err != nil {
+				l.Errorf("parsing form: %s", err.Error())
+				return "", err
+			}
 		}
 
 		// Save current page

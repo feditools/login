@@ -19,7 +19,7 @@ func TestKeyFediNodeInfo(t *testing.T) {
 }
 
 func TestKeySession(t *testing.T) {
-	want := "login:session:"
+	want := "login:session:" //nolint
 	v := KeySession()
 	if v != want {
 		t.Errorf("enexpected value for KeyDomains, got: '%s', want: '%s'.", v, want)

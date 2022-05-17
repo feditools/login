@@ -2,15 +2,16 @@ package grpc
 
 import (
 	"context"
+	"net"
+
 	"github.com/feditools/go-lib/metrics"
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/db"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
-	"net"
 )
 
-// Server is a http 2 web server
+// Server is a http 2 web server.
 type Server struct {
 	db      db.DB
 	metrics metrics.Collector
@@ -19,7 +20,7 @@ type Server struct {
 	srv *grpc.Server
 }
 
-// NewServer creates a new grpc web server
+// NewServer creates a new grpc web server.
 func NewServer(_ context.Context, d db.DB, m metrics.Collector) (*Server, error) {
 	server := &Server{
 		db:      d,
@@ -40,20 +41,20 @@ func NewServer(_ context.Context, d db.DB, m metrics.Collector) (*Server, error)
 	return server, nil
 }
 
-// Start starts the web server
+// Start starts the web server.
 func (s *Server) Start() error {
 	l := logger.WithField("func", "Start")
 	l.Infof("listening on %s", s.tcp.Addr())
 	return s.srv.Serve(s.tcp)
 }
 
-// Stop shuts down the web server
+// Stop shuts down the web server.
 func (s *Server) Stop() error {
 	s.srv.Stop()
 	return nil
 }
 
-// Server returns the server, used by modules to register themselves
+// Server returns the server, used by modules to register themselves.
 func (s *Server) Server() *grpc.Server {
 	return s.srv
 }

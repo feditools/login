@@ -2,11 +2,12 @@ package grpc
 
 import (
 	"context"
+
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
-// GetFediInstance retrieves a federated account from the login server
+// GetFediInstance retrieves a federated account from the login server.
 func (c *Client) GetFediInstance(ctx context.Context, id int64) (*GetFediInstanceReply, error) {
 	ctx, cancel := context.WithTimeout(ctx, defaultTimeout)
 
@@ -19,7 +20,6 @@ func (c *Client) GetFediInstance(ctx context.Context, id int64) (*GetFediInstanc
 		cancel()
 		respStatus := status.Convert(err)
 		if respStatus.Code() == codes.NotFound {
-
 			return nil, nil
 		}
 
@@ -27,5 +27,6 @@ func (c *Client) GetFediInstance(ctx context.Context, id int64) (*GetFediInstanc
 	}
 
 	cancel()
+
 	return resp, nil
 }

@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-// OauthClient contains the oauth clients
+// OauthClient contains the oauth clients.
 type OauthClient struct {
 	ID          int64        `validate:"-" bun:"id,pk,autoincrement"`
 	CreatedAt   time.Time    `validate:"-" bun:",nullzero,notnull,default:current_timestamp"`

@@ -13,7 +13,7 @@ import (
 	"golang.org/x/sync/singleflight"
 )
 
-// Helper is a mastodon helper
+// Helper is a mastodon helper.
 type Helper struct {
 	db   db.DB
 	fedi *fedi.Fedi
@@ -27,7 +27,7 @@ type Helper struct {
 	registerAppGroup singleflight.Group
 }
 
-// New returns a new mastodon helper
+// New returns a new mastodon helper.
 func New(d db.DB, k kv.KV, t *token.Tokenizer) (*Helper, error) {
 	return &Helper{
 		db:   d,
@@ -64,10 +64,10 @@ func newClient(instance *models.FediInstance, accessToken string) (*mastodon.Cli
 	return client, nil
 }
 
-// GetSoftware returns the software type of this module
+// GetSoftware returns the software type of this module.
 func (*Helper) GetSoftware() fedi.Software { return fedi.SoftwareMastodon }
 
-// SetFedi adds the fedi module to a helper
+// SetFedi adds the fedi module to a helper.
 func (h *Helper) SetFedi(f *fedi.Fedi) {
 	h.fedi = f
 }

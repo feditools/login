@@ -1,15 +1,16 @@
 package webapp
 
 import (
+	nethttp "net/http"
+
 	"github.com/feditools/go-lib/language"
 	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/http/template"
 	"github.com/feditools/login/internal/path"
-	nethttp "net/http"
 )
 
-// AdminOauthGetHandler serves the admin oauth page
+// AdminOauthGetHandler serves the admin oauth page.
 func (m *Module) AdminOauthGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
 	l := logger.WithField("func", "AdminOauthGetHandler")
 

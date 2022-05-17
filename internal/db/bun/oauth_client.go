@@ -3,13 +3,15 @@ package bun
 import (
 	"context"
 	"database/sql"
+	"errors"
+
 	libdatabase "github.com/feditools/go-lib/database"
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/models"
 	"github.com/uptrace/bun"
 )
 
-// CountOauthClients returns the number of oauth clients
+// CountOauthClients returns the number of oauth clients.
 func (c *Client) CountOauthClients(ctx context.Context) (int64, db.Error) {
 	metric := c.metrics.NewDBQuery("CreateOauthClient")
 
@@ -23,12 +25,11 @@ func (c *Client) CountOauthClients(ctx context.Context) (int64, db.Error) {
 	return int64(count), nil
 }
 
-// CreateOauthClient stores the oauth client
+// CreateOauthClient stores the oauth client.
 func (c *Client) CreateOauthClient(ctx context.Context, client *models.OauthClient) db.Error {
 	metric := c.metrics.NewDBQuery("CreateOauthClient")
 
-	err := c.Create(ctx, client)
-	if err != nil {
+	if err := c.Create(ctx, client); err != nil {
 		go metric.Done(true)
 		return c.bun.errProc(err)
 	}
@@ -37,13 +38,13 @@ func (c *Client) CreateOauthClient(ctx context.Context, client *models.OauthClie
 	return nil
 }
 
-// ReadOauthClient returns one federated social account
+// ReadOauthClient returns one federated social account.
 func (c *Client) ReadOauthClient(ctx context.Context, id int64) (*models.OauthClient, db.Error) {
 	metric := c.metrics.NewDBQuery("ReadOauthClient")
 
 	oauthClient := new(models.OauthClient)
 	err := c.newOauthClientQ(oauthClient).Where("id = ?", id).Scan(ctx)
-	if err == sql.ErrNoRows {
+	if errors.Is(err, sql.ErrNoRows) {
 		go metric.Done(false)
 		return nil, nil
 	}
@@ -56,7 +57,7 @@ func (c *Client) ReadOauthClient(ctx context.Context, id int64) (*models.OauthCl
 	return oauthClient, nil
 }
 
-// ReadOauthClientsPage returns a page of oauth clients
+// ReadOauthClientsPage returns a page of oauth clients.
 func (c *Client) ReadOauthClientsPage(ctx context.Context, index, count int) ([]*models.OauthClient, db.Error) {
 	metric := c.metrics.NewDBQuery("ReadOauthClientsPage")
 
@@ -74,12 +75,11 @@ func (c *Client) ReadOauthClientsPage(ctx context.Context, index, count int) ([]
 	return clients, nil
 }
 
-// UpdateOauthClient updates the stored oauth client
+// UpdateOauthClient updates the stored oauth client.
 func (c *Client) UpdateOauthClient(ctx context.Context, client *models.OauthClient) db.Error {
 	metric := c.metrics.NewDBQuery("UpdateOauthClient")
 
-	err := c.Update(ctx, client)
-	if err != nil {
+	if err := c.Update(ctx, client); err != nil {
 		go metric.Done(true)
 		return c.bun.errProc(err)
 	}

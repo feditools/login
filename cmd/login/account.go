@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// accountCommands returns the 'account' subcommand
+// accountCommands returns the 'account' subcommand.
 func accountCommands() *cobra.Command {
 	accountCmd := &cobra.Command{
 		Use:   "account",

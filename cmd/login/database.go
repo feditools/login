@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// databaseCommands returns the 'database' subcommand
+// databaseCommands returns the 'database' subcommand.
 func databaseCommands() *cobra.Command {
 	databaseCmd := &cobra.Command{
 		Use:   "database",

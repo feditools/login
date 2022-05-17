@@ -1,13 +1,20 @@
 package bun
 
 import (
+	"errors"
+
 	"github.com/feditools/login/internal/db"
 	"github.com/jackc/pgconn"
 	"modernc.org/sqlite"
 	sqlite3 "modernc.org/sqlite/lib"
 )
 
-// processPostgresError processes an error, replacing any postgres specific errors with our own error type
+var (
+	// ErrNoDatabaseSet is returned when a database isn't specified in config.
+	ErrNoDatabaseSet = errors.New("no database set")
+)
+
+// processPostgresError processes an error, replacing any postgres specific errors with our own error type.
 func processPostgresError(err error) db.Error {
 	l := logger.WithField("func", "processPostgresError")
 
@@ -29,7 +36,7 @@ func processPostgresError(err error) db.Error {
 	}
 }
 
-// processSQLiteError processes an error, replacing any sqlite specific errors with our own error type
+// processSQLiteError processes an error, replacing any sqlite specific errors with our own error type.
 func processSQLiteError(err error) db.Error {
 	l := logger.WithField("func", "processSQLiteError")
 

@@ -2,8 +2,9 @@ package models
 
 import (
 	"context"
-	"github.com/uptrace/bun"
 	"time"
+
+	"github.com/uptrace/bun"
 )
 
 // FediInstance represents a federated social instance.
@@ -21,7 +22,7 @@ type FediInstance struct {
 
 var _ bun.BeforeAppendModelHook = (*FediInstance)(nil)
 
-// BeforeAppendModel runs before a bun append operation
+// BeforeAppendModel runs before a bun append operation.
 func (f *FediInstance) BeforeAppendModel(_ context.Context, query bun.Query) error {
 	switch query.(type) {
 	case *bun.InsertQuery:
@@ -44,13 +45,13 @@ func (f *FediInstance) BeforeAppendModel(_ context.Context, query bun.Query) err
 	return nil
 }
 
-// GetClientSecret returns unencrypted client secret
+// GetClientSecret returns unencrypted client secret.
 func (f *FediInstance) GetClientSecret() (string, error) {
 	data, err := decrypt(f.ClientSecret)
 	return string(data), err
 }
 
-// SetClientSecret sets encrypted client secret
+// SetClientSecret sets encrypted client secret.
 func (f *FediInstance) SetClientSecret(s string) error {
 	data, err := encrypt([]byte(s))
 	if err != nil {

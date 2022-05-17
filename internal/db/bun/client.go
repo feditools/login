@@ -8,6 +8,10 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
+	"os"
+	"runtime"
+	"strings"
+
 	"github.com/feditools/go-lib/metrics"
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/db"
@@ -20,9 +24,6 @@ import (
 	"github.com/uptrace/bun/dialect/sqlitedialect"
 	"github.com/uptrace/bun/extra/bundebug"
 	"modernc.org/sqlite"
-	"os"
-	"runtime"
-	"strings"
 )
 
 const (
@@ -35,24 +36,24 @@ const (
 	dbTLSModeUnset   = ""
 )
 
-// Bun represents a bun db connection and it's error handler
+// Bun represents a bun db connection and it's error handler.
 type Bun struct {
 	*bun.DB
 
 	errProc func(error) db.Error
 }
 
-// Client is a DB interface compatible client for Bun
+// Client is a DB interface compatible client for Bun.
 type Client struct {
 	bun     *Bun
 	metrics metrics.Collector
 }
 
-// New creates a new bun database client
+// New creates a new bun database client.
 func New(ctx context.Context, m metrics.Collector) (db.DB, error) {
 	var newBun *Bun
 	var err error
-	dbType := strings.ToLower(viper.GetString(config.Keys.DbType))
+	dbType := strings.ToLower(viper.GetString(config.Keys.DBType))
 
 	switch dbType {
 	case dbTypePostgres:
@@ -83,9 +84,9 @@ func sqliteConn(ctx context.Context) (*Bun, error) {
 	l := logger.WithField("func", "sqliteConn")
 
 	// validate bun address has actually been set
-	dbAddress := viper.GetString(config.Keys.DbAddress)
+	dbAddress := viper.GetString(config.Keys.DBAddress)
 	if dbAddress == "" {
-		return nil, fmt.Errorf("'%s' was not set when attempting to start sqlite", config.Keys.DbAddress)
+		return nil, fmt.Errorf("'%s' was not set when attempting to start sqlite", config.Keys.DBAddress)
 	}
 
 	// Drop anything fancy from DB address
@@ -114,7 +115,10 @@ func sqliteConn(ctx context.Context) (*Bun, error) {
 		sqldb.SetConnMaxLifetime(0)
 	}
 
-	conn := getErrConn(bun.NewDB(sqldb, sqlitedialect.New()))
+	conn, err := getErrConn(bun.NewDB(sqldb, sqlitedialect.New()))
+	if err != nil {
+		return nil, err
+	}
 
 	// ping to check the bun is there and listening
 	if err := conn.PingContext(ctx); err != nil {
@@ -140,7 +144,10 @@ func pgConn(ctx context.Context) (*Bun, error) {
 
 	setConnectionValues(sqldb)
 
-	conn := getErrConn(bun.NewDB(sqldb, pgdialect.New()))
+	conn, err := getErrConn(bun.NewDB(sqldb, pgdialect.New()))
+	if err != nil {
+		return nil, err
+	}
 
 	// ping to check the bun is there and listening
 	if err := conn.PingContext(ctx); err != nil {
@@ -154,27 +161,27 @@ func pgConn(ctx context.Context) (*Bun, error) {
 func deriveBunDBPGOptions() (*pgx.ConnConfig, error) {
 	keys := config.Keys
 
-	if strings.ToUpper(viper.GetString(keys.DbType)) != db.TypePostgres {
-		return nil, fmt.Errorf("expected bun type of %s but got %s", db.TypePostgres, viper.GetString(keys.DbType))
+	if strings.ToUpper(viper.GetString(keys.DBType)) != db.TypePostgres {
+		return nil, fmt.Errorf("expected bun type of %s but got %s", db.TypePostgres, viper.GetString(keys.DBType))
 	}
 
 	// these are all optional, the bun adapter figures out defaults
-	port := viper.GetInt(keys.DbPort)
-	address := viper.GetString(keys.DbAddress)
-	username := viper.GetString(keys.DbUser)
-	password := viper.GetString(keys.DbPassword)
+	port := viper.GetInt(keys.DBPort)
+	address := viper.GetString(keys.DBAddress)
+	username := viper.GetString(keys.DBUser)
+	password := viper.GetString(keys.DBPassword)
 
 	// validate database
-	database := viper.GetString(keys.DbDatabase)
+	database := viper.GetString(keys.DBDatabase)
 	if database == "" {
-		return nil, errors.New("no database set")
+		return nil, ErrNoDatabaseSet
 	}
 
 	var tlsConfig *tls.Config
-	tlsMode := viper.GetString(keys.DbTLSMode)
+	tlsMode := viper.GetString(keys.DBTLSMode)
 	switch tlsMode {
 	case dbTLSModeDisable, dbTLSModeUnset:
-		break // nothing to do
+		// nothing to do
 	case dbTLSModeEnable:
 		/* #nosec G402 */
 		tlsConfig = &tls.Config{
@@ -183,12 +190,12 @@ func deriveBunDBPGOptions() (*pgx.ConnConfig, error) {
 	case dbTLSModeRequire:
 		tlsConfig = &tls.Config{
 			InsecureSkipVerify: false,
-			ServerName:         viper.GetString(keys.DbAddress),
+			ServerName:         viper.GetString(keys.DBAddress),
 			MinVersion:         tls.VersionTLS12,
 		}
 	}
 
-	caCertPath := viper.GetString(keys.DbTLSCACert)
+	caCertPath := viper.GetString(keys.DBTLSCACert)
 	if tlsConfig != nil && caCertPath != "" {
 		// load the system cert pool first -- we'll append the given CA cert to this
 		certPool, err := x509.SystemCertPool()
@@ -254,9 +261,10 @@ func setConnectionValues(sqldb *sql.DB) {
 	sqldb.SetMaxIdleConns(maxOpenConns)
 }
 
-func getErrConn(dbConn *bun.DB) *Bun {
+func getErrConn(dbConn *bun.DB) (*Bun, error) {
 	var errProc func(error) db.Error
 	switch dbConn.Dialect().Name() {
+	case dialect.Invalid:
 	case dialect.PG:
 		errProc = processPostgresError
 	case dialect.SQLite:
@@ -267,15 +275,15 @@ func getErrConn(dbConn *bun.DB) *Bun {
 	return &Bun{
 		errProc: errProc,
 		DB:      dbConn,
-	}
+	}, nil
 }
 
-// ProcessError replaces any known values with our own db.Error types
+// ProcessError replaces any known values with our own db.Error types.
 func (conn *Bun) ProcessError(err error) db.Error {
 	switch {
 	case err == nil:
 		return nil
-	case err == sql.ErrNoRows:
+	case errors.Is(err, sql.ErrNoRows):
 		return db.ErrNoEntries
 	default:
 		return conn.errProc(err)

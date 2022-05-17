@@ -3,6 +3,10 @@ package server
 import (
 	"context"
 	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
+
 	"github.com/feditools/go-lib/language"
 	"github.com/feditools/go-lib/metrics/statsd"
 	"github.com/feditools/login/cmd/login/action"
@@ -23,12 +27,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"github.com/tyrm/go-util"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
-// Start starts the server
+// Start starts the server.
 var Start action.Action = func(ctx context.Context) error {
 	l := logger.WithField("func", "Start")
 
@@ -180,7 +181,7 @@ var Start action.Action = func(ctx context.Context) error {
 	errChan := make(chan error)
 
 	// Wait for SIGINT and SIGTERM (HIT CTRL-C)
-	stopSigChan := make(chan os.Signal)
+	stopSigChan := make(chan os.Signal, 1)
 	signal.Notify(stopSigChan, syscall.SIGINT, syscall.SIGTERM)
 
 	// start webserver

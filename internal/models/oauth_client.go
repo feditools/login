@@ -2,11 +2,12 @@ package models
 
 import (
 	"context"
-	"github.com/uptrace/bun"
 	"time"
+
+	"github.com/uptrace/bun"
 )
 
-// OauthClient contains the oauth clients
+// OauthClient contains the oauth clients.
 type OauthClient struct {
 	ID          int64        `validate:"-" bun:"id,pk,autoincrement"`
 	CreatedAt   time.Time    `validate:"-" bun:",nullzero,notnull,default:current_timestamp"`
@@ -20,7 +21,7 @@ type OauthClient struct {
 
 var _ bun.BeforeAppendModelHook = (*OauthClient)(nil)
 
-// BeforeAppendModel runs before a bun append operation
+// BeforeAppendModel runs before a bun append operation.
 func (f *OauthClient) BeforeAppendModel(_ context.Context, query bun.Query) error {
 	switch query.(type) {
 	case *bun.InsertQuery:
@@ -43,13 +44,13 @@ func (f *OauthClient) BeforeAppendModel(_ context.Context, query bun.Query) erro
 	return nil
 }
 
-// GetSecret returns unencrypted secret
+// GetSecret returns unencrypted secret.
 func (f *OauthClient) GetSecret() (string, error) {
 	data, err := decrypt(f.Secret)
 	return string(data), err
 }
 
-// SetSecret sets encrypted secret
+// SetSecret sets encrypted secret.
 func (f *OauthClient) SetSecret(s string) error {
 	data, err := encrypt([]byte(s))
 	if err != nil {

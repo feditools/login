@@ -2,11 +2,12 @@ package models
 
 import (
 	"context"
-	"github.com/uptrace/bun"
 	"time"
+
+	"github.com/uptrace/bun"
 )
 
-// OauthScope contains the oauth scopes
+// OauthScope contains the oauth scopes.
 type OauthScope struct {
 	ID          int64     `validate:"-" bun:"id,pk,autoincrement"`
 	CreatedAt   time.Time `validate:"-" bun:",nullzero,notnull,default:current_timestamp"`
@@ -18,7 +19,7 @@ type OauthScope struct {
 
 var _ bun.BeforeAppendModelHook = (*OauthScope)(nil)
 
-// BeforeAppendModel runs before a bun append operation
+// BeforeAppendModel runs before a bun append operation.
 func (f *OauthScope) BeforeAppendModel(_ context.Context, query bun.Query) error {
 	switch query.(type) {
 	case *bun.InsertQuery:

@@ -4,12 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/feditools/login/internal/fedi"
 	"github.com/feditools/login/internal/models"
-	"time"
 )
 
-// GetCurrentAccount retrieves the current federated account
+// GetCurrentAccount retrieves the current federated account.
 func (h *Helper) GetCurrentAccount(ctx context.Context, instance *models.FediInstance, accessToken string) (*models.FediAccount, error) {
 	l := logger.WithField("func", "GetCurrentAccount")
 

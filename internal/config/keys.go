@@ -12,16 +12,16 @@ type KeyNames struct {
 	TokenSalt          string
 
 	// database
-	DbType          string
-	DbAddress       string
-	DbPort          string
-	DbUser          string
-	DbPassword      string
-	DbDatabase      string
-	DbTLSMode       string
-	DbTLSCACert     string
-	DbLoadTestData  string
-	DbEncryptionKey string
+	DBType          string
+	DBAddress       string
+	DBPort          string
+	DBUser          string
+	DBPassword      string
+	DBDatabase      string
+	DBTLSMode       string
+	DBTLSCACert     string
+	DBLoadTestData  string
+	DBEncryptionKey string
 
 	// redis
 	RedisAddress  string
@@ -72,16 +72,16 @@ var Keys = KeyNames{
 	TokenSalt:          "token-salt",
 
 	// database
-	DbType:          "db-type",
-	DbAddress:       "db-address",
-	DbPort:          "db-port",
-	DbUser:          "db-user",
-	DbPassword:      "db-password",
-	DbDatabase:      "db-database",
-	DbTLSMode:       "db-tls-mode",
-	DbTLSCACert:     "db-tls-ca-cert",
-	DbLoadTestData:  "test-data", // CLI only
-	DbEncryptionKey: "db-crypto-key",
+	DBType:          "db-type",
+	DBAddress:       "db-address",
+	DBPort:          "db-port",
+	DBUser:          "db-user",
+	DBPassword:      "db-password",
+	DBDatabase:      "db-database",
+	DBTLSMode:       "db-tls-mode",
+	DBTLSCACert:     "db-tls-ca-cert",
+	DBLoadTestData:  "test-data", // CLI only
+	DBEncryptionKey: "db-crypto-key",
 
 	// redis
 	RedisAddress:  "redis-address",

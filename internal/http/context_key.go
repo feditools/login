@@ -1,15 +1,15 @@
 package http
 
-// ContextKey is a key used in http request contexts
+// ContextKey is a key used in http request contexts.
 type ContextKey int
 
 const (
-	// ContextKeySession is the persistent session
+	// ContextKeySession is the persistent session.
 	ContextKeySession ContextKey = iota
-	// ContextKeyLocalizer is the language localizer
+	// ContextKeyLocalizer is the language localizer.
 	ContextKeyLocalizer
-	// ContextKeyLanguage is the language
+	// ContextKeyLanguage is the language.
 	ContextKeyLanguage
-	// ContextKeyAccount is the logged in user's account
+	// ContextKeyAccount is the logged in user's account.
 	ContextKeyAccount
 )

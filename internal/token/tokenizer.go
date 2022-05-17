@@ -7,12 +7,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Tokenizer generates public tokens for database IDs to obfuscate the database IDs
+// Tokenizer generates public tokens for database IDs to obfuscate the database IDs.
 type Tokenizer struct {
 	h *hashids.HashID
 }
 
-// New returns a new tokenizer
+// New returns a new tokenizer.
 func New() (*Tokenizer, error) {
 	// set config
 	hd := hashids.NewData()
@@ -34,7 +34,7 @@ func New() (*Tokenizer, error) {
 	}, nil
 }
 
-// DecodeToken returns the kind and id number of a provided token
+// DecodeToken returns the kind and id number of a provided token.
 func (t *Tokenizer) DecodeToken(token string) (Kind, int64, error) {
 	d, err := t.h.DecodeInt64WithError(token)
 	if err != nil {
@@ -46,12 +46,12 @@ func (t *Tokenizer) DecodeToken(token string) (Kind, int64, error) {
 	return Kind(d[0]), d[1], nil
 }
 
-// EncodeToken turns a model kind and id into a token
+// EncodeToken turns a model kind and id into a token.
 func (t *Tokenizer) EncodeToken(kind Kind, id int64) (string, error) {
 	return t.h.EncodeInt64([]int64{int64(kind), id})
 }
 
-// GetToken returns a token for a known model type
+// GetToken returns a token for a known model type.
 func (t *Tokenizer) GetToken(o interface{}) string {
 	l := logger.WithField("func", "GetToken")
 
@@ -59,70 +59,70 @@ func (t *Tokenizer) GetToken(o interface{}) string {
 	case models.ApplicationToken:
 		tok, err := t.EncodeToken(KindApplicationToken, o.ID)
 		if err != nil {
-			l.Errorf("couldn't generate token for %s: %s", KindApplicationToken, err.Error())
+			l.Errorf(errRespGenerateToken, KindApplicationToken, err.Error())
 		}
 
 		return tok
 	case *models.ApplicationToken:
 		tok, err := t.EncodeToken(KindApplicationToken, o.ID)
 		if err != nil {
-			l.Errorf("couldn't generate token for %s: %s", KindApplicationToken, err.Error())
+			l.Errorf(errRespGenerateToken, KindApplicationToken, err.Error())
 		}
 
 		return tok
 	case models.FediAccount:
 		tok, err := t.EncodeToken(KindFediAccount, o.ID)
 		if err != nil {
-			l.Errorf("couldn't generate token for %s: %s", KindFediAccount, err.Error())
+			l.Errorf(errRespGenerateToken, KindFediAccount, err.Error())
 		}
 
 		return tok
 	case *models.FediAccount:
 		tok, err := t.EncodeToken(KindFediAccount, o.ID)
 		if err != nil {
-			l.Errorf("couldn't generate token for %s: %s", KindFediAccount, err.Error())
+			l.Errorf(errRespGenerateToken, KindFediAccount, err.Error())
 		}
 
 		return tok
 	case models.FediInstance:
 		tok, err := t.EncodeToken(KindFediInstance, o.ID)
 		if err != nil {
-			l.Errorf("couldn't generate token for %s: %s", KindFediInstance, err.Error())
+			l.Errorf(errRespGenerateToken, KindFediInstance, err.Error())
 		}
 
 		return tok
 	case *models.FediInstance:
 		tok, err := t.EncodeToken(KindFediInstance, o.ID)
 		if err != nil {
-			l.Errorf("couldn't generate token for %s: %s", KindFediInstance, err.Error())
+			l.Errorf(errRespGenerateToken, KindFediInstance, err.Error())
 		}
 
 		return tok
 	case models.OauthClient:
 		tok, err := t.EncodeToken(KindOauthClient, o.ID)
 		if err != nil {
-			l.Errorf("couldn't generate token for %s: %s", KindOauthClient, err.Error())
+			l.Errorf(errRespGenerateToken, KindOauthClient, err.Error())
 		}
 
 		return tok
 	case *models.OauthClient:
 		tok, err := t.EncodeToken(KindOauthClient, o.ID)
 		if err != nil {
-			l.Errorf("couldn't generate token for %s: %s", KindOauthClient, err.Error())
+			l.Errorf(errRespGenerateToken, KindOauthClient, err.Error())
 		}
 
 		return tok
 	case models.OauthScope:
 		tok, err := t.EncodeToken(KindOauthScope, o.ID)
 		if err != nil {
-			l.Errorf("couldn't generate token for %s: %s", KindOauthScope, err.Error())
+			l.Errorf(errRespGenerateToken, KindOauthScope, err.Error())
 		}
 
 		return tok
 	case *models.OauthScope:
 		tok, err := t.EncodeToken(KindOauthScope, o.ID)
 		if err != nil {
-			l.Errorf("couldn't generate token for %s: %s", KindOauthScope, err.Error())
+			l.Errorf(errRespGenerateToken, KindOauthScope, err.Error())
 		}
 
 		return tok

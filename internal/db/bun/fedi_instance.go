@@ -3,13 +3,15 @@ package bun
 import (
 	"context"
 	"database/sql"
+	"errors"
+
 	libdatabase "github.com/feditools/go-lib/database"
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/models"
 	"github.com/uptrace/bun"
 )
 
-// CountFediInstances returns the number of federated instance
+// CountFediInstances returns the number of federated instance.
 func (c *Client) CountFediInstances(ctx context.Context) (int64, db.Error) {
 	metric := c.metrics.NewDBQuery("CountFediInstances")
 
@@ -23,12 +25,11 @@ func (c *Client) CountFediInstances(ctx context.Context) (int64, db.Error) {
 	return int64(count), nil
 }
 
-// CreateFediInstance stores the federated instance
+// CreateFediInstance stores the federated instance.
 func (c *Client) CreateFediInstance(ctx context.Context, instance *models.FediInstance) db.Error {
 	metric := c.metrics.NewDBQuery("CreateFediInstance")
 
-	err := c.Create(ctx, instance)
-	if err != nil {
+	if err := c.Create(ctx, instance); err != nil {
 		go metric.Done(true)
 		return c.bun.errProc(err)
 	}
@@ -37,14 +38,14 @@ func (c *Client) CreateFediInstance(ctx context.Context, instance *models.FediIn
 	return nil
 }
 
-// ReadFediInstance returns one federated social instance
+// ReadFediInstance returns one federated social instance.
 func (c *Client) ReadFediInstance(ctx context.Context, id int64) (*models.FediInstance, db.Error) {
 	metric := c.metrics.NewDBQuery("ReadFediInstance")
 
 	fediInstance := &models.FediInstance{}
 
 	err := c.newFediInstanceQ(fediInstance).Where("id = ?", id).Scan(ctx)
-	if err == sql.ErrNoRows {
+	if errors.Is(err, sql.ErrNoRows) {
 		return nil, nil
 	}
 	if err != nil {
@@ -56,14 +57,14 @@ func (c *Client) ReadFediInstance(ctx context.Context, id int64) (*models.FediIn
 	return fediInstance, nil
 }
 
-// ReadFediInstanceByDomain returns one federated social instance
+// ReadFediInstanceByDomain returns one federated social instance.
 func (c *Client) ReadFediInstanceByDomain(ctx context.Context, domain string) (*models.FediInstance, db.Error) {
 	metric := c.metrics.NewDBQuery("ReadFediInstanceByDomain")
 
 	fediInstance := &models.FediInstance{}
 
 	err := c.newFediInstanceQ(fediInstance).Where("lower(domain) = lower(?)", domain).Scan(ctx)
-	if err == sql.ErrNoRows {
+	if errors.Is(err, sql.ErrNoRows) {
 		return nil, nil
 	}
 	if err != nil {
@@ -75,7 +76,7 @@ func (c *Client) ReadFediInstanceByDomain(ctx context.Context, domain string) (*
 	return fediInstance, nil
 }
 
-// ReadFediInstancesPage returns a page of federated social instances
+// ReadFediInstancesPage returns a page of federated social instances.
 func (c *Client) ReadFediInstancesPage(ctx context.Context, index, count int) ([]*models.FediInstance, db.Error) {
 	metric := c.metrics.NewDBQuery("ReadFediInstancesPage")
 
@@ -94,12 +95,11 @@ func (c *Client) ReadFediInstancesPage(ctx context.Context, index, count int) ([
 	return instances, nil
 }
 
-// UpdateFediInstance updates the stored federated instance
+// UpdateFediInstance updates the stored federated instance.
 func (c *Client) UpdateFediInstance(ctx context.Context, instance *models.FediInstance) db.Error {
 	metric := c.metrics.NewDBQuery("UpdateFediInstance")
 
-	err := c.Update(ctx, instance)
-	if err != nil {
+	if err := c.Update(ctx, instance); err != nil {
 		go metric.Done(true)
 		return c.bun.errProc(err)
 	}

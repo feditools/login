@@ -2,6 +2,8 @@ package webapp
 
 import (
 	"fmt"
+	nethttp "net/http"
+
 	"github.com/feditools/login/internal/fedi"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/models"
@@ -9,10 +11,9 @@ import (
 	"github.com/feditools/login/internal/token"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
-	nethttp "net/http"
 )
 
-// CallbackOauthGetHandler handles an oauth callback
+// CallbackOauthGetHandler handles an oauth callback.
 func (m *Module) CallbackOauthGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
 	l := logger.WithField("func", "CallbackMastodonGetHandler")
 
@@ -112,5 +113,4 @@ func (m *Module) CallbackOauthGetHandler(w nethttp.ResponseWriter, r *nethttp.Re
 		m.returnErrorPage(w, r, nethttp.StatusNotImplemented, fmt.Sprintf("no helper for '%s'", instance.Software))
 		return
 	}
-
 }

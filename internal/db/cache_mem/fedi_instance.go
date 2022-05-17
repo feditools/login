@@ -5,98 +5,111 @@ import (
 	"context"
 	"encoding/binary"
 	"encoding/gob"
+	"errors"
+	"strconv"
+	"strings"
+
 	"github.com/allegro/bigcache/v3"
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/models"
-	"strconv"
-	"strings"
 )
 
-// CountFediInstances returns the number of federated instances
+// CountFediInstances returns the number of federated instances.
 func (c *CacheMem) CountFediInstances(ctx context.Context) (int64, db.Error) {
 	metric := c.metrics.NewDBCacheQuery("CountFediInstance")
 
 	count, hit := c.getCount(ctx, keyCountFediInstances())
 	if hit {
 		go metric.Done(true, false)
+
 		return count, nil
 	}
 	count, err := c.db.CountFediInstances(ctx)
 	if err != nil {
 		go metric.Done(false, true)
+
 		return 0, err
 	}
 	if count != 0 {
 		c.setCount(ctx, keyCountFediInstances(), count)
 	}
 	go metric.Done(false, false)
+
 	return count, nil
 }
 
-// CreateFediInstance stores the federated instance and caches it
+// CreateFediInstance stores the federated instance and caches it.
 func (c *CacheMem) CreateFediInstance(ctx context.Context, instance *models.FediInstance) db.Error {
 	err := c.db.CreateFediInstance(ctx, instance)
 	if err != nil {
 		return err
 	}
 	c.setFediInstance(ctx, instance)
+
 	return nil
 }
 
-// ReadFediInstance returns one federated social instance
+// ReadFediInstance returns one federated social instance.
 func (c *CacheMem) ReadFediInstance(ctx context.Context, id int64) (*models.FediInstance, db.Error) {
 	metric := c.metrics.NewDBCacheQuery("ReadFediInstance")
 
 	instance, hit := c.getFediInstance(ctx, id)
 	if hit {
 		go metric.Done(true, false)
+
 		return instance, nil
 	}
 	instance, err := c.db.ReadFediInstance(ctx, id)
 	if err != nil {
 		go metric.Done(false, true)
+
 		return nil, err
 	}
 	if instance != nil {
 		c.setFediInstance(ctx, instance)
 	}
 	go metric.Done(false, false)
+
 	return instance, nil
 }
 
-// ReadFediInstanceByDomain returns one federated social instance
+// ReadFediInstanceByDomain returns one federated social instance.
 func (c *CacheMem) ReadFediInstanceByDomain(ctx context.Context, domain string) (*models.FediInstance, db.Error) {
 	metric := c.metrics.NewDBCacheQuery("ReadFediInstanceByDomain")
 
 	instance, hit := c.getFediInstanceByDomain(ctx, domain)
 	if hit {
 		go metric.Done(true, false)
+
 		return instance, nil
 	}
 	instance, err := c.db.ReadFediInstanceByDomain(ctx, domain)
 	if err != nil {
 		go metric.Done(false, true)
+
 		return nil, err
 	}
 	if instance != nil {
 		c.setFediInstance(ctx, instance)
 	}
 	go metric.Done(false, false)
+
 	return instance, nil
 }
 
-// ReadFediInstancesPage returns a page of federated social instances
+// ReadFediInstancesPage returns a page of federated social instances.
 func (c *CacheMem) ReadFediInstancesPage(ctx context.Context, index, count int) ([]*models.FediInstance, db.Error) {
 	return c.db.ReadFediInstancesPage(ctx, index, count)
 }
 
-// UpdateFediInstance updates the stored federated instance and caches it
+// UpdateFediInstance updates the stored federated instance and caches it.
 func (c *CacheMem) UpdateFediInstance(ctx context.Context, instance *models.FediInstance) db.Error {
 	err := c.db.UpdateFediInstance(ctx, instance)
 	if err != nil {
 		return err
 	}
 	c.setFediInstance(ctx, instance)
+
 	return nil
 }
 
@@ -105,11 +118,12 @@ func (c *CacheMem) getFediInstance(_ context.Context, id int64) (*models.FediIns
 
 	// check cache
 	entry, err := c.fediInstance.Get(strconv.FormatInt(id, 10))
-	if err == bigcache.ErrEntryNotFound {
+	if errors.Is(err, bigcache.ErrEntryNotFound) {
 		return nil, false
 	}
 	if err != nil {
 		l.Warnf("cache get: %s", err.Error())
+
 		return nil, false
 	}
 
@@ -119,8 +133,10 @@ func (c *CacheMem) getFediInstance(_ context.Context, id int64) (*models.FediIns
 	instance := new(models.FediInstance)
 	if err := dec.Decode(&instance); err != nil {
 		l.Warnf("cache decode: %s", err.Error())
+
 		return nil, false
 	}
+
 	return instance, true
 }
 
@@ -134,6 +150,7 @@ func (c *CacheMem) getFediInstanceByDomain(ctx context.Context, domain string) (
 	}
 	if err != nil {
 		l.Warnf("cache get: %s", err.Error())
+
 		return nil, false
 	}
 	i := int64(binary.LittleEndian.Uint64(entry))
@@ -149,6 +166,7 @@ func (c *CacheMem) setFediInstance(_ context.Context, instance *models.FediInsta
 	enc := gob.NewEncoder(&buf)
 	if err := enc.Encode(instance); err != nil {
 		l.Warnf("cache encode: %s", err.Error())
+
 		return
 	}
 
@@ -156,6 +174,7 @@ func (c *CacheMem) setFediInstance(_ context.Context, instance *models.FediInsta
 	err := c.fediInstance.Set(strconv.FormatInt(instance.ID, 10), buf.Bytes())
 	if err != nil {
 		l.Warnf("cache obj: %s", err.Error())
+
 		return
 	}
 
@@ -165,6 +184,7 @@ func (c *CacheMem) setFediInstance(_ context.Context, instance *models.FediInsta
 	err = c.fediInstanceDomainToID.Set(strings.ToLower(instance.Domain), b)
 	if err != nil {
 		l.Warnf("cache domain: %s", err.Error())
+
 		return
 	}
 }

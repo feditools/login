@@ -3,6 +3,10 @@ package webapp
 import (
 	"context"
 	"encoding/gob"
+	htmltemplate "html/template"
+	"strings"
+	"sync"
+
 	"github.com/feditools/go-lib/language"
 	"github.com/feditools/go-lib/metrics"
 	libtemplate "github.com/feditools/go-lib/template"
@@ -22,12 +26,9 @@ import (
 	"github.com/spf13/viper"
 	"github.com/tdewolff/minify/v2"
 	"github.com/tdewolff/minify/v2/html"
-	htmltemplate "html/template"
-	"strings"
-	"sync"
 )
 
-// Module contains a webapp module for the web server. Implements web.Module
+// Module contains a webapp module for the web server. Implements web.Module.
 type Module struct {
 	db        db.DB
 	fedi      *fedi.Fedi
@@ -48,7 +49,7 @@ type Module struct {
 	sigCacheLock sync.RWMutex
 }
 
-// New returns a new webapp module
+// New returns a new webapp module.
 func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *language.Module, oauthServer *server.Server, t *token.Tokenizer, mc metrics.Collector) (http.Module, error) {
 	l := logger.WithField("func", "New")
 
@@ -92,13 +93,13 @@ func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *lang
 		{
 			HRef:        viper.GetString(config.Keys.WebappBootstrapCSSURI),
 			Rel:         "stylesheet",
-			CrossOrigin: "anonymous",
+			CrossOrigin: XOriginAnonymous,
 			Integrity:   viper.GetString(config.Keys.WebappBootstrapCSSIntegrity),
 		},
 		{
 			HRef:        viper.GetString(config.Keys.WebappFontAwesomeCSSURI),
 			Rel:         "stylesheet",
-			CrossOrigin: "anonymous",
+			CrossOrigin: XOriginAnonymous,
 			Integrity:   viper.GetString(config.Keys.WebappFontAwesomeCSSIntegrity),
 		},
 	}
@@ -114,7 +115,7 @@ func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *lang
 		hl = append(hl, libtemplate.HeadLink{
 			HRef:        filePath,
 			Rel:         "stylesheet",
-			CrossOrigin: "anonymous",
+			CrossOrigin: XOriginAnonymous,
 			Integrity:   signature,
 		})
 	}
@@ -123,7 +124,7 @@ func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *lang
 	fs := []libtemplate.Script{
 		{
 			Src:         viper.GetString(config.Keys.WebappBootstrapJSURI),
-			CrossOrigin: "anonymous",
+			CrossOrigin: XOriginAnonymous,
 			Integrity:   viper.GetString(config.Keys.WebappBootstrapJSIntegrity),
 		},
 	}
@@ -148,7 +149,7 @@ func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *lang
 	}, nil
 }
 
-// Name return the module name
-func (m *Module) Name() string {
+// Name return the module name.
+func (*Module) Name() string {
 	return config.ServerRoleWebapp
 }

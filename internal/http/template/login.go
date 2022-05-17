@@ -1,6 +1,6 @@
 package template
 
-// LoginName is the name of the login template
+// LoginName is the name of the login template.
 const LoginName = "login"
 
 // Login contains the variables for the "login" template.

@@ -1,14 +1,15 @@
 package log
 
 import (
+	"reflect"
+	"strings"
+
 	"github.com/feditools/login/internal/config"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"reflect"
-	"strings"
 )
 
-// Init the logging engine
+// Init the logging engine.
 func Init() error {
 	logrus.SetFormatter(&logrus.TextFormatter{
 		FullTimestamp: true,

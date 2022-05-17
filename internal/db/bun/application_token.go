@@ -3,13 +3,15 @@ package bun
 import (
 	"context"
 	"database/sql"
+	"errors"
+
 	libdatabase "github.com/feditools/go-lib/database"
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/models"
 	"github.com/uptrace/bun"
 )
 
-// CountApplicationTokens returns the number of application token
+// CountApplicationTokens returns the number of application token.
 func (c *Client) CountApplicationTokens(ctx context.Context) (int64, db.Error) {
 	metric := c.metrics.NewDBQuery("CountApplicationTokens")
 
@@ -23,7 +25,7 @@ func (c *Client) CountApplicationTokens(ctx context.Context) (int64, db.Error) {
 	return int64(count), nil
 }
 
-// CreateApplicationToken stores the application token
+// CreateApplicationToken stores the application token.
 func (c *Client) CreateApplicationToken(ctx context.Context, applicationToken *models.ApplicationToken) db.Error {
 	metric := c.metrics.NewDBQuery("CreateApplicationToken")
 
@@ -37,13 +39,13 @@ func (c *Client) CreateApplicationToken(ctx context.Context, applicationToken *m
 	return nil
 }
 
-// ReadApplicationToken returns one application token
+// ReadApplicationToken returns one application token.
 func (c *Client) ReadApplicationToken(ctx context.Context, id int64) (*models.ApplicationToken, db.Error) {
 	metric := c.metrics.NewDBQuery("ReadApplicationToken")
 
 	applicationToken := new(models.ApplicationToken)
 	err := c.newApplicationTokenQ(applicationToken).Where("id = ?", id).Scan(ctx)
-	if err == sql.ErrNoRows {
+	if errors.Is(err, sql.ErrNoRows) {
 		go metric.Done(false)
 		return nil, nil
 	}
@@ -56,14 +58,14 @@ func (c *Client) ReadApplicationToken(ctx context.Context, id int64) (*models.Ap
 	return applicationToken, nil
 }
 
-// ReadApplicationTokenByToken returns one application token
+// ReadApplicationTokenByToken returns one application token.
 func (c *Client) ReadApplicationTokenByToken(ctx context.Context, token string) (*models.ApplicationToken, db.Error) {
 	metric := c.metrics.NewDBQuery("ReadApplicationTokenByToken")
 
 	applicationToken := &models.ApplicationToken{}
 
 	err := c.newApplicationTokenQ(applicationToken).Where("token = ?", token).Scan(ctx)
-	if err == sql.ErrNoRows {
+	if errors.Is(err, sql.ErrNoRows) {
 		go metric.Done(false)
 		return nil, nil
 	}
@@ -76,7 +78,7 @@ func (c *Client) ReadApplicationTokenByToken(ctx context.Context, token string) 
 	return applicationToken, nil
 }
 
-// ReadApplicationTokensPage returns a page of application tokens
+// ReadApplicationTokensPage returns a page of application tokens.
 func (c *Client) ReadApplicationTokensPage(ctx context.Context, index, count int) ([]*models.ApplicationToken, db.Error) {
 	metric := c.metrics.NewDBQuery("ReadApplicationTokensPage")
 
@@ -94,12 +96,11 @@ func (c *Client) ReadApplicationTokensPage(ctx context.Context, index, count int
 	return applicationTokens, nil
 }
 
-// UpdateApplicationToken updates the stored application token
+// UpdateApplicationToken updates the stored application token.
 func (c *Client) UpdateApplicationToken(ctx context.Context, client *models.ApplicationToken) db.Error {
 	metric := c.metrics.NewDBQuery("UpdateApplicationToken")
 
-	err := c.Update(ctx, client)
-	if err != nil {
+	if err := c.Update(ctx, client); err != nil {
 		go metric.Done(true)
 		return c.bun.errProc(err)
 	}

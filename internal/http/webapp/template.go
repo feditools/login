@@ -5,17 +5,17 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
+	nethttp "net/http"
+
 	"github.com/feditools/go-lib/language"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/http/template"
 	"github.com/feditools/login/internal/models"
 	"github.com/feditools/login/internal/path"
-	"github.com/gorilla/sessions"
-	nethttp "net/http"
 )
 
-func (m *Module) initTemplate(w nethttp.ResponseWriter, r *nethttp.Request, tmpl template.InitTemplate) error {
-	l := logger.WithField("func", "initTemplate")
+func (m *Module) initTemplate(_ nethttp.ResponseWriter, r *nethttp.Request, tmpl template.InitTemplate) error {
+	// l := logger.WithField("func", "initTemplate")
 
 	// set text handler
 	localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
@@ -44,7 +44,7 @@ func (m *Module) initTemplate(w nethttp.ResponseWriter, r *nethttp.Request, tmpl
 	}
 
 	// try to read session data
-	if r.Context().Value(http.ContextKeySession) == nil {
+	/*if r.Context().Value(http.ContextKeySession) == nil {
 		return nil
 	}
 
@@ -57,7 +57,7 @@ func (m *Module) initTemplate(w nethttp.ResponseWriter, r *nethttp.Request, tmpl
 			l.Warningf("initTemplate could not save session: %s", err.Error())
 			return err
 		}
-	}
+	}*/
 
 	return nil
 }
@@ -75,6 +75,8 @@ func (m *Module) initTemplateAdmin(w nethttp.ResponseWriter, r *nethttp.Request,
 }
 
 func (m *Module) executeTemplate(w nethttp.ResponseWriter, name string, tmplVars interface{}) error {
+	l := logger.WithField("func", "executeTemplate")
+
 	b := new(bytes.Buffer)
 	err := m.templates.ExecuteTemplate(b, name, tmplVars)
 	if err != nil {
@@ -82,7 +84,11 @@ func (m *Module) executeTemplate(w nethttp.ResponseWriter, name string, tmplVars
 	}
 
 	h := sha256.New()
-	h.Write(b.Bytes())
+	_, err = h.Write(b.Bytes())
+	if err != nil {
+		l.Errorf("writing response: %s", err.Error())
+		return err
+	}
 	w.Header().Set("Digest", fmt.Sprintf("sha-256=%s", base64.StdEncoding.EncodeToString(h.Sum(nil))))
 
 	if m.minify == nil {
