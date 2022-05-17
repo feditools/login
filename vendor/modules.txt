@@ -50,7 +50,7 @@ github.com/go-http-utils/fresh
 # github.com/go-http-utils/headers v0.0.0-20181008091004-fed159eddc2a
 ## explicit
 github.com/go-http-utils/headers
-# github.com/go-oauth2/oauth2/v4 v4.5.0
+# github.com/go-oauth2/oauth2/v4 v4.5.0 => github.com/tyrm/oauth2/v4 v4.5.1-0.20220517175145-340820634f65
 ## explicit; go 1.13
 github.com/go-oauth2/oauth2/v4
 github.com/go-oauth2/oauth2/v4/errors
@@ -520,3 +520,4 @@ modernc.org/token
 # mvdan.cc/xurls/v2 v2.4.0
 ## explicit; go 1.16
 mvdan.cc/xurls/v2
+# github.com/go-oauth2/oauth2/v4 => github.com/tyrm/oauth2/v4 v4.5.1-0.20220517175145-340820634f65

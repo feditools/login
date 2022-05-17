@@ -2,6 +2,8 @@ module github.com/feditools/login
 
 go 1.17
 
+replace github.com/go-oauth2/oauth2/v4 => github.com/tyrm/oauth2/v4 v4.5.1-0.20220517175145-340820634f65
+
 require (
 	github.com/allegro/bigcache/v3 v3.0.2
 	github.com/feditools/go-lib v0.11.2-0.20220517040149-229a197e47b2
