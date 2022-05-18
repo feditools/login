@@ -2,6 +2,7 @@ package login
 
 import (
 	"context"
+
 	"github.com/feditools/login/pkg/proto"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

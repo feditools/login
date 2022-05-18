@@ -5,6 +5,9 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/gorilla/handlers"
+	"github.com/tyrm/go-util/middleware"
+
 	libtemplate "github.com/feditools/go-lib/template"
 	"github.com/feditools/login/internal/http/template"
 	"github.com/feditools/login/internal/path"
@@ -73,14 +76,26 @@ func (m *Module) returnErrorPage(w http.ResponseWriter, r *http.Request, code in
 
 func (m *Module) methodNotAllowedHandler() http.Handler {
 	// wrap in middleware since middlware isn't run on error pages
-	return m.Middleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return m.wrapInMiddlewares(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		m.returnErrorPage(w, r, http.StatusMethodNotAllowed, r.Method)
 	}))
 }
 
 func (m *Module) notFoundHandler() http.Handler {
 	// wrap in middleware since middlware isn't run on error pages
-	return m.Middleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return m.wrapInMiddlewares(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		m.returnErrorPage(w, r, http.StatusNotFound, fmt.Sprintf("page not found: %s", r.URL.Path))
 	}))
+}
+
+func (m *Module) wrapInMiddlewares(h http.Handler) http.Handler {
+	return m.srv.MiddlewareMetrics(
+		handlers.CompressHandler(
+			middleware.BlockFlocMux(
+				m.Middleware(
+					h,
+				),
+			),
+		),
+	)
 }

@@ -3,10 +3,12 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/feditools/login/internal/grpc/login"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/feditools/login/internal/grpc/login"
+	"github.com/feditools/login/internal/http/wellknown"
 
 	"github.com/feditools/go-lib/language"
 	"github.com/feditools/go-lib/metrics/statsd"
@@ -144,6 +146,15 @@ var Start action.Action = func(ctx context.Context) error {
 
 	// create web modules
 	var webModules []http.Module
+	if util.ContainsString(viper.GetStringSlice(config.Keys.ServerRoles), config.ServerRoleWellKnown) {
+		l.Infof("adding wellknown module")
+		webMod, err := wellknown.New(ctx)
+		if err != nil {
+			logrus.Errorf("wellknown module: %s", err.Error())
+			return err
+		}
+		webModules = append(webModules, webMod)
+	}
 	if util.ContainsString(viper.GetStringSlice(config.Keys.ServerRoles), config.ServerRoleWebapp) {
 		l.Infof("adding webapp module")
 		webMod, err := webapp.New(ctx, cachedDBClient, redisClient, fediMod, languageMod, oauthServer, tokz, metricsCollector)
@@ -156,6 +167,7 @@ var Start action.Action = func(ctx context.Context) error {
 
 	// add modules to server
 	for _, mod := range webModules {
+		mod.SetServer(httpServer)
 		err := mod.Route(httpServer)
 		if err != nil {
 			l.Errorf("loading %s module: %s", mod.Name(), err.Error())

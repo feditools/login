@@ -22,7 +22,7 @@ func (h *Helper) RegisterApp(ctx context.Context, instance *models.FediInstance)
 			ClientName:   h.appClientName,
 			Scopes:       "read:accounts",
 			Website:      h.appWebsite,
-			RedirectURIs: "https://" + h.externalHostname + "/callback/oauth/" + instanceToken,
+			RedirectURIs: h.externalURL + "/callback/oauth/" + instanceToken,
 		})
 
 		if err != nil {

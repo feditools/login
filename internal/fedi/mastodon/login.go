@@ -17,7 +17,7 @@ func (h *Helper) GetAccessToken(ctx context.Context, instance *models.FediInstan
 
 	// authenticate
 	instanceToken := h.tokz.GetToken(instance)
-	err = c.AuthenticateToken(ctx, code, "https://"+h.externalHostname+"/callback/oauth/"+instanceToken)
+	err = c.AuthenticateToken(ctx, code, h.externalURL+"/callback/oauth/"+instanceToken)
 	if err != nil {
 		return "", err
 	}
@@ -34,7 +34,7 @@ func (h *Helper) MakeLoginURI(_ context.Context, instance *models.FediInstance) 
 	}
 	q := u.Query()
 	q.Set("client_id", instance.ClientID)
-	q.Set("redirect_uri", "https://"+h.externalHostname+"/callback/oauth/"+instanceToken)
+	q.Set("redirect_uri", h.externalURL+"/callback/oauth/"+instanceToken)
 	q.Set("response_type", "code")
 	q.Set("scope", "read:accounts")
 	u.RawQuery = q.Encode()

@@ -21,7 +21,7 @@ var usage = config.KeyNames{
 	DBLoadTestData: "Should test data be loaded into the database",
 
 	// server
-	ServerExternalHostname: "The external hostname used by the server",
-	ServerMinifyHTML:       "Should the server minify html documents before sending",
-	ServerRoles:            "Server roles that should be started: [webapp]",
+	ServerExternalURL: "The external url used by the server",
+	ServerMinifyHTML:  "Should the server minify html documents before sending",
+	ServerRoles:       "Server roles that should be started: [webapp]",
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/gob"
 	htmltemplate "html/template"
+	"net/url"
 	"strings"
 	"sync"
 
@@ -37,6 +38,7 @@ type Module struct {
 	language  *language.Module
 	metrics   metrics.Collector
 	minify    *minify.M
+	srv       *http.Server
 	templates *htmltemplate.Template
 	tokenizer *token.Tokenizer
 
@@ -50,7 +52,7 @@ type Module struct {
 }
 
 // New returns a new webapp module.
-func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *language.Module, oauthServer *server.Server, t *token.Tokenizer, mc metrics.Collector) (http.Module, error) {
+func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *language.Module, oauthServer *server.Server, t *token.Tokenizer, mc metrics.Collector) (*Module, error) {
 	l := logger.WithField("func", "New")
 
 	// Fetch new store.
@@ -60,10 +62,17 @@ func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *lang
 		return nil, err
 	}
 
+	// parse external url
+	externalURL, err := url.Parse(viper.GetString(config.Keys.ServerExternalURL))
+	if err != nil {
+		l.Errorf("parsing external url: %s", err.Error())
+		return nil, err
+	}
+
 	store.KeyPrefix(kv.KeySession())
 	store.Options(sessions.Options{
 		Path:   "/",
-		Domain: viper.GetString(config.Keys.ServerExternalHostname),
+		Domain: externalURL.Host,
 		MaxAge: 86400 * 60,
 	})
 
@@ -152,4 +161,9 @@ func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *lang
 // Name return the module name.
 func (*Module) Name() string {
 	return config.ServerRoleWebapp
+}
+
+// SetServer adds a reference to the server to the module.
+func (m *Module) SetServer(s *http.Server) {
+	m.srv = s
 }

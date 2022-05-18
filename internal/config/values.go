@@ -41,11 +41,11 @@ type Values struct {
 	RefreshSecret     string
 
 	// server
-	ServerExternalHostname string
-	ServerGRPCBind         string
-	ServerHTTPBind         string
-	ServerMinifyHTML       bool
-	ServerRoles            []string
+	ServerExternalURL string
+	ServerGRPCBind    string
+	ServerHTTPBind    string
+	ServerMinifyHTML  bool
+	ServerRoles       []string
 
 	// webapp
 	WebappBootstrapCSSURI         string
@@ -92,12 +92,13 @@ var Defaults = Values{
 	RefreshExpiration: time.Hour * 24 * 7,
 
 	// server
-	ServerExternalHostname: "localhost",
-	ServerGRPCBind:         ":50051",
-	ServerHTTPBind:         ":5000",
-	ServerMinifyHTML:       true,
+	ServerExternalURL: "http://localhost:5000",
+	ServerGRPCBind:    ":50051",
+	ServerHTTPBind:    ":5000",
+	ServerMinifyHTML:  true,
 	ServerRoles: []string{
 		ServerRoleWebapp,
+		ServerRoleWellKnown,
 	},
 
 	// webapp

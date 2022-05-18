@@ -14,7 +14,7 @@ github.com/dgryski/go-rendezvous
 # github.com/fatih/color v1.13.0
 ## explicit; go 1.13
 github.com/fatih/color
-# github.com/feditools/go-lib v0.11.2-0.20220517040149-229a197e47b2
+# github.com/feditools/go-lib v0.11.2-0.20220518182639-365163222fec
 ## explicit; go 1.17
 github.com/feditools/go-lib
 github.com/feditools/go-lib/database
@@ -50,7 +50,7 @@ github.com/go-http-utils/fresh
 # github.com/go-http-utils/headers v0.0.0-20181008091004-fed159eddc2a
 ## explicit
 github.com/go-http-utils/headers
-# github.com/go-oauth2/oauth2/v4 v4.5.0 => github.com/tyrm/oauth2/v4 v4.5.1-0.20220517175145-340820634f65
+# github.com/go-oauth2/oauth2/v4 v4.5.1
 ## explicit; go 1.13
 github.com/go-oauth2/oauth2/v4
 github.com/go-oauth2/oauth2/v4/errors
@@ -520,4 +520,3 @@ modernc.org/token
 # mvdan.cc/xurls/v2 v2.4.0
 ## explicit; go 1.16
 mvdan.cc/xurls/v2
-# github.com/go-oauth2/oauth2/v4 => github.com/tyrm/oauth2/v4 v4.5.1-0.20220517175145-340820634f65

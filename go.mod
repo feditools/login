@@ -2,17 +2,16 @@ module github.com/feditools/login
 
 go 1.17
 
-replace github.com/go-oauth2/oauth2/v4 => github.com/tyrm/oauth2/v4 v4.5.1-0.20220517175145-340820634f65
-
 require (
 	github.com/allegro/bigcache/v3 v3.0.2
-	github.com/feditools/go-lib v0.11.2-0.20220517040149-229a197e47b2
+	github.com/feditools/go-lib v0.11.2-0.20220518182639-365163222fec
 	github.com/go-http-utils/etag v0.0.0-20161124023236-513ea8f21eb1
-	github.com/go-oauth2/oauth2/v4 v4.5.0
+	github.com/go-oauth2/oauth2/v4 v4.5.1
 	github.com/go-oauth2/redis/v4 v4.1.1
 	github.com/go-playground/validator/v10 v10.11.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-redsync/redsync/v4 v4.5.0
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
@@ -54,7 +53,6 @@ require (
 	github.com/go-http-utils/headers v0.0.0-20181008091004-fed159eddc2a // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
-	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/gorilla/securecookie v1.1.1 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect

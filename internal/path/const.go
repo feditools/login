@@ -38,12 +38,16 @@ const (
 	PartMe = "me"
 	// PartOauth is used in a path for oauth.
 	PartOauth = "oauth"
+	// PartOpenidConfiguration is used in a path for open id configuration.
+	PartOpenidConfiguration = "openid-configuration"
 	// PartStatic is used in a path for static files.
 	PartStatic = "static"
 	// PartSystem is used in a path for system things.
 	PartSystem = "system"
 	// PartToken is used in a path for static files.
 	PartToken = "token"
+	// PartWellKnown is used in a path for well known paths.
+	PartWellKnown = ".well-known"
 
 	// paths.
 
@@ -93,6 +97,14 @@ const (
 	AdminSubSystemApplicationTokens = AdminSubSystem + "/" + PartApplicationTokens
 	// AdminSubSystemApplicationTokenAdd is the sub path for the add application tokens page.
 	AdminSubSystemApplicationTokenAdd = AdminSubSystemApplicationTokens + "/" + PartAdd
+
+	// WellKnown is the path for the well known pages.
+	WellKnown = "/" + PartWellKnown
+	// WellKnownOpenidConfiguration is the path for the well known openid configuration.
+	WellKnownOpenidConfiguration = WellKnown + WellKnownSubOpenidConfiguration
+
+	// WellKnownSubOpenidConfiguration is the sub path for the well known openid configuration.
+	WellKnownSubOpenidConfiguration = "/" + PartOpenidConfiguration
 
 	// CallbackOauth is the path for an oauth callback.
 	CallbackOauth = "/" + PartCallback + "/" + PartOauth + "/" + VarInstance

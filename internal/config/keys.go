@@ -39,11 +39,11 @@ type KeyNames struct {
 	RefreshSecret     string
 
 	// server
-	ServerExternalHostname string
-	ServerGRPCBind         string
-	ServerHTTPBind         string
-	ServerMinifyHTML       string
-	ServerRoles            string
+	ServerExternalURL string
+	ServerGRPCBind    string
+	ServerHTTPBind    string
+	ServerMinifyHTML  string
+	ServerRoles       string
 
 	// webapp
 	WebappBootstrapCSSURI         string
@@ -99,11 +99,11 @@ var Keys = KeyNames{
 	RefreshSecret:     "refresh-secret",
 
 	// server
-	ServerExternalHostname: "external-hostname",
-	ServerGRPCBind:         "grpc-bind",
-	ServerHTTPBind:         "http-bind",
-	ServerMinifyHTML:       "minify-html",
-	ServerRoles:            "server-role",
+	ServerExternalURL: "external-url",
+	ServerGRPCBind:    "grpc-bind",
+	ServerHTTPBind:    "http-bind",
+	ServerMinifyHTML:  "minify-html",
+	ServerRoles:       "server-role",
 
 	// webapp
 	WebappBootstrapCSSURI:         "webapp-bootstrap-css-uri",
