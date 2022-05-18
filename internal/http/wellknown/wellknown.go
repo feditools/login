@@ -16,8 +16,8 @@ type Module struct {
 	externalURL string
 }
 
-// New creates a new.
-func New(ctx context.Context) (*Module, error) {
+// New creates a new well-known module.
+func New(_ context.Context) (*Module, error) {
 	return &Module{
 		externalURL: strings.TrimSuffix(viper.GetString(config.Keys.ServerExternalURL), "/"),
 	}, nil

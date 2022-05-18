@@ -17,7 +17,7 @@ func (m *Module) OpenidConfigurationGetHandler(w nethttp.ResponseWriter, r *neth
 	response := models.OpenidConfiguration{
 		Issuer:                m.externalURL,
 		AuthorizationEndpoint: m.externalURL + path.OauthAuthorize,
-		TokenEndpoint:         m.externalURL + path.OauthAuthorize,
+		TokenEndpoint:         m.externalURL + path.OauthToken,
 	}
 
 	w.Header().Set(http.HeaderContentType, http.MimeAppJSON)
