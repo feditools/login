@@ -1,6 +1,7 @@
 package grpc
 
 import (
+	"github.com/feditools/login/pkg/proto"
 	"time"
 
 	"google.golang.org/grpc"
@@ -12,11 +13,8 @@ const defaultTimeout = 10 * time.Second
 
 // Client is a feditools login grpc client.
 type Client struct {
-	conn *grpc.ClientConn
-
-	fediAccount  FediAccountClient
-	fediInstance FediInstanceClient
-	ping         PingClient
+	conn  *grpc.ClientConn
+	login proto.LoginClient
 }
 
 // NewClient creates a new feditools login grpc client.
@@ -32,16 +30,11 @@ func NewClient(address string, cred credentials.PerRPCCredentials) (*Client, err
 	}
 
 	// services
-	fediAccountC := NewFediAccountClient(conn)
-	fediInstanceC := NewFediInstanceClient(conn)
-	pingC := NewPingClient(conn)
+	loginC := proto.NewLoginClient(conn)
 
 	return &Client{
-		conn: conn,
-
-		fediAccount:  fediAccountC,
-		fediInstance: fediInstanceC,
-		ping:         pingC,
+		conn:  conn,
+		login: loginC,
 	}, nil
 }
 
