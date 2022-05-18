@@ -1,4 +1,4 @@
-package fediaccount
+package login
 
 import (
 	"github.com/feditools/login/internal/log"

@@ -3,7 +3,10 @@ PROJECT_NAME=login
 .DEFAULT_GOAL := test
 
 define generate_proto
-    protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative $(1)
+    protoc \
+    	-I=$(1) \
+        --go_out=$(1) --go_opt=paths=source_relative --go-grpc_out=$(1) --go-grpc_opt=paths=source_relative \
+        $(2)
 endef
 
 build: clean
@@ -33,8 +36,8 @@ fmt:
 	@echo formatting
 	@go fmt $(shell go list ./... | grep -v /vendor/)
 
-gen-proto: pkg/grpc/*.proto
-	$(call generate_proto,$?)
+gen-proto: pkg/proto/*.proto
+	$(call generate_proto,"pkg/proto",$?)
 
 i18n-extract:
 	goi18n extract -outdir locales
