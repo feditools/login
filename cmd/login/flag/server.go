@@ -19,6 +19,8 @@ func Server(cmd *cobra.Command, values config.Values) {
 	// auth
 	cmd.PersistentFlags().Duration(config.Keys.AccessExpiration, values.AccessExpiration, usage.AccessExpiration)
 	cmd.PersistentFlags().String(config.Keys.AccessSecret, values.AccessSecret, usage.AccessSecret)
+	cmd.PersistentFlags().String(config.Keys.ECPrivateKey, values.ECPrivateKey, usage.ECPrivateKey)
+	cmd.PersistentFlags().String(config.Keys.ECPublicKey, values.ECPublicKey, usage.ECPublicKey)
 	cmd.PersistentFlags().Duration(config.Keys.RefreshExpiration, values.RefreshExpiration, usage.RefreshExpiration)
 	cmd.PersistentFlags().String(config.Keys.RefreshSecret, values.RefreshSecret, usage.RefreshSecret)
 

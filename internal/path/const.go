@@ -30,6 +30,8 @@ const (
 	PartFediverse = "fedi"
 	// PartInstances is used in a path for instances.
 	PartInstances = "instances"
+	// PartJWKS is used in a path for jwks key exchange.
+	PartJWKS = "jwks"
 	// PartLogin is used in a path for login.
 	PartLogin = "login"
 	// PartLogout is used in a path for logout.
@@ -102,9 +104,13 @@ const (
 	WellKnown = "/" + PartWellKnown
 	// WellKnownOpenidConfiguration is the path for the well known openid configuration.
 	WellKnownOpenidConfiguration = WellKnown + WellKnownSubOpenidConfiguration
+	// WellKnownOpenidConfigurationJWKS is the path for  well known jwks.
+	WellKnownOpenidConfigurationJWKS = WellKnown + WellKnownSubOpenidConfigurationJWKS
 
 	// WellKnownSubOpenidConfiguration is the sub path for the well known openid configuration.
 	WellKnownSubOpenidConfiguration = "/" + PartOpenidConfiguration
+	// WellKnownSubOpenidConfigurationJWKS is the sub path for well known jwks.
+	WellKnownSubOpenidConfigurationJWKS = WellKnownSubOpenidConfiguration + "/" + PartJWKS
 
 	// CallbackOauth is the path for an oauth callback.
 	CallbackOauth = "/" + PartCallback + "/" + PartOauth + "/" + VarInstance

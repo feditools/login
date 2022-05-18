@@ -148,7 +148,7 @@ var Start action.Action = func(ctx context.Context) error {
 	var webModules []http.Module
 	if util.ContainsString(viper.GetStringSlice(config.Keys.ServerRoles), config.ServerRoleWellKnown) {
 		l.Infof("adding wellknown module")
-		webMod, err := wellknown.New(ctx)
+		webMod, err := wellknown.New(ctx, oauthServer)
 		if err != nil {
 			logrus.Errorf("wellknown module: %s", err.Error())
 			return err

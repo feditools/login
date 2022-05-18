@@ -37,6 +37,8 @@ type Values struct {
 	// auth
 	AccessExpiration  time.Duration
 	AccessSecret      string
+	ECPrivateKey      string
+	ECPublicKey       string
 	RefreshExpiration time.Duration
 	RefreshSecret     string
 

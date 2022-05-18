@@ -35,6 +35,8 @@ type KeyNames struct {
 	// auth
 	AccessExpiration  string
 	AccessSecret      string
+	ECPrivateKey      string
+	ECPublicKey       string
 	RefreshExpiration string
 	RefreshSecret     string
 
@@ -95,6 +97,8 @@ var Keys = KeyNames{
 	// auth
 	AccessExpiration:  "access-expiration",
 	AccessSecret:      "access-secret",
+	ECPrivateKey:      "ec-private-key",
+	ECPublicKey:       "ec-public-key",
 	RefreshExpiration: "refresh-expiration",
 	RefreshSecret:     "refresh-secret",
 

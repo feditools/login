@@ -2,25 +2,36 @@ package wellknown
 
 import (
 	"context"
-	"strings"
-
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/http"
-	"github.com/spf13/viper"
+	"github.com/feditools/login/internal/oauth"
 )
 
 // Module contains a well-known module for the web server. Implements web.Module.
 type Module struct {
-	srv *http.Server
+	oauth *oauth.Server
+	srv   *http.Server
 
-	externalURL string
+	openidConfigurationBody     []byte
+	openidConfigurationJWKSBody []byte
 }
 
 // New creates a new well-known module.
-func New(_ context.Context) (*Module, error) {
-	return &Module{
-		externalURL: strings.TrimSuffix(viper.GetString(config.Keys.ServerExternalURL), "/"),
-	}, nil
+func New(_ context.Context, oauthServer *oauth.Server) (*Module, error) {
+	module := &Module{
+		oauth: oauthServer,
+	}
+
+	err := module.generateOpenidConfigurationBody()
+	if err != nil {
+		return nil, err
+	}
+	err = module.generateOpenidConfigurationJWKSBody()
+	if err != nil {
+		return nil, err
+	}
+
+	return module, nil
 }
 
 // Name return the module name.

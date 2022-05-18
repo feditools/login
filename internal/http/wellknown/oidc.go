@@ -2,6 +2,8 @@ package wellknown
 
 import (
 	"encoding/json"
+	"github.com/feditools/login/internal/config"
+	"github.com/spf13/viper"
 	nethttp "net/http"
 	"strings"
 
@@ -14,12 +16,6 @@ import (
 func (m *Module) OpenidConfigurationGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
 	l := logger.WithField("func", "OpenidConfigurationGetHandler")
 
-	response := models.OpenidConfiguration{
-		Issuer:                m.externalURL,
-		AuthorizationEndpoint: m.externalURL + path.OauthAuthorize,
-		TokenEndpoint:         m.externalURL + path.OauthToken,
-	}
-
 	w.Header().Set(http.HeaderContentType, http.MimeAppJSON)
 	cacheControl := []string{
 		http.CacheControlNoCache,
@@ -28,8 +24,27 @@ func (m *Module) OpenidConfigurationGetHandler(w nethttp.ResponseWriter, r *neth
 		http.CacheControlNoStore,
 	}
 	w.Header().Set(http.HeaderCacheControl, strings.Join(cacheControl, ", "))
-	err := json.NewEncoder(w).Encode(response)
+	_, err := w.Write(m.openidConfigurationBody)
 	if err != nil {
 		l.Errorf("writing response: %s", err.Error())
 	}
+}
+
+func (m *Module) generateOpenidConfigurationBody() error {
+	externalURL := strings.TrimSuffix(viper.GetString(config.Keys.ServerExternalURL), "/")
+
+	response := models.OpenidConfiguration{
+		Issuer:                externalURL,
+		AuthorizationEndpoint: externalURL + path.OauthAuthorize,
+		TokenEndpoint:         externalURL + path.OauthToken,
+		JwksURI:               externalURL + path.WellKnownOpenidConfigurationJWKS,
+	}
+
+	b, err := json.Marshal(response)
+	if err != nil {
+		return err
+	}
+
+	m.openidConfigurationBody = b
+	return nil
 }

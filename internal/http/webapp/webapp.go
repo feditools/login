@@ -3,6 +3,7 @@ package webapp
 import (
 	"context"
 	"encoding/gob"
+	"github.com/feditools/login/internal/oauth"
 	htmltemplate "html/template"
 	"net/url"
 	"strings"
@@ -21,7 +22,6 @@ import (
 	"github.com/feditools/login/internal/models"
 	"github.com/feditools/login/internal/path"
 	"github.com/feditools/login/internal/token"
-	"github.com/go-oauth2/oauth2/v4/server"
 	"github.com/gorilla/sessions"
 	"github.com/rbcervilla/redisstore/v8"
 	"github.com/spf13/viper"
@@ -33,7 +33,7 @@ import (
 type Module struct {
 	db        db.DB
 	fedi      *fedi.Fedi
-	oauth     *server.Server
+	oauth     *oauth.Server
 	store     sessions.Store
 	language  *language.Module
 	metrics   metrics.Collector
@@ -52,7 +52,7 @@ type Module struct {
 }
 
 // New returns a new webapp module.
-func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *language.Module, oauthServer *server.Server, t *token.Tokenizer, mc metrics.Collector) (*Module, error) {
+func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *language.Module, oauthServer *oauth.Server, t *token.Tokenizer, mc metrics.Collector) (*Module, error) {
 	l := logger.WithField("func", "New")
 
 	// Fetch new store.
@@ -88,7 +88,7 @@ func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *lang
 	}
 
 	// oauth
-	oauthServer.UserAuthorizationHandler = oauthUserAuthorizeHandler
+	oauthServer.SetUserAuthorizationHandler(oauthUserAuthorizeHandler)
 
 	// get templates
 	tmpl, err := template.New(t)

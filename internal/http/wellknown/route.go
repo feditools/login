@@ -14,5 +14,6 @@ func (m *Module) Route(s *http.Server) error {
 	wellknown.MethodNotAllowedHandler = m.methodNotAllowedHandler()
 
 	wellknown.HandleFunc(path.WellKnownSubOpenidConfiguration, m.OpenidConfigurationGetHandler).Methods(nethttp.MethodGet)
+	wellknown.HandleFunc(path.WellKnownSubOpenidConfigurationJWKS, m.OpenidConfigurationJWKSGetHandler).Methods(nethttp.MethodGet)
 	return nil
 }
