@@ -3,9 +3,11 @@ package oauth
 import (
 	"context"
 	"crypto"
+	"crypto/ecdsa"
+	"crypto/x509"
+	"encoding/pem"
 	nethttp "net/http"
 
-	"github.com/go-oauth2/oauth2/v4/generates"
 	"github.com/golang-jwt/jwt"
 
 	"github.com/feditools/login/internal/db"
@@ -34,15 +36,29 @@ func New(_ context.Context, d db.DB, r *redis.Client, t *token.Tokenizer) (*Serv
 		return nil, err
 	}
 
+	// create server
+	newServer := &Server{
+		keychain: keychain,
+	}
+
+	// access generator
+	accessGenerator, err := newServer.NewAccessGenerator(jwt.SigningMethodES256)
+	if err != nil {
+		return nil, err
+	}
+
+	// create oauth manager
 	manager := manage.NewDefaultManager()
 	manager.SetAuthorizeCodeTokenCfg(manage.DefaultAuthorizeCodeTokenCfg)
-	manager.MapAccessGenerate(generates.NewJWTAccessGenerate("", []byte("00000000"), jwt.SigningMethodHS512))
+	manager.MapAccessGenerate(accessGenerator)
+	// manager.MapAccessGenerate(generates.NewAccessGenerate())
 	manager.MapTokenStorage(oredis.NewRedisStoreWithCli(
 		r.RedisClient(),
 		kv.KeyOauthToken(),
 	))
 	manager.MapClientStorage(NewAdapterClientStore(d, t))
 
+	// create oauth server
 	oauthServer := server.NewDefaultServer(manager)
 	oauthServer.SetAllowGetAccessRequest(true)
 	oauthServer.SetClientInfoHandler(server.ClientFormHandler)
@@ -64,6 +80,28 @@ func New(_ context.Context, d db.DB, r *redis.Client, t *token.Tokenizer) (*Serv
 
 // keys
 
+// GetECPrivateKey returns an ecdsa.PrivateKey.
+func (s *Server) GetECPrivateKey() *ecdsa.PrivateKey {
+	return s.keychain.ecdsa
+}
+
+// GetECPrivateKeyPEM returns a PEM encoded version of the private key.
+func (s *Server) GetECPrivateKeyPEM() ([]byte, error) {
+	privateKeyBytes, err := x509.MarshalECPrivateKey(s.keychain.ecdsa)
+	if err != nil {
+		return nil, err
+	}
+
+	newPem := pem.EncodeToMemory(
+		&pem.Block{
+			Type:  "EC PRIVATE KEY",
+			Bytes: privateKeyBytes,
+		},
+	)
+
+	return newPem, nil
+}
+
 // GetECPublicKeyCurve returns the ecdsa curve type.
 func (s *Server) GetECPublicKeyCurve() string {
 	return s.keychain.ecdsa.PublicKey.Curve.Params().Name
@@ -84,7 +122,7 @@ func (s *Server) GetECPublicKey() crypto.PublicKey {
 	return s.keychain.ecdsa.Public()
 }
 
-// GetECPublicKeyID returns the generated
+// GetECPublicKeyID returns the generated.
 func (s *Server) GetECPublicKeyID() string {
 	return s.keychain.ecdsaKID
 }
@@ -101,7 +139,7 @@ func (s *Server) HandleTokenRequest(w nethttp.ResponseWriter, r *nethttp.Request
 	return s.oauth.HandleTokenRequest(w, r)
 }
 
-// SetUserAuthorizationHandler sets the UserAuthorizationHandler on the OAuth server
+// SetUserAuthorizationHandler sets the UserAuthorizationHandler on the OAuth server.
 func (s *Server) SetUserAuthorizationHandler(h server.UserAuthorizationHandler) {
 	s.oauth.UserAuthorizationHandler = h
 }

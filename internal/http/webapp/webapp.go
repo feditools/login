@@ -3,11 +3,12 @@ package webapp
 import (
 	"context"
 	"encoding/gob"
-	"github.com/feditools/login/internal/oauth"
 	htmltemplate "html/template"
 	"net/url"
 	"strings"
 	"sync"
+
+	"github.com/feditools/login/internal/oauth"
 
 	"github.com/feditools/go-lib/language"
 	"github.com/feditools/go-lib/metrics"

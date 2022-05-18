@@ -2,6 +2,7 @@ package wellknown
 
 import (
 	"context"
+
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/oauth"

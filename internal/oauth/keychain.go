@@ -2,24 +2,25 @@ package oauth
 
 import (
 	"crypto/ecdsa"
-	"crypto/sha1"
+	"crypto/sha1" // #nosec G505
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
 	"fmt"
-	"github.com/feditools/login/internal/config"
-	"github.com/spf13/viper"
 	"os"
 	"strings"
+
+	"github.com/feditools/login/internal/config"
+	"github.com/spf13/viper"
 )
 
-// Keychain holds signing keys for
+// Keychain holds signing keys for.
 type Keychain struct {
 	ecdsa    *ecdsa.PrivateKey
 	ecdsaKID string
 }
 
-// NewKeychain creates a new oauth keychain
+// NewKeychain creates a new oauth keychain.
 func NewKeychain() (*Keychain, error) {
 	// read ecdsa key
 	ecdsaKey, err := readECDSA()
@@ -29,7 +30,6 @@ func NewKeychain() (*Keychain, error) {
 
 	// generate ecdsa key id
 	ecdsaKeyID := generateKeyID(strings.Join([]string{ecdsaKey.PublicKey.X.String(), ecdsaKey.PublicKey.Y.String()}, "+"))
-	fmt.Println(ecdsaKeyID)
 
 	return &Keychain{
 		ecdsa:    ecdsaKey,
@@ -81,7 +81,7 @@ func readECDSA() (*ecdsa.PrivateKey, error) {
 }
 
 func generateKeyID(s string) string {
-	h := sha1.New()
+	h := sha1.New() // #nosec G401 not used for cryptography
 	h.Write([]byte(s))
 	bs := h.Sum(nil)
 	return fmt.Sprintf("%x", bs)

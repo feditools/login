@@ -11,7 +11,7 @@ import (
 	"github.com/tyrm/go-util/middleware"
 )
 
-func (m *Module) returnErrorPage(w nethttp.ResponseWriter, _ *nethttp.Request, code int, errStr string) {
+func returnErrorPage(w nethttp.ResponseWriter, _ *nethttp.Request, code int, errStr string) {
 	l := logger.WithField("func", "returnErrorPage")
 
 	errorResp := map[string]interface{}{
@@ -33,14 +33,14 @@ func (m *Module) returnErrorPage(w nethttp.ResponseWriter, _ *nethttp.Request, c
 func (m *Module) methodNotAllowedHandler() nethttp.Handler {
 	// wrap in middleware since middleware isn't run on error pages
 	return m.wrapInMiddlewares(nethttp.HandlerFunc(func(w nethttp.ResponseWriter, r *nethttp.Request) {
-		m.returnErrorPage(w, r, nethttp.StatusMethodNotAllowed, r.Method)
+		returnErrorPage(w, r, nethttp.StatusMethodNotAllowed, r.Method)
 	}))
 }
 
 func (m *Module) notFoundHandler() nethttp.Handler {
 	// wrap in middleware since middleware isn't run on error pages
 	return m.wrapInMiddlewares(nethttp.HandlerFunc(func(w nethttp.ResponseWriter, r *nethttp.Request) {
-		m.returnErrorPage(w, r, nethttp.StatusNotFound, fmt.Sprintf("page not found: %s", r.URL.Path))
+		returnErrorPage(w, r, nethttp.StatusNotFound, fmt.Sprintf("page not found: %s", r.URL.Path))
 	}))
 }
 

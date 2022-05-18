@@ -1,9 +1,9 @@
 package models
 
 const (
-	// KeyTypeEC indicated the key is a ecdsa type
+	// KeyTypeEC indicated the key is a ecdsa type.
 	KeyTypeEC = "EC"
-	// KeyTypeRSA indicated the key is a rsa type
+	// KeyTypeRSA indicated the key is a rsa type.
 	KeyTypeRSA = "RSA"
 
 	// UseEncryption indicates the key is used for encryption.

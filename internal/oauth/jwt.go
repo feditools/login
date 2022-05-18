@@ -2,8 +2,8 @@ package oauth
 
 import (
 	"context"
+	"crypto/ecdsa"
 	"encoding/base64"
-	"errors"
 	"strings"
 	"time"
 
@@ -27,23 +27,28 @@ func (a *JWTAccessClaims) Valid() error {
 }
 
 // NewAccessGenerator creates a new access token generator.
-func NewAccessGenerator(kid string, key []byte, method jwt.SigningMethod) *JWTAccessGenerate {
-	return &JWTAccessGenerate{
-		SignedKeyID:  kid,
-		SignedKey:    key,
+func (s *Server) NewAccessGenerator(method jwt.SigningMethod) (*AccessGenerator, error) {
+	return &AccessGenerator{
+		SignedKeyID:  s.GetECPublicKeyID(),
+		SignedKey:    s.GetECPrivateKey(),
 		SignedMethod: method,
-	}
+	}, nil
 }
 
-// JWTAccessGenerate generate the jwt access token.
-type JWTAccessGenerate struct {
+// AccessGenerator generate the jwt access token.
+type AccessGenerator struct {
 	SignedKeyID  string
-	SignedKey    []byte
+	SignedKey    *ecdsa.PrivateKey
 	SignedMethod jwt.SigningMethod
 }
 
 // Token based on the UUID generated token.
-func (a *JWTAccessGenerate) Token(ctx context.Context, data *oauth2.GenerateBasic, isGenRefresh bool) (string, string, error) {
+func (a *AccessGenerator) Token(ctx context.Context, data *oauth2.GenerateBasic, isGenRefresh bool) (string, string, error) {
+	l := logger.WithField("func", "Token")
+	l.Debugf("Called: %+v", data)
+	l.Debugf("Client: %+v", data.Client)
+	l.Debugf("Token: %+v", data.TokenInfo.GetCodeChallengeMethod())
+
 	claims := &JWTAccessClaims{
 		StandardClaims: jwt.StandardClaims{
 			Audience:  data.Client.GetID(),
@@ -56,27 +61,10 @@ func (a *JWTAccessGenerate) Token(ctx context.Context, data *oauth2.GenerateBasi
 	if a.SignedKeyID != "" {
 		token.Header["kid"] = a.SignedKeyID
 	}
-	var key interface{}
-	if a.isEs() {
-		v, err := jwt.ParseECPrivateKeyFromPEM(a.SignedKey)
-		if err != nil {
-			return "", "", err
-		}
-		key = v
-	} else if a.isRsOrPS() {
-		v, err := jwt.ParseRSAPrivateKeyFromPEM(a.SignedKey)
-		if err != nil {
-			return "", "", err
-		}
-		key = v
-	} else if a.isHs() {
-		key = a.SignedKey
-	} else {
-		return "", "", errors.New("unsupported sign method")
-	}
 
-	access, err := token.SignedString(key)
+	access, err := token.SignedString(a.SignedKey)
 	if err != nil {
+		l.Errorf("signing string: %s", err.Error())
 		return "", "", err
 	}
 	refresh := ""
@@ -88,18 +76,4 @@ func (a *JWTAccessGenerate) Token(ctx context.Context, data *oauth2.GenerateBasi
 	}
 
 	return access, refresh, nil
-}
-
-func (a *JWTAccessGenerate) isEs() bool {
-	return strings.HasPrefix(a.SignedMethod.Alg(), "ES")
-}
-
-func (a *JWTAccessGenerate) isRsOrPS() bool {
-	isRs := strings.HasPrefix(a.SignedMethod.Alg(), "RS")
-	isPs := strings.HasPrefix(a.SignedMethod.Alg(), "PS")
-	return isRs || isPs
-}
-
-func (a *JWTAccessGenerate) isHs() bool {
-	return strings.HasPrefix(a.SignedMethod.Alg(), "HS")
 }

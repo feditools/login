@@ -1,21 +1,21 @@
 package wellknown
 
 import (
-	"crypto/sha1"
+	"crypto/sha1" // #nosec G505
 	"crypto/sha256"
 	"crypto/x509"
 	"encoding/asn1"
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
-	"github.com/feditools/go-lib/http"
-	"github.com/feditools/login/internal/http/wellknown/models"
 	nethttp "net/http"
 	"strings"
+
+	"github.com/feditools/go-lib/http"
+	"github.com/feditools/login/internal/http/wellknown/models"
 )
 
 // OpenidConfigurationJWKSGetHandler logs a user out.
-func (m *Module) OpenidConfigurationJWKSGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) {
+func (m *Module) OpenidConfigurationJWKSGetHandler(w nethttp.ResponseWriter, _ *nethttp.Request) {
 	l := logger.WithField("func", "OpenidConfigurationJWKSGetHandler")
 
 	w.Header().Set(http.HeaderContentType, http.MimeAppJSON)
@@ -52,8 +52,6 @@ func (m *Module) generateOpenidConfigurationJWKSBody() error {
 		l.Errorf("json marshal: %s", err.Error())
 		return err
 	}
-
-	fmt.Printf("%s\n", string(b))
 
 	m.openidConfigurationJWKSBody = b
 	return nil
@@ -99,7 +97,7 @@ func (m *Module) generateECPublicKeyJWKSKey() (*models.JWKSKey, error) {
 
 func generateX509ThumbprintSHA1(publicKeyDER []byte) string {
 	// make hash
-	hasher := sha1.New()
+	hasher := sha1.New() // #nosec G401 not used for cryptography
 	hasher.Write(publicKeyDER)
 	publicKeySignature := hasher.Sum(nil)
 

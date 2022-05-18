@@ -2,10 +2,11 @@ package wellknown
 
 import (
 	"encoding/json"
-	"github.com/feditools/login/internal/config"
-	"github.com/spf13/viper"
 	nethttp "net/http"
 	"strings"
+
+	"github.com/feditools/login/internal/config"
+	"github.com/spf13/viper"
 
 	"github.com/feditools/go-lib/http"
 	"github.com/feditools/login/internal/http/wellknown/models"
