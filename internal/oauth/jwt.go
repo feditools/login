@@ -27,8 +27,9 @@ func (a *JWTAccessClaims) Valid() error {
 }
 
 // NewAccessGenerator creates a new access token generator.
-func (s *Server) NewAccessGenerator(method jwt.SigningMethod) (*AccessGenerator, error) {
+func (s *Server) NewAccessGenerator(issuer string, method jwt.SigningMethod) (*AccessGenerator, error) {
 	return &AccessGenerator{
+		Issuer:       issuer,
 		SignedKeyID:  s.GetECPublicKeyID(),
 		SignedKey:    s.GetECPrivateKey(),
 		SignedMethod: method,
@@ -37,6 +38,7 @@ func (s *Server) NewAccessGenerator(method jwt.SigningMethod) (*AccessGenerator,
 
 // AccessGenerator generate the jwt access token.
 type AccessGenerator struct {
+	Issuer       string
 	SignedKeyID  string
 	SignedKey    *ecdsa.PrivateKey
 	SignedMethod jwt.SigningMethod
@@ -51,6 +53,7 @@ func (a *AccessGenerator) Token(ctx context.Context, data *oauth2.GenerateBasic,
 
 	claims := &JWTAccessClaims{
 		StandardClaims: jwt.StandardClaims{
+			Issuer:    a.Issuer,
 			Audience:  data.Client.GetID(),
 			Subject:   data.UserID,
 			ExpiresAt: data.TokenInfo.GetAccessCreateAt().Add(data.TokenInfo.GetAccessExpiresIn()).Unix(),

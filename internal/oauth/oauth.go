@@ -6,7 +6,10 @@ import (
 	"crypto/ecdsa"
 	"crypto/x509"
 	"encoding/pem"
+	"github.com/feditools/login/internal/config"
+	"github.com/spf13/viper"
 	nethttp "net/http"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -50,7 +53,8 @@ func New(_ context.Context, d db.DB, r *redis.Client, t *token.Tokenizer) (*Serv
 	}
 
 	// access generator
-	accessGenerator, err := newServer.NewAccessGenerator(jwt.SigningMethodES256)
+	externalURL := strings.TrimSuffix(viper.GetString(config.Keys.ServerExternalURL), "/")
+	accessGenerator, err := newServer.NewAccessGenerator(externalURL, jwt.SigningMethodES256)
 	if err != nil {
 		return nil, err
 	}
