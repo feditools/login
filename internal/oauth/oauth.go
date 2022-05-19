@@ -7,6 +7,7 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	nethttp "net/http"
+	"time"
 
 	"github.com/golang-jwt/jwt"
 
@@ -41,6 +42,13 @@ func New(_ context.Context, d db.DB, r *redis.Client, t *token.Tokenizer) (*Serv
 		keychain: keychain,
 	}
 
+	// authorize token config
+	authorizeCodeTokenCfg := &manage.Config{
+		AccessTokenExp:    time.Hour * 8,
+		RefreshTokenExp:   time.Hour * 24 * 7,
+		IsGenerateRefresh: true,
+	}
+
 	// access generator
 	accessGenerator, err := newServer.NewAccessGenerator(jwt.SigningMethodES256)
 	if err != nil {
@@ -49,7 +57,7 @@ func New(_ context.Context, d db.DB, r *redis.Client, t *token.Tokenizer) (*Serv
 
 	// create oauth manager
 	manager := manage.NewDefaultManager()
-	manager.SetAuthorizeCodeTokenCfg(manage.DefaultAuthorizeCodeTokenCfg)
+	manager.SetAuthorizeCodeTokenCfg(authorizeCodeTokenCfg)
 	manager.MapAccessGenerate(accessGenerator)
 	// manager.MapAccessGenerate(generates.NewAccessGenerate())
 	manager.MapTokenStorage(oredis.NewRedisStoreWithCli(

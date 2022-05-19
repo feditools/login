@@ -2,6 +2,7 @@ package wellknown
 
 import (
 	"encoding/json"
+	"github.com/golang-jwt/jwt"
 	nethttp "net/http"
 	"strings"
 
@@ -39,6 +40,9 @@ func (m *Module) generateOpenidConfigurationBody() error {
 		AuthorizationEndpoint: externalURL + path.OauthAuthorize,
 		TokenEndpoint:         externalURL + path.OauthToken,
 		JwksURI:               externalURL + path.WellKnownOpenidConfigurationJWKS,
+		TokenSupportedAlgos: []string{
+			jwt.SigningMethodES256.Alg(),
+		},
 	}
 
 	b, err := json.Marshal(response)
