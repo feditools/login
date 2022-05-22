@@ -18,11 +18,11 @@ func TestKeyFediNodeInfo(t *testing.T) {
 	}
 }
 
-func TestKeySession(t *testing.T) {
-	want := "login:session:" //nolint
-	v := KeySession()
+func TestKeyNonceToken(t *testing.T) {
+	want := "login:oauth:nonce:42:testtest1234"
+	v := KeyOauthNonce(42, "testtest1234")
 	if v != want {
-		t.Errorf("enexpected value for KeyDomains, got: '%s', want: '%s'.", v, want)
+		t.Errorf("enexpected value for TestKeyNonceToken, got: '%s', want: '%s'.", v, want)
 	}
 }
 
@@ -31,5 +31,13 @@ func TestKeyOauthToken(t *testing.T) {
 	v := KeyOauthToken()
 	if v != want {
 		t.Errorf("enexpected value for KeyOauthToken, got: '%s', want: '%s'.", v, want)
+	}
+}
+
+func TestKeySession(t *testing.T) {
+	want := "login:session:" //nolint
+	v := KeySession()
+	if v != want {
+		t.Errorf("enexpected value for KeyDomains, got: '%s', want: '%s'.", v, want)
 	}
 }

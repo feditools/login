@@ -20,4 +20,10 @@ type KV interface {
 	DeleteFediNodeInfo(ctx context.Context, domain string) (err error)
 	GetFediNodeInfo(ctx context.Context, domain string) (nodeinfo string, err error)
 	SetFediNodeInfo(ctx context.Context, domain string, nodeinfo string, expire time.Duration) (err error)
+
+	// oauth nonce
+
+	DeleteOauthNonce(ctx context.Context, uid int64, sid string) (err error)
+	GetOauthNonce(ctx context.Context, uid int64, sid string) (nonce string, err error)
+	SetOauthNonce(ctx context.Context, uid int64, sid string, nonce string, expire time.Duration) (err error)
 }
