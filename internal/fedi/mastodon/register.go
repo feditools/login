@@ -27,6 +27,7 @@ func (h *Helper) RegisterApp(ctx context.Context, instance *models.FediInstance)
 
 		if err != nil {
 			l.Errorf("registering app: %s", err.Error())
+
 			return nil, err
 		}
 
@@ -40,9 +41,11 @@ func (h *Helper) RegisterApp(ctx context.Context, instance *models.FediInstance)
 
 	if err != nil {
 		l.Errorf("singleflight: %s", err.Error())
+
 		return "", "", err
 	}
 
 	keys := v.(*[]string)
+
 	return (*keys)[0], (*keys)[1], nil
 }

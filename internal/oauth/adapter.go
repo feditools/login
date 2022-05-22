@@ -30,38 +30,45 @@ func (c *AdapterClientStore) GetByID(ctx context.Context, tok string) (oauth2.Cl
 
 	if tok == "" {
 		l.Debug("token empty")
+
 		return nil, nil
 	}
 
 	kind, id, err := c.tokz.DecodeToken(tok)
 	if err != nil {
 		l.Debugf("error decoding token: %s", err.Error())
+
 		return nil, err
 	}
 	if kind != token.KindOauthClient {
 		l.Debugf("invalid token kind: %s", kind.String())
+
 		return nil, token.ErrInvalidTokenKind
 	}
 
 	dbClient, err := c.db.ReadOauthClient(ctx, id)
 	if err != nil {
 		l.Errorf("db read: %s", err.Error())
+
 		return nil, err
 	}
 	if dbClient == nil {
 		l.Debug("client not found")
+
 		return nil, nil
 	}
 
 	clientSecret, err := dbClient.GetSecret()
 	if err != nil {
 		l.Warnf("decoding secret: %s", err.Error())
+
 		return nil, err
 	}
 
 	accountToken, err := c.tokz.EncodeToken(token.KindFediAccount, dbClient.OwnerID)
 	if err != nil {
 		l.Warnf("generating account tokens: %s", err.Error())
+
 		return nil, err
 	}
 

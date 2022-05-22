@@ -21,6 +21,7 @@ func (h *Helper) GetAccessToken(ctx context.Context, instance *models.FediInstan
 	if err != nil {
 		return "", err
 	}
+
 	return c.Config.AccessToken, nil
 }
 
@@ -38,5 +39,6 @@ func (h *Helper) MakeLoginURI(_ context.Context, instance *models.FediInstance) 
 	q.Set("response_type", "code")
 	q.Set("scope", "read:accounts")
 	u.RawQuery = q.Encode()
+
 	return u, nil
 }

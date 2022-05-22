@@ -1,7 +1,5 @@
 package kv
 
-import "strconv"
-
 const (
 	keyBase = "login:"
 
@@ -23,9 +21,7 @@ func KeyFediActor(u string) string { return keyFediActor + u }
 func KeyFediNodeInfo(d string) string { return keyFediNodeInfo + d }
 
 // KeyOauthNonce returns the kv key which holds oauth nonce.
-func KeyOauthNonce(uid int64, sid string) string {
-	return keyOauthNonce + strconv.FormatInt(uid, 10) + ":" + sid
-}
+func KeyOauthNonce(uid string, sid string) string { return keyOauthNonce + uid + ":" + sid }
 
 // KeyOauthToken returns the oauth token key prefix.
 func KeyOauthToken() string { return keyOauthToken }

@@ -20,7 +20,7 @@ func TestKeyFediNodeInfo(t *testing.T) {
 
 func TestKeyNonceToken(t *testing.T) {
 	want := "login:oauth:nonce:42:testtest1234"
-	v := KeyOauthNonce(42, "testtest1234")
+	v := KeyOauthNonce("42", "testtest1234")
 	if v != want {
 		t.Errorf("enexpected value for TestKeyNonceToken, got: '%s', want: '%s'.", v, want)
 	}

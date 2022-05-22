@@ -25,22 +25,24 @@ func (m *Module) authRequireLoggedIn(w nethttp.ResponseWriter, r *nethttp.Reques
 	if r.Context().Value(http.ContextKeyAccount) == nil {
 		// Save current page
 		if r.URL.Query().Encode() == "" {
-			us.Values[SessionKeyLoginRedirect] = r.URL.Path
+			us.Values[http.SessionKeyLoginRedirect] = r.URL.Path
 		} else {
-			us.Values[SessionKeyLoginRedirect] = r.URL.Path + "?" + r.URL.Query().Encode()
+			us.Values[http.SessionKeyLoginRedirect] = r.URL.Path + "?" + r.URL.Query().Encode()
 		}
 		err := us.Save(r, w)
 		if err != nil {
 			m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 			return nil, true
 		}
 
 		// redirect to login
 		nethttp.Redirect(w, r, path.Login, nethttp.StatusFound)
+
 		return nil, true
 	}
-
 	account := r.Context().Value(http.ContextKeyAccount).(*models.FediAccount)
+
 	return account, false
 }
 
@@ -55,6 +57,7 @@ func getPageLang(query, header, defaultLang string) string {
 			l.Debugf("query languages: %v", t)
 			if len(t) > 0 {
 				l.Debugf("returning language: %s", t[0].String())
+
 				return t[0].String()
 			}
 		} else {
@@ -68,6 +71,7 @@ func getPageLang(query, header, defaultLang string) string {
 			l.Debugf("header languages: %v", t)
 			if len(t) > 0 {
 				l.Debugf("returning language: %s", t[0].String())
+
 				return t[0].String()
 			}
 		} else {
@@ -76,6 +80,7 @@ func getPageLang(query, header, defaultLang string) string {
 	}
 
 	l.Debugf("returning default language: %s", defaultLang)
+
 	return defaultLang
 }
 
@@ -87,6 +92,7 @@ func getSignature(filePath string) (string, error) {
 	file, err := web.Files.Open(filePath)
 	if err != nil {
 		l.Errorf("opening file: %s", err.Error())
+
 		return "", err
 	}
 
@@ -116,6 +122,7 @@ func (m *Module) getSignatureCached(filePath string) (string, error) {
 		return "", err
 	}
 	m.writeCachedSignature(filePath, sig)
+
 	return sig, nil
 }
 
@@ -124,6 +131,7 @@ func (m *Module) readCachedSignature(filePath string) (string, bool) {
 	defer m.sigCacheLock.RUnlock()
 
 	val, ok := m.sigCache[filePath]
+
 	return val, ok
 }
 
@@ -139,6 +147,7 @@ func dumpRequest(l *logrus.Entry, header string, r *nethttp.Request) {
 	data, err := httputil.DumpRequest(r, true)
 	if err != nil {
 		l.Warnf("dump request: %s", err.Error())
+
 		return
 	}
 

@@ -32,6 +32,7 @@ func (m *Module) AdminFediInstancesGetHandler(w nethttp.ResponseWriter, r *netht
 	err := m.initTemplateAdmin(w, r, tmplVars)
 	if err != nil {
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 
@@ -42,6 +43,7 @@ func (m *Module) AdminFediInstancesGetHandler(w nethttp.ResponseWriter, r *netht
 	if err != nil {
 		l.Errorf("db read: %s", err.Error())
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 	instanceAccountCounts := make([]int64, len(instances))
@@ -50,6 +52,7 @@ func (m *Module) AdminFediInstancesGetHandler(w nethttp.ResponseWriter, r *netht
 		if err != nil {
 			l.Errorf("db count: %s", err.Error())
 			m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 			return
 		}
 		instanceAccountCounts[i] = accountCount
@@ -62,6 +65,7 @@ func (m *Module) AdminFediInstancesGetHandler(w nethttp.ResponseWriter, r *netht
 	if err != nil {
 		l.Errorf("db count: %s", err.Error())
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 

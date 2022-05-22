@@ -23,21 +23,25 @@ func (m *Module) CallbackOauthGetHandler(w nethttp.ResponseWriter, r *nethttp.Re
 	if err != nil {
 		l.Debugf("decode token: %s", err.Error())
 		m.returnErrorPage(w, r, nethttp.StatusBadRequest, "bad token")
+
 		return
 	}
 	if kind != token.KindFediInstance {
 		l.Debug("token is wrong kind")
 		m.returnErrorPage(w, r, nethttp.StatusBadRequest, "bad token")
+
 		return
 	}
 	instance, err := m.db.ReadFediInstance(r.Context(), id)
 	if err != nil {
 		l.Errorf("db read instance: %s", err.Error())
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 	if instance == nil {
 		m.returnErrorPage(w, r, nethttp.StatusNotFound, vars["token"])
+
 		return
 	}
 
@@ -49,6 +53,7 @@ func (m *Module) CallbackOauthGetHandler(w nethttp.ResponseWriter, r *nethttp.Re
 		if code, ok = r.URL.Query()["code"]; !ok || len(code[0]) < 1 {
 			l.Debugf("missing code")
 			m.returnErrorPage(w, r, nethttp.StatusBadRequest, "missing code")
+
 			return
 		}
 
@@ -58,6 +63,7 @@ func (m *Module) CallbackOauthGetHandler(w nethttp.ResponseWriter, r *nethttp.Re
 		if err != nil {
 			l.Errorf("get access token error: %s", err.Error())
 			m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 			return
 		}
 		l.Debugf("access token: %s", accessToken)
@@ -68,6 +74,7 @@ func (m *Module) CallbackOauthGetHandler(w nethttp.ResponseWriter, r *nethttp.Re
 		if err != nil {
 			l.Errorf("get access token error: %s", err.Error())
 			m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 			return
 		}
 
@@ -76,41 +83,46 @@ func (m *Module) CallbackOauthGetHandler(w nethttp.ResponseWriter, r *nethttp.Re
 		if err != nil {
 			l.Errorf("db inc login: %s", err.Error())
 			m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 			return
 		}
 
 		// init session
 		us := r.Context().Value(http.ContextKeySession).(*sessions.Session)
-		us.Values[SessionKeyAccountID] = account.ID
+		us.Values[http.SessionKeyAccountID] = account.ID
 		err = us.Save(r, w)
 		if err != nil {
 			m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 			return
 		}
 
 		l.Debugf("account: %#v", account)
 
 		// redirect to last page
-		val := us.Values[SessionKeyLoginRedirect]
+		val := us.Values[http.SessionKeyLoginRedirect]
 		var loginRedirect string
 		if loginRedirect, ok = val.(string); !ok {
 			// redirect home page if no login-redirect
 			nethttp.Redirect(w, r, path.Me, nethttp.StatusFound)
+
 			return
 		}
 
 		// Set login redirect to nil
-		us.Values[SessionKeyLoginRedirect] = nil
+		us.Values[http.SessionKeyLoginRedirect] = nil
 		err := us.Save(r, w)
 		if err != nil {
 			m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 			return
 		}
-
 		nethttp.Redirect(w, r, loginRedirect, nethttp.StatusFound)
+
 		return
 	default:
 		m.returnErrorPage(w, r, nethttp.StatusNotImplemented, fmt.Sprintf("no helper for '%s'", instance.Software))
+
 		return
 	}
 }

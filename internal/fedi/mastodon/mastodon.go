@@ -50,6 +50,7 @@ func newClient(instance *models.FediInstance, accessToken string) (*mastodon.Cli
 	clientSecret, err := instance.GetClientSecret()
 	if err != nil {
 		l.Errorf("decrypting client secret: %s", err.Error())
+
 		return nil, err
 	}
 
@@ -63,6 +64,7 @@ func newClient(instance *models.FediInstance, accessToken string) (*mastodon.Cli
 
 	// apply custom transport
 	client.Transport = &http.Transport{}
+
 	return client, nil
 }
 

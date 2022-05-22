@@ -23,7 +23,7 @@ type KV interface {
 
 	// oauth nonce
 
-	DeleteOauthNonce(ctx context.Context, uid int64, sid string) (err error)
-	GetOauthNonce(ctx context.Context, uid int64, sid string) (nonce string, err error)
-	SetOauthNonce(ctx context.Context, uid int64, sid string, nonce string, expire time.Duration) (err error)
+	DeleteOauthNonce(ctx context.Context, uid string, sid string) (err error)
+	GetOauthNonce(ctx context.Context, uid string, sid string) (nonce string, err error)
+	SetOauthNonce(ctx context.Context, uid string, sid string, nonce string, expire time.Duration) (err error)
 }

@@ -41,12 +41,14 @@ func (f *OauthClient) BeforeAppendModel(_ context.Context, query bun.Query) erro
 			return err
 		}
 	}
+
 	return nil
 }
 
 // GetSecret returns unencrypted secret.
 func (f *OauthClient) GetSecret() (string, error) {
 	data, err := decrypt(f.Secret)
+
 	return string(data), err
 }
 
@@ -57,5 +59,6 @@ func (f *OauthClient) SetSecret(s string) error {
 		return err
 	}
 	f.Secret = data
+
 	return nil
 }

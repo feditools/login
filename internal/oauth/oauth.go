@@ -2,15 +2,15 @@ package oauth
 
 import (
 	"context"
-	"crypto"
 	"crypto/ecdsa"
-	"crypto/x509"
-	"encoding/pem"
-	"github.com/feditools/login/internal/config"
-	"github.com/spf13/viper"
+	"errors"
 	nethttp "net/http"
+	"strconv"
 	"strings"
 	"time"
+
+	"github.com/feditools/login/internal/config"
+	"github.com/spf13/viper"
 
 	"github.com/golang-jwt/jwt"
 
@@ -24,9 +24,15 @@ import (
 	oredis "github.com/go-oauth2/redis/v4"
 )
 
+const (
+	accessTokenExp  = time.Hour * 8
+	refreshTokenExp = time.Hour * 24 * 7
+)
+
 // Server is an oauth server.
 type Server struct {
 	keychain *Keychain
+	kv       kv.KV
 	oauth    *server.Server
 }
 
@@ -47,14 +53,14 @@ func New(_ context.Context, d db.DB, r *redis.Client, t *token.Tokenizer) (*Serv
 
 	// authorize token config
 	authorizeCodeTokenCfg := &manage.Config{
-		AccessTokenExp:    time.Hour * 8,
-		RefreshTokenExp:   time.Hour * 24 * 7,
+		AccessTokenExp:    accessTokenExp,
+		RefreshTokenExp:   refreshTokenExp,
 		IsGenerateRefresh: true,
 	}
 
 	// access generator
 	externalURL := strings.TrimSuffix(viper.GetString(config.Keys.ServerExternalURL), "/")
-	accessGenerator, err := newServer.NewAccessGenerator(externalURL, jwt.SigningMethodES256)
+	accessGenerator, err := newServer.NewAccessGenerator(r, externalURL, jwt.SigningMethodES256)
 	if err != nil {
 		return nil, err
 	}
@@ -77,6 +83,7 @@ func New(_ context.Context, d db.DB, r *redis.Client, t *token.Tokenizer) (*Serv
 	oauthServer.SetInternalErrorHandler(func(err error) *oerrors.Response {
 		l := logger.WithField("func", "SetInternalErrorHandler")
 		l.Errorf("Internal Error: %s", err.Error())
+
 		return nil
 	})
 	oauthServer.SetResponseErrorHandler(func(re *oerrors.Response) {
@@ -86,6 +93,7 @@ func New(_ context.Context, d db.DB, r *redis.Client, t *token.Tokenizer) (*Serv
 
 	return &Server{
 		keychain: keychain,
+		kv:       r,
 		oauth:    oauthServer,
 	}, nil
 }
@@ -97,41 +105,11 @@ func (s *Server) GetECPrivateKey() *ecdsa.PrivateKey {
 	return s.keychain.ecdsa
 }
 
-// GetECPrivateKeyPEM returns a PEM encoded version of the private key.
-func (s *Server) GetECPrivateKeyPEM() ([]byte, error) {
-	privateKeyBytes, err := x509.MarshalECPrivateKey(s.keychain.ecdsa)
-	if err != nil {
-		return nil, err
-	}
-
-	newPem := pem.EncodeToMemory(
-		&pem.Block{
-			Type:  "EC PRIVATE KEY",
-			Bytes: privateKeyBytes,
-		},
-	)
-
-	return newPem, nil
-}
-
-// GetECPublicKeyCurve returns the ecdsa curve type.
-func (s *Server) GetECPublicKeyCurve() string {
-	return s.keychain.ecdsa.PublicKey.Curve.Params().Name
-}
-
-// GetECPublicKeyX returns the bytes of ecdsa X.
-func (s *Server) GetECPublicKeyX() []byte {
-	return s.keychain.ecdsa.PublicKey.X.Bytes()
-}
-
-// GetECPublicKeyY returns the bytes of ecdsa Y.
-func (s *Server) GetECPublicKeyY() []byte {
-	return s.keychain.ecdsa.PublicKey.Y.Bytes()
-}
-
 // GetECPublicKey returns a crypto.PublicKey compatable version of the public key.
-func (s *Server) GetECPublicKey() crypto.PublicKey {
-	return s.keychain.ecdsa.Public()
+func (s *Server) GetECPublicKey() *ecdsa.PublicKey {
+	pubKey := s.keychain.ecdsa.PublicKey
+
+	return &pubKey
 }
 
 // GetECPublicKeyID returns the generated.
@@ -142,7 +120,28 @@ func (s *Server) GetECPublicKeyID() string {
 // handlers
 
 // HandleAuthorizeRequest passes an authorize request to the oauth server.
-func (s *Server) HandleAuthorizeRequest(w nethttp.ResponseWriter, r *nethttp.Request) error {
+func (s *Server) HandleAuthorizeRequest(uid int64, w nethttp.ResponseWriter, r *nethttp.Request) error {
+	l := logger.WithField("func", "HandleAuthorizeRequest")
+
+	nonce := r.Form.Get("nonce")
+	l.Debugf("nonce: '%s'", nonce)
+	if nonce == "" {
+		return errors.New("missing nonce")
+	}
+
+	sessionID := r.Form.Get("session_id")
+	l.Debugf("nonce: '%s'", sessionID)
+	if sessionID == "" {
+		return errors.New("missing session id")
+	}
+
+	err := s.kv.SetOauthNonce(r.Context(), strconv.FormatInt(uid, 10), sessionID, nonce, refreshTokenExp*2)
+	if err != nil {
+		l.Errorf("set oauth nonce: %s", err.Error())
+
+		return err
+	}
+
 	return s.oauth.HandleAuthorizeRequest(w, r)
 }
 

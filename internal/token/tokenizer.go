@@ -43,6 +43,7 @@ func (t *Tokenizer) DecodeToken(token string) (Kind, int64, error) {
 	if len(d) != 2 {
 		return 0, 0, ErrInvalidLength
 	}
+
 	return Kind(d[0]), d[1], nil
 }
 

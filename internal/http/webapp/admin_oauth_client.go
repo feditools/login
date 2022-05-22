@@ -37,6 +37,7 @@ func (m *Module) AdminOauthClientsGetHandler(w nethttp.ResponseWriter, r *nethtt
 	err := m.initTemplateAdmin(w, r, tmplVars)
 	if err != nil {
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 
@@ -47,6 +48,7 @@ func (m *Module) AdminOauthClientsGetHandler(w nethttp.ResponseWriter, r *nethtt
 	if err != nil {
 		l.Errorf("db read: %s", err.Error())
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 	for _, c := range oauthClients {
@@ -55,6 +57,7 @@ func (m *Module) AdminOauthClientsGetHandler(w nethttp.ResponseWriter, r *nethtt
 			if err != nil {
 				l.Errorf("db read fedi account %d: %s", c.OwnerID, err.Error())
 				m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 				return
 			}
 			if owner.Instance == nil {
@@ -62,6 +65,7 @@ func (m *Module) AdminOauthClientsGetHandler(w nethttp.ResponseWriter, r *nethtt
 				if err != nil {
 					l.Errorf("db read fedi account %d: %s", c.OwnerID, err.Error())
 					m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 					return
 				}
 				owner.Instance = ownerInstance
@@ -76,6 +80,7 @@ func (m *Module) AdminOauthClientsGetHandler(w nethttp.ResponseWriter, r *nethtt
 	if err != nil {
 		l.Errorf("db count: %s", err.Error())
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 
@@ -168,6 +173,7 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 	// return form if invalid
 	if !valid {
 		m.displayOauthClientAdd(w, r, description, redirectURI, descriptionValidation, redirectURIValidation)
+
 		return
 	}
 
@@ -184,11 +190,13 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 	err = newClient.SetSecret(newClientSecret)
 	if err != nil {
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 	err = m.db.CreateOauthClient(r.Context(), newClient)
 	if err != nil {
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 
@@ -254,6 +262,7 @@ func (m *Module) AdminOauthClientAddPostHandler(w nethttp.ResponseWriter, r *net
 	err = m.initTemplateAdmin(w, r, tmplVars)
 	if err != nil {
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 
@@ -311,6 +320,7 @@ func (m *Module) displayOauthClientAdd(w nethttp.ResponseWriter, r *nethttp.Requ
 	err := m.initTemplateAdmin(w, r, tmplVars)
 	if err != nil {
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 

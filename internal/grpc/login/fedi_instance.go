@@ -15,10 +15,12 @@ func (m Module) GetFediInstance(ctx context.Context, request *proto.GetFediInsta
 	fediInstance, err := m.db.ReadFediInstance(ctx, request.Id)
 	if err != nil {
 		l.Errorf("db read: %s", err.Error())
+
 		return nil, err
 	}
 	if fediInstance == nil {
 		st := status.New(codes.NotFound, "FediInstance not found.")
+
 		return nil, st.Err()
 	}
 

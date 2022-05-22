@@ -15,6 +15,7 @@ func (f *Fedi) GetLoginURL(ctx context.Context, act string) (*url.URL, error) {
 	_, domain, err := lib.SplitAccount(act)
 	if err != nil {
 		l.Errorf("split account: %s", err.Error())
+
 		return nil, err
 	}
 
@@ -22,14 +23,17 @@ func (f *Fedi) GetLoginURL(ctx context.Context, act string) (*url.URL, error) {
 	instance, err := f.db.ReadFediInstanceByDomain(ctx, domain)
 	if err != nil {
 		l.Errorf("db read: %s", err.Error())
+
 		return nil, err
 	}
 	if instance != nil {
 		u, err := f.loginURLForInstance(ctx, instance)
 		if err != nil {
 			l.Errorf("get login url: %s", err.Error())
+
 			return nil, err
 		}
+
 		return u, nil
 	}
 
@@ -37,19 +41,23 @@ func (f *Fedi) GetLoginURL(ctx context.Context, act string) (*url.URL, error) {
 	newInstance, err := f.GenerateFediInstanceFromDomain(ctx, domain)
 	if err != nil {
 		l.Errorf("get nodeinfo: %s", err.Error())
+
 		return nil, err
 	}
 	err = f.db.CreateFediInstance(ctx, newInstance)
 	if err != nil {
 		l.Errorf("db create: %s", err.Error())
+
 		return nil, err
 	}
 
 	u, err := f.loginURLForInstance(ctx, newInstance)
 	if err != nil {
 		l.Errorf("get login url: %s", err.Error())
+
 		return nil, err
 	}
+
 	return u, nil
 }
 
@@ -64,6 +72,7 @@ func (f *Fedi) loginURLForInstance(ctx context.Context, instance *models.FediIns
 		clientID, clientSecret, err := f.helpers[SoftwareMastodon].RegisterApp(ctx, instance)
 		if err != nil {
 			l.Errorf("registering app: %s", err.Error())
+
 			return nil, err
 		}
 		l.Debugf("got app: %s, %s", clientID, clientSecret)
@@ -71,12 +80,14 @@ func (f *Fedi) loginURLForInstance(ctx context.Context, instance *models.FediIns
 		err = instance.SetClientSecret(clientSecret)
 		if err != nil {
 			l.Errorf("setting secret: %s", err.Error())
+
 			return nil, err
 		}
 
 		err = f.db.UpdateFediInstance(ctx, instance)
 		if err != nil {
 			l.Errorf("db update: %s", err.Error())
+
 			return nil, err
 		}
 	}

@@ -30,6 +30,7 @@ func (m *Module) AdminSystemGetHandler(w nethttp.ResponseWriter, r *nethttp.Requ
 	err := m.initTemplateAdmin(w, r, tmplVars)
 	if err != nil {
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 

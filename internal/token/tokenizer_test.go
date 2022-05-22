@@ -32,11 +32,13 @@ func TestNew(t *testing.T) {
 	tokenizer, err := New()
 	if err != nil {
 		t.Errorf("got error: %s", err.Error())
+
 		return
 	}
 
 	if tokenizer.h == nil {
 		t.Errorf("hashid is nil")
+
 		return
 	}
 }
@@ -47,11 +49,13 @@ func TestNew_SaltEmpty(t *testing.T) {
 	tokenizer, err := New()
 	if !errors.Is(err, ErrSaltEmpty) {
 		t.Errorf("unexpected error, got: '%s', want: '%s'", err, ErrSaltEmpty)
+
 		return
 	}
 
 	if tokenizer != nil {
 		t.Errorf("unexpected tokenizer, got: '%T', want: '%T'", tokenizer, nil)
+
 		return
 	}
 }
@@ -60,6 +64,7 @@ func TestTokenizer_DecodeToken(t *testing.T) {
 	tokenizer, err := testNewTestTokenizer()
 	if err != nil {
 		t.Errorf("init: %s", err.Error())
+
 		return
 	}
 
@@ -74,6 +79,7 @@ func TestTokenizer_DecodeToken(t *testing.T) {
 			kind, id, err := tokenizer.DecodeToken(table.t)
 			if err != nil {
 				t.Errorf("got error: %s", err.Error())
+
 				return
 			}
 			if kind != table.k {
@@ -90,6 +96,7 @@ func TestTokenizer_DecodeToken_InvalidLength(t *testing.T) {
 	tokenizer, err := testNewTestTokenizer()
 	if err != nil {
 		t.Errorf("init: %s", err.Error())
+
 		return
 	}
 
@@ -97,6 +104,7 @@ func TestTokenizer_DecodeToken_InvalidLength(t *testing.T) {
 	errText := "negative number not supported"
 	if !errors.Is(err, ErrInvalidLength) {
 		t.Errorf("unexpected error, got: '%s', want: '%s'", err, errText)
+
 		return
 	}
 }
@@ -105,6 +113,7 @@ func TestTokenizer_EncodeToken(t *testing.T) {
 	tokenizer, err := testNewTestTokenizer()
 	if err != nil {
 		t.Errorf("init: %s", err.Error())
+
 		return
 	}
 
@@ -119,6 +128,7 @@ func TestTokenizer_EncodeToken(t *testing.T) {
 			token, err := tokenizer.EncodeToken(table.k, table.i)
 			if err != nil {
 				t.Errorf("got error: %s", err.Error())
+
 				return
 			}
 			if token != table.t {
@@ -132,6 +142,7 @@ func TestTokenizer_EncodeToken_Negative(t *testing.T) {
 	tokenizer, err := testNewTestTokenizer()
 	if err != nil {
 		t.Errorf("init: %s", err.Error())
+
 		return
 	}
 
@@ -139,10 +150,12 @@ func TestTokenizer_EncodeToken_Negative(t *testing.T) {
 	errText := "negative number not supported"
 	if err == nil {
 		t.Errorf("expected error, got: 'nil', want: '%s'", errText)
+
 		return
 	}
 	if err.Error() != errText {
 		t.Errorf("unexpected error, got: '%s', want: '%s'", err, errText)
+
 		return
 	}
 }
@@ -151,6 +164,7 @@ func TestTokenizer_GetToken(t *testing.T) {
 	tokenizer, err := testNewTestTokenizer()
 	if err != nil {
 		t.Errorf("init: %s", err.Error())
+
 		return
 	}
 
@@ -188,6 +202,7 @@ func TestTokenizer_GetToken(t *testing.T) {
 func testNewTestTokenizer() (*Tokenizer, error) {
 	viper.Reset()
 	viper.Set(config.Keys.TokenSalt, "test1234")
+
 	return New()
 }
 
@@ -195,6 +210,7 @@ func BenchmarkTokenizer_DecodeToken(b *testing.B) {
 	tokenizer, err := testNewTestTokenizer()
 	if err != nil {
 		b.Errorf("init: %s", err.Error())
+
 		return
 	}
 
@@ -210,6 +226,7 @@ func BenchmarkTokenizer_EncodeToken(b *testing.B) {
 	tokenizer, err := testNewTestTokenizer()
 	if err != nil {
 		b.Errorf("init: %s", err.Error())
+
 		return
 	}
 

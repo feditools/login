@@ -5,6 +5,8 @@ import (
 	nethttp "net/http"
 	"strconv"
 
+	"github.com/feditools/login/internal/models"
+
 	"github.com/feditools/login/internal/http"
 	"github.com/feditools/login/internal/path"
 	oerrors "github.com/go-oauth2/oauth2/v4/errors"
@@ -20,7 +22,10 @@ func (m *Module) OauthAuthorizeGetHandler(w nethttp.ResponseWriter, r *nethttp.R
 		return
 	}
 
-	err := m.oauth.HandleAuthorizeRequest(w, r)
+	// get session
+	user := r.Context().Value(http.ContextKeyAccount).(*models.FediAccount)
+
+	err := m.oauth.HandleAuthorizeRequest(user.ID, w, r)
 	if err != nil {
 		switch {
 		case errors.Is(err, oerrors.ErrCodeChallengeRquired):
@@ -53,26 +58,29 @@ func oauthUserAuthorizeHandler(w nethttp.ResponseWriter, r *nethttp.Request) (st
 	// get session
 	us := r.Context().Value(http.ContextKeySession).(*sessions.Session)
 
-	uid, ok := us.Values[SessionKeyAccountID].(int64)
+	uid, ok := us.Values[http.SessionKeyAccountID].(int64)
 	if !ok {
 		if r.Form == nil {
 			err := r.ParseForm()
 			if err != nil {
 				l.Errorf("parsing form: %s", err.Error())
+
 				return "", err
 			}
 		}
 
 		// Save current page
-		us.Values[SessionKeyReturnURI] = r.Form
+		us.Values[http.SessionKeyReturnURI] = r.Form
 		err := us.Save(r, w)
 		if err != nil {
 			l.Errorf("saving session: %s", err.Error())
+
 			return "", err
 		}
 
 		w.Header().Set("Location", path.Login)
 		w.WriteHeader(nethttp.StatusFound)
+
 		return "", nil
 	}
 

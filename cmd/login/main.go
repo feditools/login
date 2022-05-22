@@ -44,6 +44,7 @@ func main() {
 	err := viper.BindPFlag(config.Keys.ConfigPath, rootCmd.PersistentFlags().Lookup(config.Keys.ConfigPath))
 	if err != nil {
 		l.Fatalf("error binding config flag: %s", err)
+
 		return
 	}
 

@@ -15,10 +15,12 @@ func (m Module) GetFediAccount(ctx context.Context, request *proto.GetFediAccoun
 	fediAccount, err := m.db.ReadFediAccount(ctx, request.Id)
 	if err != nil {
 		l.Errorf("db read: %s", err.Error())
+
 		return nil, err
 	}
 	if fediAccount == nil {
 		st := status.New(codes.NotFound, "FediAccount not found.")
+
 		return nil, st.Err()
 	}
 

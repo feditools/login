@@ -19,18 +19,20 @@ func (m *Module) Middleware(next nethttp.Handler) nethttp.Handler {
 		if err != nil {
 			l.Errorf("get session: %s", err.Error())
 			m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 			return
 		}
 		ctx := context.WithValue(r.Context(), http.ContextKeySession, us)
 
 		// Retrieve our account and type-assert it
-		val := us.Values[SessionKeyAccountID]
+		val := us.Values[http.SessionKeyAccountID]
 		if accountID, ok := val.(int64); ok {
 			// read federated accounts
 			account, err := m.db.ReadFediAccount(ctx, accountID)
 			if err != nil {
 				l.Errorf("db read: %s", err.Error())
 				m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 				return
 			}
 
@@ -40,6 +42,7 @@ func (m *Module) Middleware(next nethttp.Handler) nethttp.Handler {
 				if err != nil {
 					l.Errorf("db read: %s", err.Error())
 					m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 					return
 				}
 				account.Instance = instance
@@ -55,6 +58,7 @@ func (m *Module) Middleware(next nethttp.Handler) nethttp.Handler {
 		if err != nil {
 			l.Errorf("could get localizer: %s", err.Error())
 			m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 			return
 		}
 		ctx = context.WithValue(ctx, http.ContextKeyLocalizer, localizer)
@@ -79,6 +83,7 @@ func (m *Module) MiddlewareRequireAdmin(next nethttp.Handler) nethttp.Handler {
 		if !account.Admin {
 			localizer := r.Context().Value(http.ContextKeyLocalizer).(*language.Localizer)
 			m.returnErrorPage(w, r, nethttp.StatusUnauthorized, localizer.TextUnauthorized().String())
+
 			return
 		}
 

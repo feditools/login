@@ -36,6 +36,7 @@ func (m *Module) AdminSystemApplicationTokensGetHandler(w nethttp.ResponseWriter
 	err := m.initTemplateAdmin(w, r, tmplVars)
 	if err != nil {
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 
@@ -46,6 +47,7 @@ func (m *Module) AdminSystemApplicationTokensGetHandler(w nethttp.ResponseWriter
 	if err != nil {
 		l.Errorf("db read: %s", err.Error())
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 	for _, at := range applicationTokens {
@@ -54,6 +56,7 @@ func (m *Module) AdminSystemApplicationTokensGetHandler(w nethttp.ResponseWriter
 			if err != nil {
 				l.Errorf("db read fedi account %d: %s", at.CreatedByID, err.Error())
 				m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 				return
 			}
 			if creator.Instance == nil {
@@ -61,6 +64,7 @@ func (m *Module) AdminSystemApplicationTokensGetHandler(w nethttp.ResponseWriter
 				if err != nil {
 					l.Errorf("db read fedi instasnce %d: %s", creator.InstanceID, err.Error())
 					m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 					return
 				}
 				creator.Instance = ownerInstance
@@ -75,6 +79,7 @@ func (m *Module) AdminSystemApplicationTokensGetHandler(w nethttp.ResponseWriter
 	if err != nil {
 		l.Errorf("db count: %s", err.Error())
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 
@@ -133,6 +138,7 @@ func (m *Module) AdminSystemApplicationTokenAddPostHandler(w nethttp.ResponseWri
 	// return form if invalid
 	if !valid {
 		m.displayApplicationTokenAdd(w, r, description, descriptionValidation)
+
 		return
 	}
 
@@ -149,6 +155,7 @@ func (m *Module) AdminSystemApplicationTokenAddPostHandler(w nethttp.ResponseWri
 	if err != nil {
 		l.Errorf("db craete: %s", err.Error())
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 
@@ -190,6 +197,7 @@ func (m *Module) displayApplicationTokenAdd(w nethttp.ResponseWriter, r *nethttp
 	err := m.initTemplateAdmin(w, r, tmplVars)
 	if err != nil {
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 
@@ -243,6 +251,7 @@ func (m *Module) displayApplicationTokenAdded(w nethttp.ResponseWriter, r *netht
 	err := m.initTemplateAdmin(w, r, tmplVars)
 	if err != nil {
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 

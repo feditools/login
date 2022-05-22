@@ -36,6 +36,7 @@ require (
 	golang.org/x/text v0.3.7
 	google.golang.org/grpc v1.46.2
 	google.golang.org/protobuf v1.28.0
+	gopkg.in/square/go-jose.v2 v2.6.0
 	modernc.org/sqlite v1.17.1
 	mvdan.cc/xurls/v2 v2.4.0
 )

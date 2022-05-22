@@ -71,6 +71,7 @@ func (m *Module) initTemplateAdmin(w nethttp.ResponseWriter, r *nethttp.Request,
 	// make admin navbar
 	navbar := makeAdminNavbar(r)
 	tmpl.SetNavbar(navbar)
+
 	return nil
 }
 
@@ -87,14 +88,17 @@ func (m *Module) executeTemplate(w nethttp.ResponseWriter, name string, tmplVars
 	_, err = h.Write(b.Bytes())
 	if err != nil {
 		l.Errorf("writing response: %s", err.Error())
+
 		return err
 	}
 	w.Header().Set("Digest", fmt.Sprintf("sha-256=%s", base64.StdEncoding.EncodeToString(h.Sum(nil))))
 
 	if m.minify == nil {
 		_, err := w.Write(b.Bytes())
+
 		return err
 	}
+
 	return m.minify.Minify("text/html", w, b)
 }
 

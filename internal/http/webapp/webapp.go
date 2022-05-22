@@ -60,6 +60,7 @@ func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *lang
 	store, err := redisstore.NewRedisStore(ctx, r.RedisClient())
 	if err != nil {
 		l.Errorf("create redis store: %s", err.Error())
+
 		return nil, err
 	}
 
@@ -67,6 +68,7 @@ func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *lang
 	externalURL, err := url.Parse(viper.GetString(config.Keys.ServerExternalURL))
 	if err != nil {
 		l.Errorf("parsing external url: %s", err.Error())
+
 		return nil, err
 	}
 
@@ -78,7 +80,7 @@ func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *lang
 	})
 
 	// Register models for GOB
-	gob.Register(SessionKey(0))
+	gob.Register(http.SessionKey(0))
 	gob.Register(models.FediAccount{})
 
 	// minify
@@ -95,6 +97,7 @@ func New(ctx context.Context, d db.DB, r *redis.Client, f *fedi.Fedi, lMod *lang
 	tmpl, err := template.New(t)
 	if err != nil {
 		l.Errorf("create templates: %s", err.Error())
+
 		return nil, err
 	}
 

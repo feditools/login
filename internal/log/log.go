@@ -24,9 +24,9 @@ func Init() error {
 		}
 		logrus.SetLevel(level)
 
-		if level == logrus.TraceLevel {
+		/*if level == logrus.TraceLevel {
 			logrus.SetReportCaller(true)
-		}
+		}*/
 	}
 
 	return nil

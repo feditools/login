@@ -4,8 +4,11 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"encoding/base64"
+	"errors"
 	"strings"
 	"time"
+
+	"github.com/feditools/login/internal/kv"
 
 	"github.com/go-oauth2/oauth2/v4"
 	oerrors "github.com/go-oauth2/oauth2/v4/errors"
@@ -16,6 +19,8 @@ import (
 // JWTAccessClaims jwt claims.
 type JWTAccessClaims struct {
 	jwt.StandardClaims
+
+	Nonce string `json:"nonce,omitempty"`
 }
 
 // Valid claims verification.
@@ -23,12 +28,15 @@ func (a *JWTAccessClaims) Valid() error {
 	if time.Unix(a.ExpiresAt, 0).Before(time.Now()) {
 		return oerrors.ErrInvalidAccessToken
 	}
+
 	return nil
 }
 
 // NewAccessGenerator creates a new access token generator.
-func (s *Server) NewAccessGenerator(issuer string, method jwt.SigningMethod) (*AccessGenerator, error) {
+func (s *Server) NewAccessGenerator(k kv.KV, issuer string, method jwt.SigningMethod) (*AccessGenerator, error) {
 	return &AccessGenerator{
+		kv: k,
+
 		Issuer:       issuer,
 		SignedKeyID:  s.GetECPublicKeyID(),
 		SignedKey:    s.GetECPrivateKey(),
@@ -38,6 +46,8 @@ func (s *Server) NewAccessGenerator(issuer string, method jwt.SigningMethod) (*A
 
 // AccessGenerator generate the jwt access token.
 type AccessGenerator struct {
+	kv kv.KV
+
 	Issuer       string
 	SignedKeyID  string
 	SignedKey    *ecdsa.PrivateKey
@@ -48,8 +58,22 @@ type AccessGenerator struct {
 func (a *AccessGenerator) Token(ctx context.Context, data *oauth2.GenerateBasic, isGenRefresh bool) (string, string, error) {
 	l := logger.WithField("func", "Token")
 	l.Debugf("Called: %+v", data)
+	l.Debugf("Form: %+v", data.Request.Form)
 	l.Debugf("Client: %+v", data.Client)
-	l.Debugf("Token: %+v", data.TokenInfo.GetCodeChallengeMethod())
+	l.Debugf("Token: %+v", data.TokenInfo)
+
+	nonce, err := a.kv.GetOauthNonce(ctx, data.TokenInfo.GetUserID(), data.Request.Form.Get("session_id"))
+	if err != nil {
+		l.Errorf("getting oauth nonce: %s %T", err.Error(), err)
+
+		return "", "", err
+	}
+	if nonce == "" {
+		msg := "missing oauth nonce"
+		l.Error(msg)
+
+		return "", "", errors.New(msg)
+	}
 
 	claims := &JWTAccessClaims{
 		StandardClaims: jwt.StandardClaims{
@@ -58,6 +82,7 @@ func (a *AccessGenerator) Token(ctx context.Context, data *oauth2.GenerateBasic,
 			Subject:   data.UserID,
 			ExpiresAt: data.TokenInfo.GetAccessCreateAt().Add(data.TokenInfo.GetAccessExpiresIn()).Unix(),
 		},
+		Nonce: nonce,
 	}
 
 	token := jwt.NewWithClaims(a.SignedMethod, claims)
@@ -68,6 +93,7 @@ func (a *AccessGenerator) Token(ctx context.Context, data *oauth2.GenerateBasic,
 	access, err := token.SignedString(a.SignedKey)
 	if err != nil {
 		l.Errorf("signing string: %s", err.Error())
+
 		return "", "", err
 	}
 	refresh := ""

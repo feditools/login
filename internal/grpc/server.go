@@ -45,12 +45,14 @@ func NewServer(_ context.Context, d db.DB, m metrics.Collector) (*Server, error)
 func (s *Server) Start() error {
 	l := logger.WithField("func", "Start")
 	l.Infof("listening on %s", s.tcp.Addr())
+
 	return s.srv.Serve(s.tcp)
 }
 
 // Stop shuts down the web server.
 func (s *Server) Stop() error {
 	s.srv.Stop()
+
 	return nil
 }
 

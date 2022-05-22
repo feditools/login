@@ -33,6 +33,7 @@ func (m *Module) AdminFediAccountsGetHandler(w nethttp.ResponseWriter, r *nethtt
 	err := m.initTemplateAdmin(w, r, tmplVars)
 	if err != nil {
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 
@@ -43,6 +44,7 @@ func (m *Module) AdminFediAccountsGetHandler(w nethttp.ResponseWriter, r *nethtt
 	if err != nil {
 		l.Errorf("db read: %s", err.Error())
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 	for _, a := range accounts {
@@ -51,6 +53,7 @@ func (m *Module) AdminFediAccountsGetHandler(w nethttp.ResponseWriter, r *nethtt
 			if err != nil {
 				l.Errorf("db read fedi instance %d: %s", a.InstanceID, err.Error())
 				m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 				return
 			}
 			a.Instance = instance
@@ -63,6 +66,7 @@ func (m *Module) AdminFediAccountsGetHandler(w nethttp.ResponseWriter, r *nethtt
 	if err != nil {
 		l.Errorf("db count: %s", err.Error())
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 

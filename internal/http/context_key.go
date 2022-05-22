@@ -12,4 +12,6 @@ const (
 	ContextKeyLanguage
 	// ContextKeyAccount is the logged in user's account.
 	ContextKeyAccount
+	// ContextKeyOauthNonce is the oauth nonce.
+	ContextKeyOauthNonce
 )

@@ -28,5 +28,6 @@ func (Module) Name() string {
 // Register registers the service with the grpc server.
 func (m *Module) Register(s *grpc.Server) error {
 	proto.RegisterLoginServer(s.Server(), m)
+
 	return nil
 }

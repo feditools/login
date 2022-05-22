@@ -33,6 +33,7 @@ func (m *Module) returnErrorPage(w http.ResponseWriter, r *http.Request, code in
 	err := m.initTemplate(w, r, tmplVars)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+
 		return
 	}
 

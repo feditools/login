@@ -21,6 +21,7 @@ func TestDecrypt(t *testing.T) {
 	val, err := decrypt(byts)
 	if err != nil {
 		t.Errorf("unexpected error getting scanning, got: '%s', want: 'nil", err)
+
 		return
 	}
 	if string(val) != "test string 1" {
@@ -39,10 +40,12 @@ func TestDecrypt_NoData(t *testing.T) {
 	errMsg := "data too small"
 	if err == nil {
 		t.Errorf("expected error getting scanning, got: 'nil', want: '%s", errMsg)
+
 		return
 	}
 	if err.Error() != errMsg {
 		t.Errorf("unexpected error getting scanning, got: '%s', want: '%s", err.Error(), errMsg)
+
 		return
 	}
 }
@@ -69,18 +72,21 @@ func TestEncrypt(t *testing.T) {
 			data, err := encrypt([]byte(table.n))
 			if err != nil {
 				t.Errorf("unexpected error getting value: %s", err.Error())
+
 				return
 			}
 
 			gcm, err := getCrypto()
 			if err != nil {
 				t.Errorf("getting crypto: %s", err.Error())
+
 				return
 			}
 
 			nonceSize := gcm.NonceSize()
 			if len(data) < nonceSize {
 				t.Errorf("value too small")
+
 				return
 			}
 
@@ -88,6 +94,7 @@ func TestEncrypt(t *testing.T) {
 			plaintext, err := gcm.Open(nil, nonce, ciphertext, nil)
 			if err != nil {
 				t.Errorf("decrypting: %s", err.Error())
+
 				return
 			}
 			if string(plaintext) != table.n {

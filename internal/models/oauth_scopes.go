@@ -39,5 +39,6 @@ func (f *OauthScope) BeforeAppendModel(_ context.Context, query bun.Query) error
 			return err
 		}
 	}
+
 	return nil
 }

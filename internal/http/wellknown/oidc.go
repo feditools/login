@@ -2,9 +2,10 @@ package wellknown
 
 import (
 	"encoding/json"
-	"github.com/golang-jwt/jwt"
 	nethttp "net/http"
 	"strings"
+
+	"github.com/golang-jwt/jwt"
 
 	"github.com/feditools/login/internal/config"
 	"github.com/spf13/viper"
@@ -51,5 +52,6 @@ func (m *Module) generateOpenidConfigurationBody() error {
 	}
 
 	m.openidConfigurationBody = b
+
 	return nil
 }

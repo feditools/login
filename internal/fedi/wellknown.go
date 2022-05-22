@@ -20,6 +20,7 @@ func (f *Fedi) GetWellknownNodeInfo(ctx context.Context, domain string) (*models
 		resp, err := http.Get(ctx, nodinfoURI)
 		if err != nil {
 			l.Errorf("http get: %s", err.Error())
+
 			return nil, err
 		}
 
@@ -28,6 +29,7 @@ func (f *Fedi) GetWellknownNodeInfo(ctx context.Context, domain string) (*models
 		err = json.NewDecoder(resp.Body).Decode(nodeinfo)
 		if err != nil {
 			l.Errorf("decode json: %s", err.Error())
+
 			return nil, err
 		}
 
@@ -36,10 +38,12 @@ func (f *Fedi) GetWellknownNodeInfo(ctx context.Context, domain string) (*models
 
 	if err != nil {
 		l.Errorf("singleflight: %s", err.Error())
+
 		return nil, err
 	}
 
 	nodeinfo := v.(*models.NodeInfo)
+
 	return nodeinfo, nil
 }
 
@@ -52,6 +56,7 @@ func (f *Fedi) GetWellknownWebFinger(ctx context.Context, username, domain strin
 		resp, err := http.Get(ctx, webfingerURI)
 		if err != nil {
 			l.Errorf("http get: %s", err.Error())
+
 			return nil, err
 		}
 
@@ -60,6 +65,7 @@ func (f *Fedi) GetWellknownWebFinger(ctx context.Context, username, domain strin
 		err = json.NewDecoder(resp.Body).Decode(webfinger)
 		if err != nil {
 			l.Errorf("decode json: %s", err.Error())
+
 			return nil, err
 		}
 
@@ -68,10 +74,12 @@ func (f *Fedi) GetWellknownWebFinger(ctx context.Context, username, domain strin
 
 	if err != nil {
 		l.Errorf("singleflight: %s", err.Error())
+
 		return nil, err
 	}
 
 	webfinger := v.(*models.WebFinger)
+
 	return webfinger, nil
 }
 
