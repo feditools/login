@@ -3,10 +3,12 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/feditools/login/internal/grpc/login"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/feditools/login/internal/grpc/login"
+	"github.com/feditools/login/internal/http/wellknown"
 
 	"github.com/feditools/go-lib/language"
 	"github.com/feditools/go-lib/metrics/statsd"
@@ -22,7 +24,6 @@ import (
 	"github.com/feditools/login/internal/kv/redis"
 	"github.com/feditools/login/internal/oauth"
 	"github.com/feditools/login/internal/token"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"github.com/tyrm/go-util"
 )
@@ -38,6 +39,7 @@ var Start action.Action = func(ctx context.Context) error {
 	)
 	if err != nil {
 		l.Errorf("metrics: %s", err.Error())
+
 		return err
 	}
 	defer func() {
@@ -50,11 +52,13 @@ var Start action.Action = func(ctx context.Context) error {
 	dbClient, err := bun.New(ctx, metricsCollector)
 	if err != nil {
 		l.Errorf("db: %s", err.Error())
+
 		return err
 	}
 	cachedDBClient, err := cachemem.New(ctx, dbClient, metricsCollector)
 	if err != nil {
 		l.Errorf("db-cachemem: %s", err.Error())
+
 		return err
 	}
 	defer func() {
@@ -67,6 +71,7 @@ var Start action.Action = func(ctx context.Context) error {
 	redisClient, err := redis.New(ctx)
 	if err != nil {
 		l.Errorf("redis: %s", err.Error())
+
 		return err
 	}
 	defer func() {
@@ -79,18 +84,21 @@ var Start action.Action = func(ctx context.Context) error {
 	tokz, err := token.New()
 	if err != nil {
 		l.Errorf("create tokenizer: %s", err.Error())
+
 		return err
 	}
 
 	languageMod, err := language.New()
 	if err != nil {
 		l.Errorf("language: %s", err.Error())
+
 		return err
 	}
 
 	oauthServer, err := oauth.New(ctx, cachedDBClient, redisClient, tokz)
 	if err != nil {
 		l.Errorf("oauth server: %s", err.Error())
+
 		return err
 	}
 
@@ -105,6 +113,7 @@ var Start action.Action = func(ctx context.Context) error {
 	fediMod, err := fedi.New(cachedDBClient, redisClient, tokz, fediHelpers)
 	if err != nil {
 		l.Errorf("fedihelper: %s", err.Error())
+
 		return err
 	}
 
@@ -113,6 +122,7 @@ var Start action.Action = func(ctx context.Context) error {
 	grpcServer, err := grpc.NewServer(ctx, cachedDBClient, metricsCollector)
 	if err != nil {
 		l.Errorf("http httpServer: %s", err.Error())
+
 		return err
 	}
 
@@ -120,7 +130,8 @@ var Start action.Action = func(ctx context.Context) error {
 	var grpcModules []grpc.Module
 	loginGRPC, err := login.New(cachedDBClient)
 	if err != nil {
-		logrus.Errorf("login grpc module: %s", err.Error())
+		l.Errorf("login grpc module: %s", err.Error())
+
 		return err
 	}
 	grpcModules = append(grpcModules, loginGRPC)
@@ -130,6 +141,7 @@ var Start action.Action = func(ctx context.Context) error {
 		err := mod.Register(grpcServer)
 		if err != nil {
 			l.Errorf("loading %s module: %s", mod.Name(), err.Error())
+
 			return err
 		}
 	}
@@ -139,16 +151,28 @@ var Start action.Action = func(ctx context.Context) error {
 	httpServer, err := http.NewServer(ctx, metricsCollector)
 	if err != nil {
 		l.Errorf("http httpServer: %s", err.Error())
+
 		return err
 	}
 
 	// create web modules
 	var webModules []http.Module
+	if util.ContainsString(viper.GetStringSlice(config.Keys.ServerRoles), config.ServerRoleWellKnown) {
+		l.Infof("adding wellknown module")
+		webMod, err := wellknown.New(ctx, oauthServer)
+		if err != nil {
+			l.Errorf("wellknown module: %s", err.Error())
+
+			return err
+		}
+		webModules = append(webModules, webMod)
+	}
 	if util.ContainsString(viper.GetStringSlice(config.Keys.ServerRoles), config.ServerRoleWebapp) {
 		l.Infof("adding webapp module")
 		webMod, err := webapp.New(ctx, cachedDBClient, redisClient, fediMod, languageMod, oauthServer, tokz, metricsCollector)
 		if err != nil {
-			logrus.Errorf("webapp module: %s", err.Error())
+			l.Errorf("webapp module: %s", err.Error())
+
 			return err
 		}
 		webModules = append(webModules, webMod)
@@ -156,9 +180,11 @@ var Start action.Action = func(ctx context.Context) error {
 
 	// add modules to server
 	for _, mod := range webModules {
+		mod.SetServer(httpServer)
 		err := mod.Route(httpServer)
 		if err != nil {
 			l.Errorf("loading %s module: %s", mod.Name(), err.Error())
+
 			return err
 		}
 	}
@@ -197,5 +223,6 @@ var Start action.Action = func(ctx context.Context) error {
 	}
 
 	l.Infof("done")
+
 	return nil
 }

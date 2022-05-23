@@ -17,6 +17,7 @@ import (
 func (c *Client) Close(_ context.Context) db.Error {
 	l := logger.WithField("func", "Close")
 	l.Info("closing db connection")
+
 	return c.bun.Close()
 }
 
@@ -26,6 +27,7 @@ func (c *Client) Create(ctx context.Context, i interface{}) db.Error {
 	if err != nil {
 		logger.WithField("func", "Create").Errorf("db: %s", err.Error())
 	}
+
 	return c.bun.ProcessError(err)
 }
 
@@ -44,15 +46,18 @@ func (c *Client) DoMigration(ctx context.Context) db.Error {
 		if err.Error() == "migrate: there are no any migrations" {
 			return nil
 		}
+
 		return err
 	}
 
 	if group.ID == 0 {
 		l.Info("there are no new migrations to run")
+
 		return nil
 	}
 
 	l.Infof("migrated database to %s", group)
+
 	return nil
 }
 
@@ -71,6 +76,7 @@ func (c *Client) LoadTestData(ctx context.Context) db.Error {
 		_, err := c.bun.NewTruncateTable().Model(m).Exec(ctx)
 		if err != nil {
 			l.Errorf("truncating %T: %s", m, err.Error())
+
 			return err
 		}
 	}
@@ -81,6 +87,7 @@ func (c *Client) LoadTestData(ctx context.Context) db.Error {
 		err := c.Create(ctx, testdata.TestInstances[i])
 		if err != nil {
 			l.Errorf("[%d] creating Instances: %s", i, err.Error())
+
 			return err
 		}
 	}
@@ -104,6 +111,7 @@ func (c *Client) LoadTestData(ctx context.Context) db.Error {
 			_, err := c.bun.Exec("SELECT setval(?, ?, true);", fmt.Sprintf("%s_id_seq", s.table), s.currentValue)
 			if err != nil {
 				l.Errorf("can't update sequence for %s: %s", s.table, err.Error())
+
 				return err
 			}
 		}
@@ -117,8 +125,8 @@ func (c *Client) LoadTestData(ctx context.Context) db.Error {
 // ReadByID returns a model by its ID.
 func (c *Client) ReadByID(ctx context.Context, id int64, i interface{}) db.Error {
 	q := c.bun.NewSelect().Model(i).Where("id = ?", id)
-
 	err := q.Scan(ctx)
+
 	return c.bun.ProcessError(err)
 }
 
@@ -130,7 +138,7 @@ func (*Client) ResetCache(_ context.Context) db.Error {
 // Update updates stored data.
 func (c *Client) Update(ctx context.Context, i interface{}) db.Error {
 	q := c.bun.NewUpdate().Model(i).WherePK()
-
 	_, err := q.Exec(ctx)
+
 	return c.bun.ProcessError(err)
 }

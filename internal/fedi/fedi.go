@@ -21,8 +21,7 @@ type Fedi struct {
 
 	helpers map[Software]Helper
 
-	appClientName    string
-	externalHostname string
+	appClientName string
 
 	nodeinfoCacheExp time.Duration
 
@@ -38,8 +37,7 @@ func New(d db.DB, k kv.KV, t *token.Tokenizer, helpers []Helper) (*Fedi, error) 
 
 		helpers: map[Software]Helper{},
 
-		appClientName:    viper.GetString(config.Keys.ApplicationName),
-		externalHostname: viper.GetString(config.Keys.ServerExternalHostname),
+		appClientName: viper.GetString(config.Keys.ApplicationName),
 
 		nodeinfoCacheExp: nodeInfoCacheExp,
 	}

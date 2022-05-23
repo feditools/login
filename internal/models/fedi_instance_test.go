@@ -16,6 +16,7 @@ func TestFediInstance_BeforeAppendModel_Insert(t *testing.T) {
 	err := obj.BeforeAppendModel(context.Background(), &bun.InsertQuery{})
 	if err != nil {
 		t.Errorf("got error: %s", err.Error())
+
 		return
 	}
 
@@ -36,6 +37,7 @@ func TestFediInstance_BeforeAppendModel_Update(t *testing.T) {
 	err := obj.BeforeAppendModel(context.Background(), &bun.UpdateQuery{})
 	if err != nil {
 		t.Errorf("got error: %s", err.Error())
+
 		return
 	}
 

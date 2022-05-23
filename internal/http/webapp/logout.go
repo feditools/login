@@ -14,11 +14,12 @@ func (m *Module) LogoutGetHandler(w nethttp.ResponseWriter, r *nethttp.Request) 
 	us := r.Context().Value(http.ContextKeySession).(*sessions.Session)
 
 	// Set account to nil
-	us.Values[SessionKeyAccountID] = nil
+	us.Values[http.SessionKeyAccountID] = nil
 
 	if err := us.Save(r, w); err != nil {
 		nethttp.Error(w, err.Error(), nethttp.StatusInternalServerError)
 		m.returnErrorPage(w, r, nethttp.StatusInternalServerError, err.Error())
+
 		return
 	}
 

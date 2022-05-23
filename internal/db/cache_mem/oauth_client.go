@@ -14,17 +14,20 @@ func (c *CacheMem) CountOauthClients(ctx context.Context) (int64, db.Error) {
 	count, hit := c.getCount(ctx, keyCountOauthClients())
 	if hit {
 		go metric.Done(true, false)
+
 		return count, nil
 	}
 	count, err := c.db.CountOauthClients(ctx)
 	if err != nil {
 		go metric.Done(false, true)
+
 		return 0, err
 	}
 	if count != 0 {
 		c.setCount(ctx, keyCountOauthClients(), count)
 	}
 	go metric.Done(false, false)
+
 	return count, nil
 }
 

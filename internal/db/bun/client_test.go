@@ -35,10 +35,12 @@ func TestDeriveBunDBPGOptions(t *testing.T) {
 	opts, err := deriveBunDBPGOptions()
 	if err != nil {
 		t.Errorf("unexpected error initializing pg options: %s", err.Error())
+
 		return
 	}
 	if opts == nil {
 		t.Errorf("opts is nil")
+
 		return
 	}
 
@@ -83,10 +85,12 @@ func TestDeriveBunDBPGOptions_TLSDisable(t *testing.T) {
 	opts, err := deriveBunDBPGOptions()
 	if err != nil {
 		t.Errorf("unexpected error initializing pg options: %s", err.Error())
+
 		return
 	}
 	if opts == nil {
 		t.Errorf("opts is nil")
+
 		return
 	}
 
@@ -134,10 +138,12 @@ func TestDeriveBunDBPGOptions_TLSEnable(t *testing.T) {
 	opts, err := deriveBunDBPGOptions()
 	if err != nil {
 		t.Errorf("unexpected error initializing pg options: %s", err.Error())
+
 		return
 	}
 	if opts == nil {
 		t.Errorf("opts is nil")
+
 		return
 	}
 
@@ -160,6 +166,7 @@ func TestDeriveBunDBPGOptions_TLSEnable(t *testing.T) {
 	// tls
 	if opts.TLSConfig == nil {
 		t.Errorf("unexpected value for tls config, got: 'nil', want: '*tls.Config'")
+
 		return
 	}
 	if !opts.TLSConfig.InsecureSkipVerify {
@@ -191,10 +198,12 @@ func TestDeriveBunDBPGOptions_TLSRequire(t *testing.T) {
 	opts, err := deriveBunDBPGOptions()
 	if err != nil {
 		t.Errorf("unexpected error initializing pg options: %s", err.Error())
+
 		return
 	}
 	if opts == nil {
 		t.Errorf("opts is nil")
+
 		return
 	}
 
@@ -217,6 +226,7 @@ func TestDeriveBunDBPGOptions_TLSRequire(t *testing.T) {
 	// tls
 	if opts.TLSConfig == nil {
 		t.Errorf("unexpected value for tls config, got: 'nil', want: '*tls.Config'")
+
 		return
 	}
 	if opts.TLSConfig.InsecureSkipVerify {
@@ -236,10 +246,9 @@ func TestDeriveBunDBPGOptions_NoDatabase(t *testing.T) {
 	viper.Set(config.Keys.DBType, "postgres")
 
 	_, err := deriveBunDBPGOptions()
-	errText := "no database set" //nolint
+	errText := "no database set"
 	if err.Error() != errText {
 		t.Errorf("unexpected error initializing sqlite connection, got: '%s', want: '%s'", err.Error(), errText)
-		return
 	}
 }
 
@@ -250,7 +259,6 @@ func TestDeriveBunDBPGOptions_NoType(t *testing.T) {
 	errText := "expected bun type of POSTGRES but got "
 	if err.Error() != errText {
 		t.Errorf("unexpected error initializing sqlite connection, got: '%s', want: '%s'", err.Error(), errText)
-		return
 	}
 }
 
@@ -265,7 +273,6 @@ func TestNew_Invalid(t *testing.T) {
 	errText := "database type invalid not supported for bundb"
 	if err.Error() != errText {
 		t.Errorf("unexpected error initializing sqlite connection, got: '%s', want: '%s'", err.Error(), errText)
-		return
 	}
 }
 
@@ -280,10 +287,12 @@ func TestNew_Sqlite(t *testing.T) {
 	bun, err := New(context.Background(), metricsCollector)
 	if err != nil {
 		t.Errorf("unexpected error initializing bun connection: %s", err.Error())
+
 		return
 	}
 	if bun == nil {
 		t.Errorf("client is nil")
+
 		return
 	}
 }
@@ -295,7 +304,6 @@ func TestPgConn_NoConfig(t *testing.T) {
 	errText := "could not create bundb postgres options: expected bun type of POSTGRES but got "
 	if err.Error() != errText {
 		t.Errorf("unexpected error initializing pg connection, got: '%s', want: '%s'", err.Error(), errText)
-		return
 	}
 }
 
@@ -307,10 +315,12 @@ func TestSqliteConn(t *testing.T) {
 	bun, err := sqliteConn(context.Background())
 	if err != nil {
 		t.Errorf("unexpected error initializing sqlite connection: %s", err.Error())
+
 		return
 	}
 	if bun == nil {
 		t.Errorf("client is nil")
+
 		return
 	}
 }
@@ -322,7 +332,6 @@ func TestSqliteConn_NoConfig(t *testing.T) {
 	errText := fmt.Sprintf("'%s' was not set when attempting to start sqlite", config.Keys.DBAddress)
 	if err.Error() != errText {
 		t.Errorf("unexpected error initializing sqlite connection, got: '%s', want: '%s'", err.Error(), errText)
-		return
 	}
 }
 
@@ -335,7 +344,6 @@ func TestSqliteConn_BadPath(t *testing.T) {
 	errText := "sqlite ping: Unable to open the database file (SQLITE_CANTOPEN)"
 	if err.Error() != errText {
 		t.Errorf("unexpected error initializing sqlite connection, got: '%s', want: '%s'", err.Error(), errText)
-		return
 	}
 }
 

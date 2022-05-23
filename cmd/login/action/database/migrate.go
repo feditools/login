@@ -21,6 +21,7 @@ var Migrate action.Action = func(ctx context.Context) error {
 	)
 	if err != nil {
 		l.Errorf("metrics: %s", err.Error())
+
 		return err
 	}
 	defer func() {
@@ -35,6 +36,7 @@ var Migrate action.Action = func(ctx context.Context) error {
 	dbClient, err := bun.New(ctx, metricsCollector)
 	if err != nil {
 		l.Errorf("db: %s", err.Error())
+
 		return err
 	}
 	defer func() {
@@ -47,6 +49,7 @@ var Migrate action.Action = func(ctx context.Context) error {
 	err = dbClient.DoMigration(ctx)
 	if err != nil {
 		l.Errorf("migration: %s", err.Error())
+
 		return err
 	}
 
@@ -54,6 +57,7 @@ var Migrate action.Action = func(ctx context.Context) error {
 		err = dbClient.LoadTestData(ctx)
 		if err != nil {
 			l.Errorf("migration: %s", err.Error())
+
 			return err
 		}
 	}

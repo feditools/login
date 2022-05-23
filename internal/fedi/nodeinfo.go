@@ -42,6 +42,7 @@ func (f *Fedi) GetNodeInfo20(ctx context.Context, domain string, infoURI *url.UR
 		cache, err := f.kv.GetFediNodeInfo(ctx, domain)
 		if err != nil && err.Error() != "redis: nil" {
 			l.Errorf("redis get: %s", err.Error())
+
 			return nil, err
 		}
 		if err == nil {
@@ -52,6 +53,7 @@ func (f *Fedi) GetNodeInfo20(ctx context.Context, domain string, infoURI *url.UR
 		resp, err := http.Get(ctx, infoURI.String())
 		if err != nil {
 			l.Errorf("http get: %s", err.Error())
+
 			return nil, err
 		}
 		if resp.StatusCode != nethttp.StatusOK {
@@ -61,6 +63,7 @@ func (f *Fedi) GetNodeInfo20(ctx context.Context, domain string, infoURI *url.UR
 		bodyBytes, err := io.ReadAll(resp.Body)
 		if err != nil {
 			l.Errorf("read body: %s", err.Error())
+
 			return nil, err
 		}
 		bodyString := string(bodyBytes)
@@ -69,6 +72,7 @@ func (f *Fedi) GetNodeInfo20(ctx context.Context, domain string, infoURI *url.UR
 		nodeinfo, err := unmarshalNodeInfo20(bodyString)
 		if err != nil {
 			l.Errorf("marshal: %s", err.Error())
+
 			return nil, err
 		}
 
@@ -76,6 +80,7 @@ func (f *Fedi) GetNodeInfo20(ctx context.Context, domain string, infoURI *url.UR
 		err = f.kv.SetFediNodeInfo(ctx, domain, bodyString, f.nodeinfoCacheExp)
 		if err != nil {
 			l.Errorf("redis get: %s", err.Error())
+
 			return nil, err
 		}
 
@@ -84,10 +89,12 @@ func (f *Fedi) GetNodeInfo20(ctx context.Context, domain string, infoURI *url.UR
 
 	if err != nil {
 		l.Errorf("singleflight: %s", err.Error())
+
 		return nil, err
 	}
 
 	nodeinfo := v.(*models.NodeInfo2)
+
 	return nodeinfo, nil
 }
 
@@ -96,5 +103,6 @@ func unmarshalNodeInfo20(body string) (*models.NodeInfo2, error) {
 	if err := json.Unmarshal([]byte(body), &nodeinfo); err != nil {
 		return nil, err
 	}
+
 	return nodeinfo, nil
 }

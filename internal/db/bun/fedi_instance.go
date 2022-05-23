@@ -18,10 +18,12 @@ func (c *Client) CountFediInstances(ctx context.Context) (int64, db.Error) {
 	count, err := c.newFediInstanceQ((*models.FediInstance)(nil)).Count(ctx)
 	if err != nil {
 		go metric.Done(true)
+
 		return 0, c.bun.errProc(err)
 	}
 
 	go metric.Done(false)
+
 	return int64(count), nil
 }
 
@@ -31,10 +33,12 @@ func (c *Client) CreateFediInstance(ctx context.Context, instance *models.FediIn
 
 	if err := c.Create(ctx, instance); err != nil {
 		go metric.Done(true)
+
 		return c.bun.errProc(err)
 	}
 
 	go metric.Done(false)
+
 	return nil
 }
 
@@ -50,10 +54,12 @@ func (c *Client) ReadFediInstance(ctx context.Context, id int64) (*models.FediIn
 	}
 	if err != nil {
 		go metric.Done(true)
+
 		return nil, c.bun.ProcessError(err)
 	}
 
 	go metric.Done(false)
+
 	return fediInstance, nil
 }
 
@@ -69,10 +75,12 @@ func (c *Client) ReadFediInstanceByDomain(ctx context.Context, domain string) (*
 	}
 	if err != nil {
 		go metric.Done(true)
+
 		return nil, c.bun.ProcessError(err)
 	}
 
 	go metric.Done(false)
+
 	return fediInstance, nil
 }
 
@@ -88,10 +96,12 @@ func (c *Client) ReadFediInstancesPage(ctx context.Context, index, count int) ([
 		Scan(ctx)
 	if err != nil {
 		go metric.Done(true)
+
 		return nil, c.bun.ProcessError(err)
 	}
 
 	go metric.Done(false)
+
 	return instances, nil
 }
 
@@ -101,10 +111,12 @@ func (c *Client) UpdateFediInstance(ctx context.Context, instance *models.FediIn
 
 	if err := c.Update(ctx, instance); err != nil {
 		go metric.Done(true)
+
 		return c.bun.errProc(err)
 	}
 
 	go metric.Done(false)
+
 	return nil
 }
 

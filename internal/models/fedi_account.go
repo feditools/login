@@ -48,12 +48,14 @@ func (f *FediAccount) BeforeAppendModel(_ context.Context, query bun.Query) erro
 			return err
 		}
 	}
+
 	return nil
 }
 
 // GetAccessToken returns unencrypted access token.
 func (f *FediAccount) GetAccessToken() (string, error) {
 	data, err := decrypt(f.AccessToken)
+
 	return string(data), err
 }
 
@@ -64,5 +66,6 @@ func (f *FediAccount) SetAccessToken(a string) error {
 		return err
 	}
 	f.AccessToken = data
+
 	return nil
 }

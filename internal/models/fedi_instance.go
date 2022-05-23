@@ -42,12 +42,14 @@ func (f *FediInstance) BeforeAppendModel(_ context.Context, query bun.Query) err
 			return err
 		}
 	}
+
 	return nil
 }
 
 // GetClientSecret returns unencrypted client secret.
 func (f *FediInstance) GetClientSecret() (string, error) {
 	data, err := decrypt(f.ClientSecret)
+
 	return string(data), err
 }
 
@@ -58,5 +60,6 @@ func (f *FediInstance) SetClientSecret(s string) error {
 		return err
 	}
 	f.ClientSecret = data
+
 	return nil
 }

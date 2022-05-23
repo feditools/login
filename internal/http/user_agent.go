@@ -18,10 +18,10 @@ var (
 // doInit sets the User-Agent for all subsequent requests.
 func doInit() {
 	userAgentLock.Lock()
-	userAgent = fmt.Sprintf("Go-http-client/2.0 (%s/%s; +https://%s/)",
+	userAgent = fmt.Sprintf("Go-http-client/2.0 (%s/%s; +%s/)",
 		viper.GetString(config.Keys.ApplicationName),
 		viper.GetString(config.Keys.SoftwareVersion),
-		viper.GetString(config.Keys.ServerExternalHostname),
+		viper.GetString(config.Keys.ServerExternalURL),
 	)
 	userAgentLock.Unlock()
 }

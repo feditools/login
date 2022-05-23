@@ -1,6 +1,8 @@
 package mastodon
 
 import (
+	"strings"
+
 	"github.com/feditools/login/internal/config"
 	"github.com/feditools/login/internal/db"
 	"github.com/feditools/login/internal/fedi"
@@ -20,9 +22,9 @@ type Helper struct {
 	kv   kv.KV
 	tokz *token.Tokenizer
 
-	appClientName    string
-	appWebsite       string
-	externalHostname string
+	appClientName string
+	appWebsite    string
+	externalURL   string
 
 	registerAppGroup singleflight.Group
 }
@@ -34,9 +36,9 @@ func New(d db.DB, k kv.KV, t *token.Tokenizer) (*Helper, error) {
 		kv:   k,
 		tokz: t,
 
-		appClientName:    viper.GetString(config.Keys.ApplicationName),
-		appWebsite:       viper.GetString(config.Keys.ApplicationWebsite),
-		externalHostname: viper.GetString(config.Keys.ServerExternalHostname),
+		appClientName: viper.GetString(config.Keys.ApplicationName),
+		appWebsite:    viper.GetString(config.Keys.ApplicationWebsite),
+		externalURL:   strings.TrimSuffix(viper.GetString(config.Keys.ServerExternalURL), "/"),
 	}, nil
 }
 
@@ -48,6 +50,7 @@ func newClient(instance *models.FediInstance, accessToken string) (*mastodon.Cli
 	clientSecret, err := instance.GetClientSecret()
 	if err != nil {
 		l.Errorf("decrypting client secret: %s", err.Error())
+
 		return nil, err
 	}
 
@@ -61,6 +64,7 @@ func newClient(instance *models.FediInstance, accessToken string) (*mastodon.Cli
 
 	// apply custom transport
 	client.Transport = &http.Transport{}
+
 	return client, nil
 }
 

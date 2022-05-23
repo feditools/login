@@ -22,6 +22,7 @@ func (s *Server) unaryInterceptor(ctx context.Context, req interface{}, info *gr
 		}()
 
 		st := status.New(codes.Internal, "Missing metadata.")
+
 		return nil, st.Err()
 	}
 
@@ -33,6 +34,7 @@ func (s *Server) unaryInterceptor(ctx context.Context, req interface{}, info *gr
 		}()
 
 		st := status.New(codes.Unauthenticated, "Invalid token.")
+
 		return nil, st.Err()
 	}
 

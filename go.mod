@@ -2,17 +2,17 @@ module github.com/feditools/login
 
 go 1.17
 
-replace github.com/go-oauth2/oauth2/v4 => github.com/tyrm/oauth2/v4 v4.5.1-0.20220517175145-340820634f65
-
 require (
 	github.com/allegro/bigcache/v3 v3.0.2
-	github.com/feditools/go-lib v0.11.2-0.20220517040149-229a197e47b2
+	github.com/coreos/go-oidc/v3 v3.2.0
+	github.com/feditools/go-lib v0.11.2-0.20220518182639-365163222fec
 	github.com/go-http-utils/etag v0.0.0-20161124023236-513ea8f21eb1
-	github.com/go-oauth2/oauth2/v4 v4.5.0
+	github.com/go-oauth2/oauth2/v4 v4.5.1
 	github.com/go-oauth2/redis/v4 v4.1.1
 	github.com/go-playground/validator/v10 v10.11.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-redsync/redsync/v4 v4.5.0
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
@@ -33,10 +33,12 @@ require (
 	github.com/uptrace/bun/dialect/pgdialect v1.1.5
 	github.com/uptrace/bun/dialect/sqlitedialect v1.1.5
 	github.com/uptrace/bun/extra/bundebug v1.1.5
+	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	golang.org/x/text v0.3.7
 	google.golang.org/grpc v1.46.2
 	google.golang.org/protobuf v1.28.0
+	gopkg.in/square/go-jose.v2 v2.6.0
 	modernc.org/sqlite v1.17.1
 	mvdan.cc/xurls/v2 v2.4.0
 )
@@ -54,7 +56,6 @@ require (
 	github.com/go-http-utils/headers v0.0.0-20181008091004-fed159eddc2a // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
-	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/gorilla/securecookie v1.1.1 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
@@ -97,6 +98,7 @@ require (
 	golang.org/x/sys v0.0.0-20220503163025-988cb79eb6c6 // indirect
 	golang.org/x/tools v0.1.10 // indirect
 	golang.org/x/xerrors v0.0.0-20220411194840-2f41105eb62f // indirect
+	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20220407144326-9054f6ed7bac // indirect
 	gopkg.in/ini.v1 v1.66.4 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect

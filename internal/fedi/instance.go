@@ -15,6 +15,7 @@ func (f *Fedi) GenerateFediInstanceFromDomain(ctx context.Context, domain string
 	wkni, err := f.GetWellknownNodeInfo(ctx, domain)
 	if err != nil {
 		l.Errorf("get nodeinfo: %s", err.Error())
+
 		return nil, err
 	}
 
@@ -31,6 +32,7 @@ func (f *Fedi) GenerateFediInstanceFromDomain(ctx context.Context, domain string
 	nodeinfo, err := f.GetNodeInfo20(ctx, domain, nodeinfoURI)
 	if err != nil {
 		l.Errorf("get nodeinfo 2.0: %s", err.Error())
+
 		return nil, err
 	}
 

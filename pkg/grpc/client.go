@@ -1,8 +1,9 @@
 package grpc
 
 import (
-	"github.com/feditools/login/pkg/proto"
 	"time"
+
+	"github.com/feditools/login/pkg/proto"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"

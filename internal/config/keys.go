@@ -35,15 +35,17 @@ type KeyNames struct {
 	// auth
 	AccessExpiration  string
 	AccessSecret      string
+	ECPrivateKey      string
+	ECPublicKey       string
 	RefreshExpiration string
 	RefreshSecret     string
 
 	// server
-	ServerExternalHostname string
-	ServerGRPCBind         string
-	ServerHTTPBind         string
-	ServerMinifyHTML       string
-	ServerRoles            string
+	ServerExternalURL string
+	ServerGRPCBind    string
+	ServerHTTPBind    string
+	ServerMinifyHTML  string
+	ServerRoles       string
 
 	// webapp
 	WebappBootstrapCSSURI         string
@@ -95,15 +97,17 @@ var Keys = KeyNames{
 	// auth
 	AccessExpiration:  "access-expiration",
 	AccessSecret:      "access-secret",
+	ECPrivateKey:      "ec-private-key",
+	ECPublicKey:       "ec-public-key",
 	RefreshExpiration: "refresh-expiration",
 	RefreshSecret:     "refresh-secret",
 
 	// server
-	ServerExternalHostname: "external-hostname",
-	ServerGRPCBind:         "grpc-bind",
-	ServerHTTPBind:         "http-bind",
-	ServerMinifyHTML:       "minify-html",
-	ServerRoles:            "server-role",
+	ServerExternalURL: "external-url",
+	ServerGRPCBind:    "grpc-bind",
+	ServerHTTPBind:    "http-bind",
+	ServerMinifyHTML:  "minify-html",
+	ServerRoles:       "server-role",
 
 	// webapp
 	WebappBootstrapCSSURI:         "webapp-bootstrap-css-uri",

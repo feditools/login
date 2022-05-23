@@ -102,6 +102,7 @@ func sqliteConn(ctx context.Context) (*Bun, error) {
 		if errWithCode, ok := err.(*sqlite.Error); ok {
 			err = errors.New(sqlite.ErrorCodeString[errWithCode.Code()])
 		}
+
 		return nil, fmt.Errorf("could not open sqlite bun: %s", err)
 	}
 
@@ -125,10 +126,12 @@ func sqliteConn(ctx context.Context) (*Bun, error) {
 		if errWithCode, ok := err.(*sqlite.Error); ok {
 			err = errors.New(sqlite.ErrorCodeString[errWithCode.Code()])
 		}
+
 		return nil, fmt.Errorf("sqlite ping: %s", err)
 	}
 
 	l.Info("connected to SQLITE database")
+
 	return conn, nil
 }
 
@@ -155,6 +158,7 @@ func pgConn(ctx context.Context) (*Bun, error) {
 	}
 
 	l.Info("connected to POSTGRES database")
+
 	return conn, nil
 }
 
@@ -265,13 +269,15 @@ func getErrConn(dbConn *bun.DB) (*Bun, error) {
 	var errProc func(error) db.Error
 	switch dbConn.Dialect().Name() {
 	case dialect.Invalid:
+		return nil, fmt.Errorf("invalid dialect")
 	case dialect.PG:
 		errProc = processPostgresError
 	case dialect.SQLite:
 		errProc = processSQLiteError
 	default:
-		panic("unknown dialect name: " + dbConn.Dialect().Name().String())
+		return nil, fmt.Errorf("unknown dialect name: " + dbConn.Dialect().Name().String())
 	}
+
 	return &Bun{
 		errProc: errProc,
 		DB:      dbConn,

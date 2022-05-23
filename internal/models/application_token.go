@@ -40,5 +40,6 @@ func (f *ApplicationToken) BeforeAppendModel(_ context.Context, query bun.Query)
 			return err
 		}
 	}
+
 	return nil
 }

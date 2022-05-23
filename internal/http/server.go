@@ -42,7 +42,7 @@ func NewServer(_ context.Context, m metrics.Collector) (*Server, error) {
 	}
 
 	// add global middlewares
-	r.Use(server.middlewareMetrics)
+	r.Use(server.MiddlewareMetrics)
 	r.Use(handlers.CompressHandler)
 	r.Use(middleware.BlockFlocMux)
 
@@ -79,7 +79,7 @@ func (s *Server) methodNotAllowedHandler() http.Handler {
 	l := logger.WithField("func", "methodNotAllowedHandler")
 
 	// wrap in middleware since middleware isn't run on error pages
-	return s.middlewareMetrics(middleware.BlockFlocMux(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return s.MiddlewareMetrics(middleware.BlockFlocMux(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", mimetype.TextPlain)
 		_, err := w.Write([]byte(fmt.Sprintf("%d %s", http.StatusMethodNotAllowed, http.StatusText(http.StatusMethodNotAllowed))))
 		if err != nil {
@@ -92,7 +92,7 @@ func (s *Server) notFoundHandler() http.Handler {
 	l := logger.WithField("func", "notFoundHandler")
 
 	// wrap in middleware since middleware isn't run on error pages
-	return s.middlewareMetrics(middleware.BlockFlocMux(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return s.MiddlewareMetrics(middleware.BlockFlocMux(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", mimetype.TextPlain)
 		_, err := w.Write([]byte(fmt.Sprintf("%d %s", http.StatusNotFound, http.StatusText(http.StatusNotFound))))
 		if err != nil {

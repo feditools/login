@@ -18,6 +18,7 @@ func (h *Helper) GetCurrentAccount(ctx context.Context, instance *models.FediIns
 	client, err := newClient(instance, accessToken)
 	if err != nil {
 		l.Errorf("creating client: %s", err.Error())
+
 		return nil, err
 	}
 
@@ -25,6 +26,7 @@ func (h *Helper) GetCurrentAccount(ctx context.Context, instance *models.FediIns
 	account, err := client.GetAccountCurrentUser(ctx)
 	if err != nil {
 		l.Errorf("getting current account: %s", err.Error())
+
 		return nil, err
 	}
 
@@ -47,6 +49,7 @@ func (h *Helper) GetCurrentAccount(ctx context.Context, instance *models.FediIns
 	fediAccount, err := h.db.ReadFediAccountByUsername(ctx, instance.ID, account.Username)
 	if err != nil {
 		l.Errorf("db read: %s", err.Error())
+
 		return nil, err
 	}
 	if fediAccount != nil {
@@ -57,16 +60,19 @@ func (h *Helper) GetCurrentAccount(ctx context.Context, instance *models.FediIns
 	webFinger, err := h.fedi.GetWellknownWebFinger(ctx, account.Username, instance.Domain)
 	if err != nil {
 		l.Debugf("webfinger %s@%s: %s", account.Username, instance.Domain, err.Error())
+
 		return nil, err
 	}
 	actorURI, err := fedi.FindActorURI(webFinger)
 	if err != nil {
 		l.Debugf("webfinger %s@%s: %s", account.Username, instance.Domain, err.Error())
+
 		return nil, err
 	}
 	if actorURI == nil {
 		msg := fmt.Sprintf("can't find actor uri for %s@%s", account.Username, instance.Domain)
 		l.Debug(msg)
+
 		return nil, errors.New(msg)
 	}
 
@@ -82,6 +88,7 @@ func (h *Helper) GetCurrentAccount(ctx context.Context, instance *models.FediIns
 	err = newFediAccount.SetAccessToken(accessToken)
 	if err != nil {
 		l.Errorf("set access token: %s", err.Error())
+
 		return nil, err
 	}
 
@@ -89,6 +96,7 @@ func (h *Helper) GetCurrentAccount(ctx context.Context, instance *models.FediIns
 	err = h.db.CreateFediAccount(ctx, newFediAccount)
 	if err != nil {
 		l.Errorf("db create: %s", err.Error())
+
 		return nil, err
 	}
 

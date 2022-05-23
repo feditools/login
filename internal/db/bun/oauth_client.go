@@ -18,10 +18,12 @@ func (c *Client) CountOauthClients(ctx context.Context) (int64, db.Error) {
 	count, err := c.newOauthClientQ((*models.OauthClient)(nil)).Count(ctx)
 	if err != nil {
 		go metric.Done(true)
+
 		return 0, c.bun.errProc(err)
 	}
 
 	go metric.Done(false)
+
 	return int64(count), nil
 }
 
@@ -31,10 +33,12 @@ func (c *Client) CreateOauthClient(ctx context.Context, client *models.OauthClie
 
 	if err := c.Create(ctx, client); err != nil {
 		go metric.Done(true)
+
 		return c.bun.errProc(err)
 	}
 
 	go metric.Done(false)
+
 	return nil
 }
 
@@ -46,14 +50,17 @@ func (c *Client) ReadOauthClient(ctx context.Context, id int64) (*models.OauthCl
 	err := c.newOauthClientQ(oauthClient).Where("id = ?", id).Scan(ctx)
 	if errors.Is(err, sql.ErrNoRows) {
 		go metric.Done(false)
+
 		return nil, nil
 	}
 	if err != nil {
 		go metric.Done(true)
+
 		return nil, c.bun.ProcessError(err)
 	}
 
 	go metric.Done(false)
+
 	return oauthClient, nil
 }
 
@@ -68,10 +75,12 @@ func (c *Client) ReadOauthClientsPage(ctx context.Context, index, count int) ([]
 		Scan(ctx)
 	if err != nil {
 		go metric.Done(true)
+
 		return nil, c.bun.ProcessError(err)
 	}
 
 	go metric.Done(false)
+
 	return clients, nil
 }
 
@@ -81,10 +90,12 @@ func (c *Client) UpdateOauthClient(ctx context.Context, client *models.OauthClie
 
 	if err := c.Update(ctx, client); err != nil {
 		go metric.Done(true)
+
 		return c.bun.errProc(err)
 	}
 
 	go metric.Done(false)
+
 	return nil
 }
 
