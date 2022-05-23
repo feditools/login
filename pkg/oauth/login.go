@@ -8,6 +8,7 @@ import (
 	nethttp "net/http"
 )
 
+// HandleLogin sends the user to the oauth login server.
 func (c *Client) HandleLogin(w nethttp.ResponseWriter, r *nethttp.Request, us *sessions.Session, sessionID string) error {
 	newCode := uuid.New().String()
 	newNonce := uuid.New().String()

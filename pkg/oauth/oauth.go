@@ -7,27 +7,29 @@ import (
 	"golang.org/x/oauth2"
 )
 
+// Client is an oauth client.
 type Client struct {
 	config   oauth2.Config
 	verifier *oidc.IDTokenVerifier
 }
 
-func New(ctx context.Context, callbackURL, serverURL, clientID, secret string) (*Client, error) {
-	provider, err := oidc.NewProvider(ctx, serverURL)
+// New creates a new client
+func New(ctx context.Context, cfg *Config) (*Client, error) {
+	provider, err := oidc.NewProvider(ctx, cfg.ServerURL)
 	if err != nil {
 		return nil, err
 	}
 
 	c := oauth2.Config{
-		ClientID:     clientID,
-		ClientSecret: secret,
+		ClientID:     cfg.ClientID,
+		ClientSecret: cfg.ClientSecret,
 		Scopes:       []string{oidc.ScopeOpenID},
-		RedirectURL:  callbackURL,
+		RedirectURL:  cfg.CallbackURL,
 		Endpoint:     provider.Endpoint(),
 	}
 
 	oidcConfig := &oidc.Config{
-		ClientID: clientID,
+		ClientID: cfg.ClientID,
 	}
 	v := provider.Verifier(oidcConfig)
 
