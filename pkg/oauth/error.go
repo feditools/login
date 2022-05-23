@@ -2,20 +2,20 @@ package oauth
 
 import "fmt"
 
-// CallbackError is returned when the callback handler encounters an error.
-type CallbackError struct {
+// Error is an oauth specific error.
+type Error struct {
 	Code    int
 	Message string
 }
 
 // Error returns the error message as a string.
-func (e *CallbackError) Error() string {
+func (e *Error) Error() string {
 	return fmt.Sprintf("%s (%d)", e.Message, e.Code)
 }
 
-// NewCallbackError wraps a message in a CallbackError object.
-func NewCallbackError(c int, m string) error {
-	return &CallbackError{
+// NewError wraps a message in a Error object.
+func NewError(c int, m string) error {
+	return &Error{
 		Code:    c,
 		Message: m,
 	}
