@@ -2,13 +2,14 @@ package oauth
 
 import (
 	"fmt"
+	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/gorilla/sessions"
 	"golang.org/x/oauth2"
 	nethttp "net/http"
 )
 
 // HandleCallback handles the callback from the oauth server.
-func (c *Client) HandleCallback(w nethttp.ResponseWriter, r *nethttp.Request, us *sessions.Session, sessionID string) (*oauth2.Token, error) {
+func (c *Client) HandleCallback(w nethttp.ResponseWriter, r *nethttp.Request, us *sessions.Session, sessionID string) (*oidc.IDToken, error) {
 	expectedCode, ok := us.Values[SessionKeyCode].(string)
 	if !ok {
 		return nil, NewError(nethttp.StatusBadRequest, "missing code")
@@ -66,5 +67,5 @@ func (c *Client) HandleCallback(w nethttp.ResponseWriter, r *nethttp.Request, us
 		return nil, NewError(nethttp.StatusBadRequest, "invalid nonce")
 	}
 
-	return token, nil
+	return idToken, nil
 }
