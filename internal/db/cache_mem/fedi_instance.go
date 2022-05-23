@@ -184,7 +184,5 @@ func (c *CacheMem) setFediInstance(_ context.Context, instance *models.FediInsta
 	err = c.fediInstanceDomainToID.Set(strings.ToLower(instance.Domain), b)
 	if err != nil {
 		l.Warnf("cache domain: %s", err.Error())
-
-		return
 	}
 }
