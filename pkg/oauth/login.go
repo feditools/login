@@ -1,11 +1,13 @@
 package oauth
 
 import (
+	"fmt"
+	nethttp "net/http"
+
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/google/uuid"
 	"github.com/gorilla/sessions"
 	"golang.org/x/oauth2"
-	nethttp "net/http"
 )
 
 // HandleLogin sends the user to the oauth login server.
@@ -17,7 +19,7 @@ func (c *Client) HandleLogin(w nethttp.ResponseWriter, r *nethttp.Request, us *s
 	us.Values[SessionKeyNonce] = newNonce
 	us.Values[SessionKeyState] = newState
 	if err := us.Save(r, w); err != nil {
-		return err
+		return NewError(nethttp.StatusInternalServerError, fmt.Sprintf("session: %s", err.Error()))
 	}
 
 	authCodeURL := c.config.AuthCodeURL(

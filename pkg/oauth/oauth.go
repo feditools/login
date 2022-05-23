@@ -3,6 +3,7 @@ package oauth
 import (
 	"context"
 	"encoding/gob"
+
 	"github.com/coreos/go-oidc/v3/oidc"
 	"golang.org/x/oauth2"
 )
@@ -13,7 +14,7 @@ type Client struct {
 	verifier *oidc.IDTokenVerifier
 }
 
-// New creates a new client
+// New creates a new client.
 func New(ctx context.Context, cfg *Config) (*Client, error) {
 	provider, err := oidc.NewProvider(ctx, cfg.ServerURL)
 	if err != nil {
