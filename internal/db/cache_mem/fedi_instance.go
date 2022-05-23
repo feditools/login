@@ -145,7 +145,7 @@ func (c *CacheMem) getFediInstanceByDomain(ctx context.Context, domain string) (
 
 	// check domain cache
 	entry, err := c.fediInstanceDomainToID.Get(strings.ToLower(domain))
-	if err == bigcache.ErrEntryNotFound {
+	if errors.Is(err, bigcache.ErrEntryNotFound) {
 		return nil, false
 	}
 	if err != nil {
