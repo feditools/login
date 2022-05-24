@@ -10,7 +10,7 @@ import (
 )
 
 // HandleCallback handles the callback from the oauth server.
-func (c *Client) HandleCallback(w nethttp.ResponseWriter, r *nethttp.Request, us *sessions.Session, sessionID string) (*oauth2.Token, *oidc.IDToken, error) {
+func (c *Client) HandleCallback(w nethttp.ResponseWriter, r *nethttp.Request, us *sessions.Session) (*oauth2.Token, *oidc.IDToken, error) {
 	expectedCode, ok := us.Values[SessionKeyCode].(string)
 	if !ok {
 		return nil, nil, NewError(nethttp.StatusBadRequest, "missing code")
@@ -52,7 +52,6 @@ func (c *Client) HandleCallback(w nethttp.ResponseWriter, r *nethttp.Request, us
 	token, err := c.config.Exchange(
 		r.Context(),
 		code,
-		oauth2.SetAuthURLParam("session_id", sessionID),
 		oauth2.SetAuthURLParam("code_verifier", expectedCode),
 	)
 	if err != nil {
