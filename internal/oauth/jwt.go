@@ -69,7 +69,7 @@ func (a *AccessGenerator) Token(ctx context.Context, data *oauth2.GenerateBasic,
 	l.Debugf("IsGenRefresh: %v", isGenRefresh)
 
 	// get nonce
-	nonce := ""
+	var nonce string
 	if isGenRefresh {
 		var err error
 		nonce, err = a.kv.GetOauthNonceLogin(ctx, data.TokenInfo.GetUserID())
