@@ -7,9 +7,11 @@ const (
 	keyFediActor    = keyFedi + "actor:"
 	keyFediNodeInfo = keyFedi + "ni:"
 
-	keyOauth      = keyBase + "oauth:"
-	keyOauthNonce = keyOauth + "nonce:"
-	keyOauthToken = keyOauth + "token:"
+	keyOauth             = keyBase + "oauth:"
+	keyOauthNonce        = keyOauth + "nonce:"
+	keyOauthNonceLogin   = keyOauthNonce + "login:"
+	keyOauthNonceRefresh = keyOauthNonce + "refresh:"
+	keyOauthToken        = keyOauth + "token:"
 
 	keySession = keyBase + "session:"
 )
@@ -20,8 +22,11 @@ func KeyFediActor(u string) string { return keyFediActor + u }
 // KeyFediNodeInfo returns the kv key which holds cached nodeinfo.
 func KeyFediNodeInfo(d string) string { return keyFediNodeInfo + d }
 
-// KeyOauthNonce returns the kv key which holds oauth nonce.
-func KeyOauthNonce(uid string, sid string) string { return keyOauthNonce + uid + ":" + sid }
+// KeyOauthNonceLogin returns the kv key which holds oauth nonce received from a login request.
+func KeyOauthNonceLogin(uid string) string { return keyOauthNonceLogin + uid }
+
+// KeyOauthNonceRefresh returns the kv key which holds oauth nonce tied to a refresh token.
+func KeyOauthNonceRefresh(refreshToken string) string { return keyOauthNonceRefresh + refreshToken }
 
 // KeyOauthToken returns the oauth token key prefix.
 func KeyOauthToken() string { return keyOauthToken }

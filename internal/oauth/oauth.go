@@ -27,6 +27,8 @@ import (
 const (
 	accessTokenExp  = time.Hour * 8
 	refreshTokenExp = time.Hour * 24 * 7
+
+	loginNonceExp = time.Hour * 1
 )
 
 // Server is an oauth server.
@@ -124,18 +126,11 @@ func (s *Server) HandleAuthorizeRequest(uid int64, w nethttp.ResponseWriter, r *
 	l := logger.WithField("func", "HandleAuthorizeRequest")
 
 	nonce := r.Form.Get("nonce")
-	l.Debugf("nonce: '%s'", nonce)
 	if nonce == "" {
 		return errors.New("missing nonce")
 	}
 
-	sessionID := r.Form.Get("session_id")
-	l.Debugf("nonce: '%s'", sessionID)
-	if sessionID == "" {
-		return errors.New("missing session id")
-	}
-
-	err := s.kv.SetOauthNonce(r.Context(), strconv.FormatInt(uid, 10), sessionID, nonce, refreshTokenExp*2)
+	err := s.kv.SetOauthNonceLogin(r.Context(), strconv.FormatInt(uid, 10), nonce, loginNonceExp)
 	if err != nil {
 		l.Errorf("set oauth nonce: %s", err.Error())
 

@@ -61,12 +61,26 @@ func (a *AccessGenerator) Token(ctx context.Context, data *oauth2.GenerateBasic,
 	l.Debugf("Form: %+v", data.Request.Form)
 	l.Debugf("Client: %+v", data.Client)
 	l.Debugf("Token: %+v", data.TokenInfo)
+	l.Debugf("IsGenRefresh: %v", isGenRefresh)
 
-	nonce, err := a.kv.GetOauthNonce(ctx, data.TokenInfo.GetUserID(), data.Request.Form.Get("session_id"))
-	if err != nil {
-		l.Errorf("getting oauth nonce: %s %T", err.Error(), err)
+	// get nonce
+	nonce := ""
+	if isGenRefresh {
+		var err error
+		nonce, err = a.kv.GetOauthNonceLogin(ctx, data.TokenInfo.GetUserID())
+		if err != nil {
+			l.Errorf("getting oauth nonce login: %s %T", err.Error(), err)
 
-		return "", "", err
+			return "", "", err
+		}
+	} else {
+		var err error
+		nonce, err = a.kv.GetOauthNonceRefresh(ctx, data.TokenInfo.GetRefresh())
+		if err != nil {
+			l.Errorf("getting oauth nonce refresh: %s %T", err.Error(), err)
+
+			return "", "", err
+		}
 	}
 	if nonce == "" {
 		msg := "missing oauth nonce"
@@ -75,6 +89,7 @@ func (a *AccessGenerator) Token(ctx context.Context, data *oauth2.GenerateBasic,
 		return "", "", errors.New(msg)
 	}
 
+	// build jwt
 	claims := &JWTAccessClaims{
 		StandardClaims: jwt.StandardClaims{
 			Issuer:    a.Issuer,
@@ -96,12 +111,26 @@ func (a *AccessGenerator) Token(ctx context.Context, data *oauth2.GenerateBasic,
 
 		return "", "", err
 	}
-	refresh := ""
 
+	refresh := ""
 	if isGenRefresh {
 		t := uuid.NewSHA1(uuid.Must(uuid.NewRandom()), []byte(access)).String()
 		refresh = base64.URLEncoding.EncodeToString([]byte(t))
 		refresh = strings.ToUpper(strings.TrimRight(refresh, "="))
+
+		// move nonce
+		err = a.kv.DeleteOauthNonceLogin(ctx, data.TokenInfo.GetUserID())
+		if err != nil {
+			l.Errorf("deleting oauth nonce login: %s %T", err.Error(), err)
+
+			return "", "", err
+		}
+		err = a.kv.SetOauthNonceRefresh(ctx, refresh, nonce, refreshTokenExp)
+		if err != nil {
+			l.Errorf("set oauth nonce refresh: %s", err.Error())
+
+			return "", "", err
+		}
 	}
 
 	return access, refresh, nil

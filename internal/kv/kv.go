@@ -21,9 +21,15 @@ type KV interface {
 	GetFediNodeInfo(ctx context.Context, domain string) (nodeinfo string, err error)
 	SetFediNodeInfo(ctx context.Context, domain string, nodeinfo string, expire time.Duration) (err error)
 
-	// oauth nonce
+	// oauth nonce login
 
-	DeleteOauthNonce(ctx context.Context, uid string, sid string) (err error)
-	GetOauthNonce(ctx context.Context, uid string, sid string) (nonce string, err error)
-	SetOauthNonce(ctx context.Context, uid string, sid string, nonce string, expire time.Duration) (err error)
+	DeleteOauthNonceLogin(ctx context.Context, uid string) (err error)
+	GetOauthNonceLogin(ctx context.Context, uid string) (nonce string, err error)
+	SetOauthNonceLogin(ctx context.Context, uid string, nonce string, expire time.Duration) (err error)
+
+	// oauth nonce refresh
+
+	DeleteOauthNonceRefresh(ctx context.Context, refreshToken string) (err error)
+	GetOauthNonceRefresh(ctx context.Context, refreshToken string) (nonce string, err error)
+	SetOauthNonceRefresh(ctx context.Context, refreshToken string, nonce string, expire time.Duration) (err error)
 }
