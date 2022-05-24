@@ -117,6 +117,7 @@ func (a *AccessGenerator) Token(ctx context.Context, data *oauth2.GenerateBasic,
 		return "", "", err
 	}
 
+	// generate refresh token if asked
 	refresh := ""
 	if isGenRefresh {
 		t := uuid.NewSHA1(uuid.Must(uuid.NewRandom()), []byte(access)).String()
