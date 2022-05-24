@@ -20,6 +20,7 @@ func Server(cmd *cobra.Command, values config.Values) {
 	cmd.PersistentFlags().Duration(config.Keys.AccessExpiration, values.AccessExpiration, usage.AccessExpiration)
 	cmd.PersistentFlags().String(config.Keys.ECPrivateKey, values.ECPrivateKey, usage.ECPrivateKey)
 	cmd.PersistentFlags().String(config.Keys.ECPublicKey, values.ECPublicKey, usage.ECPublicKey)
+	cmd.PersistentFlags().Duration(config.Keys.LoginNonceExpiration, values.LoginNonceExpiration, usage.LoginNonceExpiration)
 	cmd.PersistentFlags().Duration(config.Keys.RefreshExpiration, values.RefreshExpiration, usage.RefreshExpiration)
 
 	// webapp

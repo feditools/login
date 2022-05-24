@@ -33,10 +33,11 @@ type KeyNames struct {
 	AccountAddGroup string
 
 	// auth
-	AccessExpiration  string
-	ECPrivateKey      string
-	ECPublicKey       string
-	RefreshExpiration string
+	AccessExpiration     string
+	ECPrivateKey         string
+	ECPublicKey          string
+	LoginNonceExpiration string
+	RefreshExpiration    string
 
 	// server
 	ServerExternalURL string
@@ -93,10 +94,11 @@ var Keys = KeyNames{
 	AccountAddGroup: "add-group",
 
 	// auth
-	AccessExpiration:  "access-expiration",
-	ECPrivateKey:      "ec-private-key",
-	ECPublicKey:       "ec-public-key",
-	RefreshExpiration: "refresh-expiration",
+	AccessExpiration:     "access-expiration",
+	ECPrivateKey:         "ec-private-key",
+	ECPublicKey:          "ec-public-key",
+	LoginNonceExpiration: "login-nonce-expiration",
+	RefreshExpiration:    "refresh-expiration",
 
 	// server
 	ServerExternalURL: "external-url",

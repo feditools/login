@@ -24,15 +24,13 @@ import (
 	oredis "github.com/go-oauth2/redis/v4"
 )
 
-const (
-	loginNonceExp = time.Hour * 1
-)
-
 // Server is an oauth server.
 type Server struct {
 	keychain *Keychain
 	kv       kv.KV
 	oauth    *server.Server
+
+	LoginNonceExp time.Duration
 }
 
 // New returns a new oauth server.Server object.
@@ -94,6 +92,8 @@ func New(_ context.Context, d db.DB, r *redis.Client, t *token.Tokenizer) (*Serv
 		keychain: keychain,
 		kv:       r,
 		oauth:    oauthServer,
+
+		LoginNonceExp: viper.GetDuration(config.Keys.LoginNonceExpiration),
 	}, nil
 }
 
@@ -127,7 +127,7 @@ func (s *Server) HandleAuthorizeRequest(uid int64, w nethttp.ResponseWriter, r *
 		return errors.New("missing nonce")
 	}
 
-	err := s.kv.SetOauthNonceLogin(r.Context(), strconv.FormatInt(uid, 10), nonce, loginNonceExp)
+	err := s.kv.SetOauthNonceLogin(r.Context(), strconv.FormatInt(uid, 10), nonce, s.LoginNonceExp)
 	if err != nil {
 		l.Errorf("set oauth nonce: %s", err.Error())
 

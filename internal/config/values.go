@@ -35,10 +35,11 @@ type Values struct {
 	AccountAddGroup []string
 
 	// auth
-	AccessExpiration  time.Duration
-	ECPrivateKey      string
-	ECPublicKey       string
-	RefreshExpiration time.Duration
+	AccessExpiration     time.Duration
+	ECPrivateKey         string
+	ECPublicKey          string
+	LoginNonceExpiration time.Duration
+	RefreshExpiration    time.Duration
 
 	// server
 	ServerExternalURL string
@@ -88,8 +89,9 @@ var Defaults = Values{
 	RedisPassword: "",
 
 	// auth
-	AccessExpiration:  time.Hour * 8,
-	RefreshExpiration: time.Hour * 24 * 7,
+	AccessExpiration:     time.Hour * 8,
+	LoginNonceExpiration: time.Minute * 10,
+	RefreshExpiration:    time.Hour * 24 * 7,
 
 	// server
 	ServerExternalURL: "http://localhost:5000",
