@@ -8,6 +8,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/feditools/login/internal/config"
+	"github.com/spf13/viper"
+
 	"github.com/feditools/login/internal/kv"
 
 	"github.com/go-oauth2/oauth2/v4"
@@ -37,10 +40,11 @@ func (s *Server) NewAccessGenerator(k kv.KV, issuer string, method jwt.SigningMe
 	return &AccessGenerator{
 		kv: k,
 
-		Issuer:       issuer,
-		SignedKeyID:  s.GetECPublicKeyID(),
-		SignedKey:    s.GetECPrivateKey(),
-		SignedMethod: method,
+		Issuer:          issuer,
+		RefreshTokenExp: viper.GetDuration(config.Keys.AccessExpiration),
+		SignedKeyID:     s.GetECPublicKeyID(),
+		SignedKey:       s.GetECPrivateKey(),
+		SignedMethod:    method,
 	}, nil
 }
 
@@ -48,10 +52,11 @@ func (s *Server) NewAccessGenerator(k kv.KV, issuer string, method jwt.SigningMe
 type AccessGenerator struct {
 	kv kv.KV
 
-	Issuer       string
-	SignedKeyID  string
-	SignedKey    *ecdsa.PrivateKey
-	SignedMethod jwt.SigningMethod
+	Issuer          string
+	RefreshTokenExp time.Duration
+	SignedKeyID     string
+	SignedKey       *ecdsa.PrivateKey
+	SignedMethod    jwt.SigningMethod
 }
 
 // Token based on the UUID generated token.
@@ -125,7 +130,7 @@ func (a *AccessGenerator) Token(ctx context.Context, data *oauth2.GenerateBasic,
 
 			return "", "", err
 		}
-		err = a.kv.SetOauthNonceRefresh(ctx, refresh, nonce, refreshTokenExp)
+		err = a.kv.SetOauthNonceRefresh(ctx, refresh, nonce, a.RefreshTokenExp)
 		if err != nil {
 			l.Errorf("set oauth nonce refresh: %s", err.Error())
 

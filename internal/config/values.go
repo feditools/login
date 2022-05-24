@@ -36,11 +36,9 @@ type Values struct {
 
 	// auth
 	AccessExpiration  time.Duration
-	AccessSecret      string
 	ECPrivateKey      string
 	ECPublicKey       string
 	RefreshExpiration time.Duration
-	RefreshSecret     string
 
 	// server
 	ServerExternalURL string
@@ -90,7 +88,7 @@ var Defaults = Values{
 	RedisPassword: "",
 
 	// auth
-	AccessExpiration:  time.Minute * 15,
+	AccessExpiration:  time.Hour * 8,
 	RefreshExpiration: time.Hour * 24 * 7,
 
 	// server

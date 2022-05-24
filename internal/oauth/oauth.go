@@ -25,9 +25,6 @@ import (
 )
 
 const (
-	accessTokenExp  = time.Hour * 8
-	refreshTokenExp = time.Hour * 24 * 7
-
 	loginNonceExp = time.Hour * 1
 )
 
@@ -55,8 +52,8 @@ func New(_ context.Context, d db.DB, r *redis.Client, t *token.Tokenizer) (*Serv
 
 	// authorize token config
 	authorizeCodeTokenCfg := &manage.Config{
-		AccessTokenExp:    accessTokenExp,
-		RefreshTokenExp:   refreshTokenExp,
+		AccessTokenExp:    viper.GetDuration(config.Keys.AccessExpiration),
+		RefreshTokenExp:   viper.GetDuration(config.Keys.RefreshExpiration),
 		IsGenerateRefresh: true,
 	}
 
