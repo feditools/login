@@ -625,8 +625,8 @@ github.com/stvp/tempredis v0.0.0-20181119212430-b82af8480203 h1:QVqDTf3h2WHt08Yu
 github.com/stvp/tempredis v0.0.0-20181119212430-b82af8480203/go.mod h1:oqN97ltKNihBbwlX8dLpwxCl3+HnXKV/R0e+sRLd9C8=
 github.com/subosito/gotenv v1.2.0 h1:Slr1R9HxAlEKefgq5jn9U+DnETlIUa6HfgEzj0g5d7s=
 github.com/subosito/gotenv v1.2.0/go.mod h1:N0PQaV/YGNqwC0u51sEeR/aUtSLEXKX9iv69rRypqCw=
-github.com/tdewolff/minify/v2 v2.11.4 h1:v8V3IUW421h/rExknkudfEnzsiIOVRsRNbb43iZPF+A=
-github.com/tdewolff/minify/v2 v2.11.4/go.mod h1:ZR6VK7tbgF0XXBVwDHXrbqM4tGYchBpdwhsbKeDmAww=
+github.com/tdewolff/minify/v2 v2.11.5 h1:wfRJ6JMmu87Azx+Lj7NcCTg8D/L/92SNuYF5fv31fjg=
+github.com/tdewolff/minify/v2 v2.11.5/go.mod h1:ZR6VK7tbgF0XXBVwDHXrbqM4tGYchBpdwhsbKeDmAww=
 github.com/tdewolff/parse/v2 v2.5.31 h1:PrJN/trWTUYaYxg7jRpKnKXpBK4kBjT9rAFhFAh2Lus=
 github.com/tdewolff/parse/v2 v2.5.31/go.mod h1:WzaJpRSbwq++EIQHYIRTpbYKNA3gn9it1Ik++q4zyho=
 github.com/tdewolff/test v1.0.6 h1:76mzYJQ83Op284kMT+63iCNCI7NEERsIN8dLM+RiKr4=
