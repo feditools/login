@@ -23,7 +23,7 @@ require (
 	github.com/rbcervilla/redisstore/v8 v8.1.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/speps/go-hashids/v2 v2.0.1
-	github.com/spf13/cobra v1.4.0
+	github.com/spf13/cobra v1.5.0
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.12.0
 	github.com/tdewolff/minify/v2 v2.11.11
