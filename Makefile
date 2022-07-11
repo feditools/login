@@ -75,7 +75,7 @@ test-bench-ext: tidy fmt lint #gosec
 	go test  -run=XXX -bench=. --tags=postgres -cover ./...
 
 tidy:
-	go mod tidy
+	go mod tidy -compat=1.17
 
 vendor: tidy
 	go mod vendor
